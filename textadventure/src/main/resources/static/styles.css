@@ -1,0 +1,143 @@
+* {
+    margin: 0;
+    color: #00ff00;
+    font-family: 'Ubuntu Mono';
+}
+
+body {
+    background-color: rgb(185, 181, 181);
+}
+
+p {
+    line-height: 20px;
+}
+
+input {
+    border: hidden;
+    background-color: black;
+    font-size: 1em;
+}
+
+#user-input {
+    width: 786px;
+    height: 30px;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    resize: none;
+    caret-color: transparent;
+    z-index: 1;
+}
+
+input:focus {
+    outline: none;
+}
+
+#terminal {
+    width: 800px;
+    height: 500px;
+    position: relative;
+    margin: 20px;
+    background-color: black;
+}
+
+#display-container {
+    position: relative;
+    width: 780px;
+    height: 471px;
+    margin: 0 12px;
+    overflow-y: hidden;
+}
+
+#display {
+    width: inherit;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+}
+
+.bottom-left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.caret-solid {
+    background-color: #00ff00;
+    width: 7px;
+    height: 16px;
+    position: absolute;
+    z-index: 3;
+    transform: translateX(40px) translateY(-46px);
+}
+
+.caret-blink {
+    background-color: #00ff00;
+    -webkit-animation: blink 1s step-end infinite;
+    width: 7px;
+    height: 16px;
+    position: absolute;
+    z-index: 3;
+    transform: translateX(40px) translateY(-46px);
+}
+
+#prompt {
+    white-space: pre;
+    position: absolute;
+    z-index: 2;
+    padding-left: 2px;
+    transform: translateY(-2px) translateX(8px);
+}
+
+#container {
+    display: flex;
+}
+
+#game-code-container {
+    background-color: black;
+    height: 50px;
+    margin: 20px;
+    padding: 10px 15px 10px 15px;
+}
+
+#game-code {
+    width: 150px;
+    margin-top: 5px;
+    outline: 1px solid #00ff00;
+    font-size: 1.2em;
+}
+
+@-webkit-keyframes blink { 50% { visibility: hidden; }}
+@keyframes blink { 50% { visibility: hidden }}
+
+
+
+/* smartphones, iPhone, portrait 480x320 phones */
+/* @media (min-width:320px) {
+    #container {
+        display: block;
+    }
+
+    #terminal {
+        width: 98%;
+    }
+} */
+/* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+/* @media (min-width:481px) {
+    #container {
+        display: block;
+    }
+
+    #terminal {
+        width: 90%;
+    }
+} */
+/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+/* @media (min-width:641px) {  } */
+/* tablet, landscape iPad, lo-res laptops ands desktops */
+/* @media (min-width:961px) {  } */
+/* big landscape tablets, laptops, and desktops */
+/* @media (min-width:1025px) {  } */
+/* hi-res laptops and desktops */
+/* @media (min-width:1281px) {  } */

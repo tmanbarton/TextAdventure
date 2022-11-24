@@ -19,17 +19,20 @@ $(document).ready(
 				$.ajax({
 					type : "POST",
 					contentType : "application/json",
-					url : "saveBook",
+					url : "userInput",
 					data : JSON.stringify(formData),
 					dataType : 'json',
 					success : function(result) {
+					    console.log(result);
 						if (result.status == "success") {
-							$("#postResultDiv").html(
-									result.data.input + " posted successfully! <br>");
+						    $('#user-input').val('')
+						    $('#caret')[0].style.transform = 'translateX(40px) translateY(-46px)';
+						    let currentDisplay = $('#display').html();
+							$('#display').html(currentDisplay + result.data.input + '<br>' + result.data.response + '<br>');
 						} else {
-							$("#postResultDiv").html("<strong>Error</strong>");
+							let currentDisplay = $('#display').html();
+							$('#display').html(currentDisplay + '<strong>Error</strong><br>')
 						}
-						console.log(result);
 					},
 					error : function(e) {
 						alert("Error!")

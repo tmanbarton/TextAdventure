@@ -10,7 +10,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class Input {
-    private String input = ":)";
+    private String input;
 
     public String getInput() {
         return input;
