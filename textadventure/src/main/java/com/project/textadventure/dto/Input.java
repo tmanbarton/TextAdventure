@@ -9,8 +9,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Book {
-    private int bookId;
-    private String bookName;
-    private String author;
+public class Input {
+    private String input = ":)";
+
+    public String getInput() {
+        return input;
+    }
 }
