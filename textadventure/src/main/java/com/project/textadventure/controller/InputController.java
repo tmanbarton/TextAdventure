@@ -23,12 +23,8 @@ public class InputController {
     public ResponseEntity<Object> userInput(@RequestBody Input input) {
         inputList.add(input);
         String in = input.getInput();
-        if(in.equals("n")) {
-            Response resp = new Response("dirt road", in);
-            ServiceResponse<Response> response = new ServiceResponse<>("success", resp);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-        Response resp = new Response(in, in);
+        String result = new GameController().getResponse(in);
+        Response resp = new Response(result, in);
         ServiceResponse<Response> response = new ServiceResponse<>("success", resp);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
