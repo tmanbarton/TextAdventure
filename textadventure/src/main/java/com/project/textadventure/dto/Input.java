@@ -11,8 +11,13 @@ import lombok.ToString;
 @ToString
 public class Input {
     private String input;
+    private boolean gameStarted;
 
     public String getInput() {
         return input;
+    }
+
+    public boolean hasGameStarted() {
+        return gameStarted;
     }
 }

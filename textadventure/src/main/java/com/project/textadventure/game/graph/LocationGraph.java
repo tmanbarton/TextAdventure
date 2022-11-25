@@ -219,6 +219,10 @@ public class LocationGraph {
         westEndOfSideStreet.connectingLocations.add(new ConnectingLocation(List.of("north", "n"), outsideLogCabin));
         westEndOfSideStreet.connectingLocations.add(new ConnectingLocation(List.of("east", "e"), topOfStairs));
     }
+
+    public LocationGraph getGraph() {
+        
+    }
     
 //    LocationGraph(user id) {}
 }

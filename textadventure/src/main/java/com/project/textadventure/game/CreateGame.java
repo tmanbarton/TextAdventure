@@ -1,15 +1,12 @@
 package com.project.textadventure.game;
 
 import com.project.textadventure.game.graph.LocationGraph;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 
-@Component
-public class CreateGame implements CommandLineRunner {
+public class CreateGame {
 
-    @Override
-    public void run(String... args) {
+    public LocationGraph createNewGame() {
         LocationGraph locationGraph = new LocationGraph();
         System.out.println(locationGraph.antHillDescription);
+        return locationGraph;
     }
 }

@@ -1,22 +1,31 @@
 package com.project.textadventure.controller;
 
+import com.project.textadventure.game.CreateGame;
+import com.project.textadventure.game.graph.LocationGraph;
+
 import java.util.List;
 
 public class GameController {
-    public String getResponse(String input) {
-        return findAction(input);
+    public String getResponse(String input, boolean gameStarted) {
+        if(!gameStarted) {
+            LocationGraph locationGraph = new CreateGame().createNewGame();
+            return "not started "+ findAction(input, locationGraph);
+        }
+        return "started " + findAction(input);
     }
 
-    public String findAction(String input) {
+    public String findAction(String input, LocationGraph locationGraph) {
         if(isDirection(input)) {
+
             return "You went " + input;
         }
         return "description";
     }
 
     private boolean isDirection(String input) {
-        List<String> directions = List.of("n", "north", "s", "south", "e", "east", "w", "west", "u", "up", "d", "down", "nw", "ne", "sw", "se");
-        return (input.length() <= 5 && directions.contains(input)) || (input.length() > 5 && directions.contains(input.substring(0, 5)));
+        List<String> directions = List.of("n", "north", "s", "south", "e", "east", "w", "west", "u", "up",
+                "d", "down", "nw", "northwest", "ne", "northeast", "sw", "southwest", "se", "southeast");
+        return directions.contains(input);
     }
 }
 

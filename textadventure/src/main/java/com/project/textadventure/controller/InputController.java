@@ -22,10 +22,13 @@ public class InputController {
     @PostMapping("/userInput")
     public ResponseEntity<Object> userInput(@RequestBody Input input) {
         inputList.add(input);
-        String in = input.getInput();
-        String result = new GameController().getResponse(in);
-        Response resp = new Response(result, in);
+        String inputString = input.getInput();
+        boolean gameStarted = input.hasGameStarted();
+
+        String result = new GameController().getResponse(inputString, gameStarted);
+        Response resp = new Response(result, inputString);
         ServiceResponse<Response> response = new ServiceResponse<>("success", resp);
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
