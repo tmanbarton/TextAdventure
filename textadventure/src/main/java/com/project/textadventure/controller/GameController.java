@@ -1,22 +1,19 @@
 package com.project.textadventure.controller;
 
-import com.project.textadventure.game.CreateGame;
-import com.project.textadventure.game.graph.LocationGraph;
+import com.project.textadventure.game.GameState;
+import com.project.textadventure.game.Player;
 
 import java.util.List;
 
 public class GameController {
-    public String getResponse(String input, boolean gameStarted) {
-        if(!gameStarted) {
-            LocationGraph locationGraph = new CreateGame().createNewGame();
-            return "not started "+ findAction(input, locationGraph);
-        }
-        return "started " + findAction(input);
+    public String getResponse(String input) {
+        Player player = GameState.getInstance().getGame();
+        return player.getCurrentLocation().getDescription();
+//        return findAction(input, player);
     }
 
-    public String findAction(String input, LocationGraph locationGraph) {
+    public String findAction(String input, Player player) {
         if(isDirection(input)) {
-
             return "You went " + input;
         }
         return "description";

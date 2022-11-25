@@ -23,9 +23,8 @@ public class InputController {
     public ResponseEntity<Object> userInput(@RequestBody Input input) {
         inputList.add(input);
         String inputString = input.getInput();
-        boolean gameStarted = input.hasGameStarted();
 
-        String result = new GameController().getResponse(inputString, gameStarted);
+        String result = new GameController().getResponse(inputString);
         Response resp = new Response(result, inputString);
         ServiceResponse<Response> response = new ServiceResponse<>("success", resp);
 

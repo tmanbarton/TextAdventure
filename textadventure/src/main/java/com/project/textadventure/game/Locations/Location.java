@@ -8,27 +8,34 @@ import java.util.List;
 public class Location {
     private String description;
     private List<Item> items;
-    public List<ConnectingLocation> connectingLocations;
-    private Location previousLocation;
-    private boolean visited;                            // Has this location been visited yet? Used to know what to print for description
+    private List<ConnectingLocation> connectingLocations;
+    private boolean visited;
     private String name;
     private String shortDescription;
-
-    public Location() {}
 
     public Location(
             String description,
             String shortDescription,
             List<Item> items,
             List<ConnectingLocation> connectingLocations,
-            Location previousLocation,
             boolean visited, String name) {
         this.description = description;
         this.items = items;
         this.connectingLocations = connectingLocations;
-        this.previousLocation = previousLocation;
         this.visited = visited;
         this.name = name;
         this.shortDescription = shortDescription;
+    }
+
+    public void connectLocation(ConnectingLocation locationToConnect) {
+        this.connectingLocations.add(locationToConnect);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getShortDescription() {
+        return shortDescription;
     }
 }

@@ -1,6 +1,5 @@
 $(document).ready(
 		function() {
-		    let gameStarted = false;
 			$("#form").submit(function(event) {
 				event.preventDefault();
 				ajaxPost();
@@ -8,8 +7,7 @@ $(document).ready(
 
 			function ajaxPost() {
 				var formData = {
-					input: $("#user-input").val(),
-					gameStarted: gameStarted
+					input: $("#user-input").val()
 				}
 				$.ajax({
 					type : "POST",
@@ -20,14 +18,13 @@ $(document).ready(
 					success : function(result) {
 						if (result.status == "success") {
 						    $('#user-input').val('');
-						    $('#caret')[0].style.transform = 'translateX(40px) translateY(-46px)';
+						    $('#caret')[0].style.transform = 'translateX(46px) translateY(-46px)';
 						    let currentDisplay = $('#display').html();
-							$('#display').html(currentDisplay + result.data.input + '<br>' + result.data.response + '<br>');
+							$('#display').html(currentDisplay + '<span>~</span> ' + result.data.input + '<br>' + result.data.response + '<br>');
 						} else {
 							let currentDisplay = $('#display').html();
 							$('#display').html(currentDisplay + 'Failed response from the server. Report to xyz.<br>');
 						}
-						gameStarted = true;
 					},
 					error : function(e) {
 						console.log("ERROR: ", e);

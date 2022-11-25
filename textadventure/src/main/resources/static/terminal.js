@@ -1,35 +1,32 @@
-let caretPosition = 40;     // In pixels
+let caretPosition = 46;     // In pixels
 const userInput = $('#user-input');
 const caret = $('#caret');
 
 
 $(function() {
     userInput.on('keydown', function(event) {
-        // Move the caret when left or right arrow keys are pressed
-        if(caretPosition !== 40 && event.key === 'ArrowLeft') {
+        caretPosition = getCaretPosition();
+        if(getCaretPosition() > 46 && event.key === 'ArrowLeft') {
             stopBlinking();
-            // All these * 8 because ubuntu mono is 8px wide
-            caretPosition = (userInput[0].selectionStart * 8) + 32;
             let width = userInput[0].offsetWidth;
             if(caretPosition <= width) {
-                moveCaret(caretPosition);
+                moveCaret(caretPosition - 8);
             }
         }
-        else if(caretPosition < userInput.val().length * 8 + 40 && event.key === 'ArrowRight') {
+        else if(caretPosition < userInput.val().length * 8 + 46 && event.key === 'ArrowRight') {
             stopBlinking();
-            caretPosition = ((userInput[0].selectionStart + 1) * 8) + 40;
             let width = userInput[0].offsetWidth;
             if(caretPosition <= width) {
-                moveCaret(caretPosition);
+                moveCaret(caretPosition + 8);
             }
         }
     });
 
     // Move blinking caret to index in text where user clicked
     userInput.on('click', function() {
-        caretPosition = (userInput[0].selectionStart * 8) + 40;
+        caretPosition = (userInput[0].selectionStart * 8) + 46;
         let width = userInput[0].offsetWidth;
-        if(caretPosition <= width) {
+        if(getCaretPosition() <= width) {
             moveCaret(caretPosition);
         }
     });
@@ -39,7 +36,7 @@ $(function() {
         stopBlinking();
         let input = userInput.val();
         input = input.replace(/\s/g, '&nbsp;');
-        caretPosition = (userInput[0].selectionStart * 8) + 40;
+        caretPosition = (userInput[0].selectionStart * 8) + 46;
         let width = userInput[0].offsetWidth;
         if(caretPosition <= width) {
             moveCaret(caretPosition);
@@ -58,13 +55,15 @@ $(function() {
     function stopBlinking() {
         caret.toggleClass('caret-solid');
         caret.toggleClass('caret-blink');
-        // caret.id = 'caret-solid';
         setTimeout(function() {
             caret.toggleClass('caret-blink');
             caret.toggleClass('caret-solid');
         }, 250);
     }
 
+    function getCaretPosition() {
+        return parseInt(caret.css('-webkit-transform').split(/[(),]/)[5]);
+    }
 });
 
 /* <script>$('#user-input').val('hacked');</script> */
