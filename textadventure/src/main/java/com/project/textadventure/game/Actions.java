@@ -29,7 +29,7 @@ public class Actions {
     private String listLocationItems(List<Item> items) {
         StringBuilder result = new StringBuilder();
         for(Item item : items) {
-            result.append(item.getLocationDescription());
+            result.append("<br>" + item.getLocationDescription());
         }
         return result.isEmpty() ? "" : "<br>" + result.toString();
     }
@@ -88,9 +88,9 @@ public class Actions {
         }
         StringBuilder result = new StringBuilder();
         for(Item item : player.getInventory()) {
-            result.append(item.getInventoryDescription()).append(" ");
+            result.append("<br>" + item.getInventoryDescription()).append(" ");
         }
-        return "You're carrying:<br>" + result.toString();
+        return "You're carrying:" + result.toString();
     }
 
     public static String unlock(String input) {
@@ -107,9 +107,7 @@ public class Actions {
             }
             else if(!((Shed) currentLocation).isUnlocked()) {
                 ((Shed) currentLocation).unlockShed();
-                currentLocation.setDescription("A cheerful little shed stands with " +
-                        "it's lock hanging open with a picnic table to the north.");
-                result = "The shed is now unlocked";
+                result = "The shed is now unlocked.";
             }
         }
         else if(new Actions().unlockingAndOpeningShed(input)) {
@@ -120,28 +118,59 @@ public class Actions {
                 result = "You need a key to unlock the shed.";
             }
             else {
-                ((Shed) currentLocation).unlockShed();
                 currentLocation.setDescription("You stand before an open shed " +
                         "with a picnic table to the north.");
-                result = "open";//open("");
+                result = open("");
             }
         }
         return result;
     }
 
     private boolean unlockingAndOpeningShed(String input) {
-        return input.equals("shed and open shed") || input.equals("shed then open shed") ||input.equals("and open")
-                || input.equals("then open") || input.equals("shed and open") || input.equals("shed then open")
-                || input.equals("and open shed") || input.equals("then open shed");
+        return input.equals("the shed and open it") ||
+                input.equals("the shed and open") ||
+                input.equals("the shed then open it") ||
+                input.equals("the shed then open") ||
+                input.equals("and open the shed") ||
+                input.equals("and open shed") ||
+                input.equals("and open") ||
+                input.equals("then open the shed") ||
+                input.equals("then open shed") ||
+                input.equals("then open") ||
+                input.equals("shed then open shed") ||
+                input.equals("shed and open shed") ||
+                input.equals("shed and open") ||
+                input.equals("shed then open");
     }
 
-//    public static String open(String input) {
-//
-//    }
+    public static String open(String input) {
+        String result = "What?";
+        Item key = GameState.getInstance().getGame().getInventoryItemByName("key");
+        Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
+
+        if(input.equals("shed") || input.equals("") || input.equals("the shed")) {
+            if(!(currentLocation instanceof Shed)) {
+                result = "There's nothing here to open.";
+            }
+            else if(!((Shed) currentLocation).isUnlocked()) {
+                String unlockResult = unlock("");
+                if(!unlockResult.equals("The shed is now unlocked.")) {
+                    return unlockResult;
+                }
+                ((Shed) currentLocation).openShed();
+                result = "(First unlocking the shed) The shed is now open." + new Actions().listLocationItems(currentLocation.getItems());;
+            }
+            else {
+                ((Shed) currentLocation).openShed();
+                result = "The shed is now open." + new Actions().listLocationItems(currentLocation.getItems());
+            }
+        }
+        return result;
+    }
 
     public static String curse(String input) {
         String result = "Hey, watch your language.";
-        if(input.equals("fuck this")) {
+        if(input.equals("fuck this") || input.equals("fuck this game")) {
             result = "Maybe you need to take a break.";
         }
         else if(input.equals("fuck you")) {

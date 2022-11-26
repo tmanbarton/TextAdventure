@@ -46,7 +46,7 @@ public class GameController {
             case "look" -> look();
             case "inventory", "inven", "invent", "invento", "inventor", "take inventory" -> inventory();
             case "unlock" -> splitInput.length > 1 ? unlock(noun) : unlock("");
-            case "open" -> "open";
+            case "open" -> splitInput.length > 1 ? open(noun) : open("");
             case "fill" -> "fill";
             case "shoot" -> "shoot";
             case "turn" -> "turn";

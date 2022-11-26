@@ -85,13 +85,7 @@ public class GameState {
         String westEndOfSideStreetDescription = "You are at the west and of a side street in an abandoned gold mining town. Branching off from this street is a smaller road to the north.";
 
         Item key = new Item(1, "There is a shiny key here", "Shiny key", "key");
-        Item hammer = new Item(2, "There is a hammer here", "Hammer", "hammer");
-        Item bow = new Item(3, "There is a bow here, strung an ready for shooting", "Bow", "bow");
-        Item arrow = new Item(4, "There is an arrow here", "Arrow", "arrow");
-        Item jar = new Item(5, "There is a jar here", "Jar", "jar");
         Item gold = new Item(6, "There are some gold flakes on the ground here.", "Gold flakes in jar", "gold");
-        Item shovel = new Item(8, "There is a shovel here.", "Shovel", "shovel");
-        Item tent = new Item(9, "There is a tent here, packed neatly in a bag.", "Tent in bag", "tent");
         Item magnet = new Item(10, "There is a thick, circular magnet here, about the size of your palm.", "Magnet", "magnet");
         Item ruby = new Item(11, "A large ruby lays on the ground", "Ruby", "ruby");
 //        Item cube = new Cube(12, "There is a plastic cube puzzle lying on the ground", "Cube", "cube", false, false);
