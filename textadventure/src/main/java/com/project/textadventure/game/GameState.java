@@ -1,6 +1,7 @@
 package com.project.textadventure.game;
 
 import com.project.textadventure.game.Locations.Location;
+import com.project.textadventure.game.Locations.MineEntrance;
 import com.project.textadventure.game.Locations.Shed;
 
 import java.util.*;
@@ -129,7 +130,7 @@ public class GameState {
 //        Boat boat = new Boat(boatDescription, "You're in a rickety wooden boat in an underground lake", new ArrayList<>(), new ArrayList<>(), new Boat(), false, "rickety wooden boat", false);
 //        Dam dam = new Dam(damDescription, "You're at Dam", new ArrayList<>(), new ArrayList<>(), new Dam(), false, "dam", false, false);
 //        GraniteRoom graniteRoom = new GraniteRoom(graniteRoomDescription, "You're at Granite Room", new ArrayList<>(Collections.singletonList(cube)), new ArrayList<>(), false, "granite room", false);
-//        MineEntrance mineEntrance = new MineEntrance(mineEntranceDescription, "You're at the entrance of an abandoned gold mine", new ArrayList<>(Collections.singletonList(gold)), new ArrayList<>(), new MineEntrance(), false, "mine entrance", false);
+        MineEntrance mineEntrance = new MineEntrance(mineEntranceDescription, "You're at the entrance of an abandoned gold mine", new ArrayList<>(Collections.singletonList(gold)), new ArrayList<>(), false, "mine entrance", false);
 //        RubyOnRails rubyOnRails = new RubyOnRails(rubyOnRailsDescription, "You're at Ruby On Rails", new ArrayList<>(Collections.singletonList(ruby)), new ArrayList<>(), false, "ruby on rails", false);
         Shed shed = new Shed(shedDescription, "You're standing before a cheerful little shed", new ArrayList<>(), new ArrayList<>(), false, "shed", false, false);
 
@@ -141,7 +142,7 @@ public class GameState {
 //        boat.connectLocation(new ConnectingLocation(List.of("west", "w"), undergroundLakeWest));
 //        boat.connectLocation(new ConnectingLocation(List.of("northeast", "ne"), undergroundLakeNE));
         bottomOfVerticalMineShaft.connectLocation(new ConnectingLocation(List.of("west", "w"), dankPassage));
-//        bottomOfVerticalMineShaft.connectLocation.(new ConnectingLocation(List.of("in"), mine cage));
+//        bottomOfVerticalMineShaft.connectLocation.(new ConnectingLocation(List.of("in", "enter"), mine cage));
         brokenRock.connectLocation(new ConnectingLocation(List.of("down", "d"), dirtyPassage));
 //        dam.connectLocation.(new ConnectingLocation(List.of("north"), topOfStairs));
 //        dam.connectLocation.(new ConnectingLocation(List.of("south", "s"), lake));
@@ -176,15 +177,15 @@ public class GameState {
         footPath.connectLocation(new ConnectingLocation(List.of("south", "s"), driveway));
         footPath.connectLocation(new ConnectingLocation(List.of("east", "e"), topOfHill));
 //        graniteRoom.connectLocation(new ConnectingLocation(List.of("west", "w"), undergroundLakeEast));
-//        graniteRoom.connectLocation(new ConnectingLocation(List.of("out"), undergroundLakeEast));
+//        graniteRoom.connectLocation(new ConnectingLocation(List.of("out", "exit"), undergroundLakeEast));
         insideLogCabin.connectLocation(new ConnectingLocation(List.of("east", "e"), outsideLogCabin));
         insideLogCabin.connectLocation(new ConnectingLocation(List.of("up", "u"), upstairsLogCabin));
-        insideLogCabin.connectLocation(new ConnectingLocation(List.of("out"), outsideLogCabin));
+        insideLogCabin.connectLocation(new ConnectingLocation(List.of("out", "exit"), outsideLogCabin));
         intersection.connectLocation(new ConnectingLocation(List.of("north", "n"), topOfHill));
         intersection.connectLocation(new ConnectingLocation(List.of("south", "s"), tailings));
         intersection.connectLocation(new ConnectingLocation(List.of("west", "w"), dirtRoad));
         insideTavern.connectLocation(new ConnectingLocation(List.of("west", "w"), outsideTavern));
-        insideTavern.connectLocation(new ConnectingLocation(List.of("out"), outsideTavern));
+        insideTavern.connectLocation(new ConnectingLocation(List.of("out", "exit"), outsideTavern));
 //        lake.connectLocation(new ConnectingLocation(List.of("north", "n"), dam));
         lake.connectLocation(new ConnectingLocation(List.of("west", "w"), tailings));
 //        lakeTown.connectLocation(new ConnectingLocation(List.of("east", "e"), dam));
@@ -192,11 +193,11 @@ public class GameState {
 //        lakeTown.connectLocation(new ConnectingLocation(List.of("up", "u"), dam));
         lightningTree.connectLocation(new ConnectingLocation(List.of("east", "e"), ditch));
         mineShaft.connectLocation(new ConnectingLocation(List.of("east", "e"), undergroundLakeWest));
-//        mineShaft.connectLocation(new ConnectingLocation(List.of("west", "w"), mineEntrance));
-//        mineShaft.connectLocation(new ConnectingLocation(List.of("out"), mineEntrance));
-//        mineEntrance.connectLocation(new ConnectingLocation(List.of("north", "n"), tailings));
-//        mineEntrance.connectLocation(new ConnectingLocation(List.of("east", "e"), mineShaft));
-//        mineEntrance.connectLocation(new ConnectingLocation(List.of("in"), mineShaft));
+        mineShaft.connectLocation(new ConnectingLocation(List.of("west", "w"), mineEntrance));
+        mineShaft.connectLocation(new ConnectingLocation(List.of("out", "exit"), mineEntrance));
+        mineEntrance.connectLocation(new ConnectingLocation(List.of("north", "n"), tailings));
+        mineEntrance.connectLocation(new ConnectingLocation(List.of("east", "e"), mineShaft));
+        mineEntrance.connectLocation(new ConnectingLocation(List.of("in", "enter"), mineShaft));
         mountainPass.connectLocation(new ConnectingLocation(List.of("south", "s"), fieldsOfGrass));
 //        mountainPass.connectLocation(new ConnectingLocation(List.of("west", "w"), mine cage));
         mountainPass.connectLocation(new ConnectingLocation(List.of("down", "d"), fieldsOfGrass));
@@ -208,11 +209,11 @@ public class GameState {
         narrowCorridor.connectLocation(new ConnectingLocation(List.of("down", "d"), dynamiteHoles));
         outsideLogCabin.connectLocation(new ConnectingLocation(List.of("south", "s"), westEndOfSideStreet));
         outsideLogCabin.connectLocation(new ConnectingLocation(List.of("west", "w"), insideLogCabin));
-        outsideLogCabin.connectLocation(new ConnectingLocation(List.of("in"), insideLogCabin));
+        outsideLogCabin.connectLocation(new ConnectingLocation(List.of("in", "enter"), insideLogCabin));
         outsideTavern.connectLocation(new ConnectingLocation(List.of("north", "n"), eastEndOfSideStreet));
 //        outsideTavern.connectLocation(new ConnectingLocation(List.of("south", "s"), head towards colorado springs?));
         outsideTavern.connectLocation(new ConnectingLocation(List.of("east", "e"), insideTavern));
-        outsideTavern.connectLocation(new ConnectingLocation(List.of("in"), insideTavern));
+        outsideTavern.connectLocation(new ConnectingLocation(List.of("in", "enter"), insideTavern));
         picnicTable.connectLocation(new ConnectingLocation(List.of("north", "n"), shed));
         picnicTable.connectLocation(new ConnectingLocation(List.of("south", "s"), privateProperty));
         privateProperty.connectLocation(new ConnectingLocation(List.of("north", "n"), archeryRange));
@@ -223,7 +224,7 @@ public class GameState {
         roadInValley.connectLocation(new ConnectingLocation(List.of("south", "s"), eastEndOfSideStreet));
 //        rubyOnRails.connectLocation(new ConnectingLocation(List.of("up", "u"), dynamiteHoles));
         shed.connectLocation(new ConnectingLocation(List.of("south", "s"), picnicTable));
-//        tailings.connectLocation(new ConnectingLocation(List.of("south", "s"), mineEntrance));
+        tailings.connectLocation(new ConnectingLocation(List.of("south", "s"), mineEntrance));
         tailings.connectLocation(new ConnectingLocation(List.of("east", "e"), lake));
         tailings.connectLocation(new ConnectingLocation(List.of("north", "n"), intersection));
         topOfHill.connectLocation(new ConnectingLocation(List.of("south", "s"), intersection));
@@ -234,19 +235,19 @@ public class GameState {
         topOfStairs.connectLocation(new ConnectingLocation(List.of("west", "w"), westEndOfSideStreet));
 //        topOfStairs.connectLocation(new ConnectingLocation(List.of("down", "d"), dam));
         undergroundLakeWest.connectLocation(new ConnectingLocation(List.of("south", "s"), mineShaft));
-//        undergroundLakeWest.connectLocation(new ConnectingLocation(List.of("in"), boat));
+//        undergroundLakeWest.connectLocation(new ConnectingLocation(List.of("in", "enter"), boat));
         undergroundLakeNE.connectLocation(new ConnectingLocation(List.of("east", "e"), dirtyPassage));
-//        undergroundLakeNE.connectLocation(new ConnectingLocation(List.of("in"), boat));
+//        undergroundLakeNE.connectLocation(new ConnectingLocation(List.of("in", "enter"), boat));
 //        undergroundLakeEast.connectLocation(new ConnectingLocation(List.of("east", "e"), graniteRoom));
-//        undergroundLakeEast.connectLocation(new ConnectingLocation(List.of("in"), boat));
+//        undergroundLakeEast.connectLocation(new ConnectingLocation(List.of("in", "enter"), boat));
         upstairsLogCabin.connectLocation(new ConnectingLocation(List.of("down", "d"), insideLogCabin));
         westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("north", "n"), outsideLogCabin));
         westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("east", "e"), topOfStairs));
 
         driveway.setVisited(true);
 //        return new Player(new ArrayList<>(), driveway, false);
-        Player player = new Player(new ArrayList<>(), shed, false);
-        player.addItemToInventory(key);
+        Player player = new Player(new ArrayList<>(), mineEntrance, false);
+        player.addItemToInventory(new Item(5, "There is a jar here", "Jar", "jar"));
         return player;
 
     }

@@ -30,6 +30,10 @@ public class Shed extends Location {
         return unlocked;
     }
 
+    public boolean isOpen() {
+        return open;
+    }
+
     public void unlockShed() {
         this.unlocked = true;
         this.setDescription("A cheerful little shed stands with it's lock hanging open with a picnic table to the north.");

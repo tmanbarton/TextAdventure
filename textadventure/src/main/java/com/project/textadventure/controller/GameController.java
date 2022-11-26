@@ -64,7 +64,8 @@ public class GameController {
 
     private boolean isDirection(String input) {
         List<String> directions = List.of("n", "north", "s", "south", "e", "east", "w", "west", "u", "up",
-                "d", "down", "nw", "northwest", "ne", "northeast", "sw", "southwest", "se", "southeast");
+                "d", "down", "nw", "northwest", "ne", "northeast", "sw", "southwest", "se", "southeast",
+                "in", "out", "enter", "exit");
         return directions.contains(input);
     }
 

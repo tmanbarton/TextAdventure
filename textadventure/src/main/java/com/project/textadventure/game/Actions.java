@@ -1,6 +1,7 @@
 package com.project.textadventure.game;
 
 import com.project.textadventure.game.Locations.Location;
+import com.project.textadventure.game.Locations.MineEntrance;
 import com.project.textadventure.game.Locations.Shed;
 
 import java.util.List;
@@ -29,27 +30,36 @@ public class Actions {
     private String listLocationItems(List<Item> items) {
         StringBuilder result = new StringBuilder();
         for(Item item : items) {
-            result.append("<br>" + item.getLocationDescription());
+            result.append("<br>").append(item.getLocationDescription());
         }
-        return result.isEmpty() ? "" : "<br>" + result.toString();
+        return result.isEmpty() ? "" : "<br>" + result;
     }
 
     public static String getItem(String input) {
         Player player = GameState.getInstance().getGame();
+        Location currentLocation = player.getCurrentLocation();
         String[] splitInput = input.split(" ");
-        Item item = player.getCurrentLocation().getLocationItemByName(splitInput[splitInput.length - 1]);
+        Item item = currentLocation.getLocationItemByName(splitInput[splitInput.length - 1]);
 
-        // Either input is "get item" or "get the item"
-        if(item != null && (splitInput.length == 1 || (splitInput.length == 2 && splitInput[0].equals("the")))) {
+        String result = "I don't see that here";
+        // Either input is "get item" or "get the item", or trying to get nails before you've shot them off with arrow
+        if(item != null && (splitInput.length == 1 || (splitInput.length == 2 && splitInput[0].equals("the")))
+                || new Actions().gettingNailsAtMineEntrance(splitInput[splitInput.length - 1], currentLocation)) {
+            if(splitInput[splitInput.length - 1].equals("nails")) {
+                return "Are you sure about that? The structure is very fragile and may fall apart and onto you.";
+            }
             player.addItemToInventory(item);
-            player.getCurrentLocation().removeItemFromLocation(item);
-            return "OK";
+            currentLocation.removeItemFromLocation(item);
+            result = "OK";
+            if(input.equals("tree") && new Actions().locationHasTrees(currentLocation)) {
+                result = "You walk to the nearest tree and start pulling. After a couple minutes of this you give up. You can't get a tree.";
+            }
         }
-        if(input.equals("tree")) {
-            // Make sure location has trees
-            return "You walk to the nearest tree and start pulling. After a couple minutes of this you give up. You can't get a tree.";
-        }
-        return "I don't see that here.";
+        return result;
+    }
+
+    private boolean gettingNailsAtMineEntrance(String input, Location location) {
+        return location instanceof MineEntrance && input.equals("nails");
     }
 
     private boolean locationHasTrees(Location location) {
@@ -88,9 +98,9 @@ public class Actions {
         }
         StringBuilder result = new StringBuilder();
         for(Item item : player.getInventory()) {
-            result.append("<br>" + item.getInventoryDescription()).append(" ");
+            result.append("<br>").append(item.getInventoryDescription()).append(" ");
         }
-        return "You're carrying:" + result.toString();
+        return "You're carrying:" + result;
     }
 
     public static String unlock(String input) {
@@ -105,7 +115,10 @@ public class Actions {
             else if(key == null) {
                 result = "You need a key to unlock the shed.";
             }
-            else if(!((Shed) currentLocation).isUnlocked()) {
+            else if(((Shed) currentLocation).isUnlocked()) {
+                result = "The shed is already unlocked.";
+            }
+            else {
                 ((Shed) currentLocation).unlockShed();
                 result = "The shed is now unlocked.";
             }
@@ -145,7 +158,6 @@ public class Actions {
 
     public static String open(String input) {
         String result = "What?";
-        Item key = GameState.getInstance().getGame().getInventoryItemByName("key");
         Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
 
         if(input.equals("shed") || input.equals("") || input.equals("the shed")) {
@@ -158,30 +170,26 @@ public class Actions {
                     return unlockResult;
                 }
                 ((Shed) currentLocation).openShed();
-                result = "(First unlocking the shed) The shed is now open." + new Actions().listLocationItems(currentLocation.getItems());;
+                result = "(First unlocking the shed) The shed is now open." + new Actions().listLocationItems(currentLocation.getItems());
             }
-            else {
+            else if(!((Shed) currentLocation).isOpen()) {
                 ((Shed) currentLocation).openShed();
                 result = "The shed is now open." + new Actions().listLocationItems(currentLocation.getItems());
+            }
+            else {
+                result = "The shed is already open.";
             }
         }
         return result;
     }
 
     public static String curse(String input) {
-        String result = "Hey, watch your language.";
-        if(input.equals("fuck this") || input.equals("fuck this game")) {
-            result = "Maybe you need to take a break.";
-        }
-        else if(input.equals("fuck you")) {
-            result = "Well fuck you too, that's not very nice.";
-        }
-        else if(input.equals("shit")) {
-            result = "Poop is gross.";
-        }
-        else if(input.equals("damn") || input.equals("damn it")) {
-            result = "There's a dam around here, but no damn.";
-        }
-        return result;
+        return switch (input) {
+            case "fuck this", "fuck this game" -> "Maybe you need to take a break.";
+            case "fuck you" -> "Well fuck you too, that's not very nice.";
+            case "shit" -> "Poop is gross.";
+            case "damn", "damn it" -> "There's a dam around here, but no damn.";
+            default -> "Hey, watch your language.";
+        };
     }
 }
