@@ -5,7 +5,8 @@ import com.project.textadventure.game.Locations.Location;
 import java.util.List;
 
 public class Actions {
-    public static String makeMove(String direction, Player player) {
+    public static String makeMove(String direction) {
+        Player player = GameState.getInstance().getGame();
         List<ConnectingLocation> connectingLocations = player.getCurrentLocation().getConnectingLocations();
 
         for(ConnectingLocation connectingLocation : connectingLocations) {
@@ -32,7 +33,8 @@ public class Actions {
         return result.isEmpty() ? "" : "<br>" + result.toString();
     }
 
-    public static String getItem(String inputItem, Player player) {
+    public static String getItem(String inputItem) {
+        Player player = GameState.getInstance().getGame();
         Item item = player.getCurrentLocation().getItemByName(inputItem);
         if(item != null) {
             player.addItemToInventory(item);
@@ -42,7 +44,9 @@ public class Actions {
         return "I don't see that here.";
     }
 
-    public static String dropItem(String inputItem, Player player) {
+    public static String dropItem(String inputItem) {
+        Player player = GameState.getInstance().getGame();
+
         Item item = player.getInventoryItemByName(inputItem);
         if(item != null) {
             player.removeItemFromInventory(item);
@@ -52,13 +56,15 @@ public class Actions {
         return "You're not carrying it!";
     }
 
-    public static String look(Player player) {
-        Location currentLocation = player.getCurrentLocation();
+    public static String look() {
+
+        Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
         return currentLocation.getDescription()
                 + new Actions().listLocationItems(currentLocation.getItems());
     }
 
-    public static String inventory(Player player) {
+    public static String inventory() {
+        Player player = GameState.getInstance().getGame();
         if(player.getInventory().isEmpty()) {
             return "You're not carrying anything!";
         }

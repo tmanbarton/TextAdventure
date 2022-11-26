@@ -250,6 +250,6 @@ public class GameState {
         westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("east", "e"), topOfStairs));
 
         driveway.setVisited(true);
-        return new Player(new ArrayList<>(), driveway);
+        return new Player(new ArrayList<>(), driveway, false);
     }
 }

@@ -7,10 +7,12 @@ import java.util.List;
 public class Player {
     private List<Item> inventory;
     private Location currentLocation;
+    private boolean hasMoved;
 
-    public Player(List<Item> inventory, Location currentLocation) {
+    public Player(List<Item> inventory, Location currentLocation, boolean hasMoved) {
         this.inventory = inventory;
         this.currentLocation = currentLocation;
+        this.hasMoved = hasMoved;
     }
 
     public Location getCurrentLocation() {
