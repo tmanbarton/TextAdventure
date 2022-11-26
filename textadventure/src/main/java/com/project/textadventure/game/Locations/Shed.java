@@ -5,7 +5,7 @@ import com.project.textadventure.game.Item;
 
 import java.util.List;
 
-public class Shed extends Location{
+public class Shed extends Location {
     boolean unlocked;
     boolean open;
     public Shed(String description,
@@ -26,8 +26,12 @@ public class Shed extends Location{
         this.open = open;
     }
 
-    public void unlockShed() {
+    public boolean isUnlocked() {
+        return unlocked;
+    }
 
+    public void unlockShed() {
+        this.unlocked = true;
     }
 
     public void openShed() {

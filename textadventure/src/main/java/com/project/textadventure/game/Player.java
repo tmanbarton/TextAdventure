@@ -27,6 +27,14 @@ public class Player {
         return inventory;
     }
 
+    public boolean hasPlayerMoved() {
+        return hasMoved;
+    }
+
+    public void setHasMoved(boolean hasMoved) {
+        this.hasMoved = hasMoved;
+    }
+
     public Item getInventoryItemByName(String name) {
         for(Item item : this.inventory) {
             if(name.equals(item.getName())) {

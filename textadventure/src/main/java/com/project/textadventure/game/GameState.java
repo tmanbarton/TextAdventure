@@ -40,7 +40,6 @@ public class GameState {
 //    }
 
     private Player createGame() {
-        String tailingsDescription = "All around are piles of tailings that look like they have been puked into this valley. There's not much else to be seen except the entrance to a mine to the south. The shimmering is definitely a lake and there's a path leading in that direction and another to the north.";
         String antHillDescription = "Nearby is an ant hill with little black ants scurrying about doing their business."; //TODO if input is "dig" and you have the shovel, reveal a salamander in ant hill. Then you can get the salamander
         String archeryRangeDescription = "You step in front of two archery targets made of hay bales and spray-painted circles that are in an archery range made from a rope tied to four trees, creating a rectangle. There's a ditch to the north and a long driveway leading south.";
         String boatDescription = "You're sitting in a rickety wooden boat in a large underground lake with passages to the west, east, and northeast.";
@@ -75,6 +74,7 @@ public class GameState {
         String rubyOnRailsDescription = "You've reached a dead end. A crumpled mine cart, no longer able to run on the rails, has fallen on its side and dumped a large ruby onto the rails.";
         String shedDescription = "Here is a cheerful shed with wood matching that of the picnic table's. Its doors are firmly shut and locked, the one and only thing that is on this plot of land.";
         String insideTavernDescription = "The Tommyknocker Tavern looks just as shabby on the inside as it does on the outside with all of its furnishings falling apart and a dusty smell in the air.";
+        String tailingsDescription = "All around are piles of tailings that look like they have been puked into this valley. There's not much else to be seen except the entrance to a mine to the south. The shimmering is definitely a lake and there's a path leading in that direction and another to the north.";
         String topOfHillDescription = "You are at the top of a steep hill and have a magnificent view of the lush, green valley. The road goes into the trees to the west and down the hill to the south.";
         String mountainPassDescription = "The road you're on has reached a mountain pass. This vantage point gives a magnificent view of the valley. The road goes down the mountain to the south and there's a working mine cage to the west.";
         String topOfStairsDescription = "You are at the top of a set of wooden stairs embedded in the hill. The stairs are next to a street running east and west in the abandoned gold mining town. A dam is to the south at the bottom of the stairs.";
@@ -250,6 +250,10 @@ public class GameState {
         westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("east", "e"), topOfStairs));
 
         driveway.setVisited(true);
-        return new Player(new ArrayList<>(), driveway, false);
+//        return new Player(new ArrayList<>(), driveway, false);
+        Player player = new Player(new ArrayList<>(), shed, false);
+        player.addItemToInventory(key);
+        return player;
+
     }
 }

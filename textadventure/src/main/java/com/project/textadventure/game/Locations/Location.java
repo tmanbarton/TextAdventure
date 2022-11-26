@@ -14,13 +14,13 @@ public class Location {
     private String shortDescription;
 
     public Location(
-            String description,
+            String fullDescription,
             String shortDescription,
             List<Item> items,
             List<ConnectingLocation> connectingLocations,
             boolean visited,
             String name) {
-        this.description = description;
+        this.description = fullDescription;
         this.items = items;
         this.connectingLocations = connectingLocations;
         this.visited = visited;
@@ -48,6 +48,10 @@ public class Location {
         return items;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public boolean isVisited() {
         return visited;
     }
@@ -56,7 +60,11 @@ public class Location {
         this.visited = visited;
     }
 
-    public Item getItemByName(String name) {
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Item getLocationItemByName(String name) {
         for(Item item : this.items) {
             if(name.equals(item.getName())) {
                 return item;
