@@ -16,6 +16,11 @@ public class Player {
     public Location getCurrentLocation() {
         return currentLocation;
     }
+
+    public void setCurrentLocation(Location currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+
     public List<Item> getInventory() {
         return inventory;
     }

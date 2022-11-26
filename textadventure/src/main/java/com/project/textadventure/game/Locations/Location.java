@@ -18,7 +18,8 @@ public class Location {
             String shortDescription,
             List<Item> items,
             List<ConnectingLocation> connectingLocations,
-            boolean visited, String name) {
+            boolean visited,
+            String name) {
         this.description = description;
         this.items = items;
         this.connectingLocations = connectingLocations;
@@ -37,6 +38,22 @@ public class Location {
 
     public String getShortDescription() {
         return shortDescription;
+    }
+
+    public List<ConnectingLocation> getConnectingLocations() {
+        return connectingLocations;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
     }
 
     public Item getItemByName(String name) {

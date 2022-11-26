@@ -16,4 +16,12 @@ public class Item {
     public String getName() {
         return name;
     }
+
+    public String getInventoryDescription() {
+        return inventoryDescription;
+    }
+
+    public String getLocationDescription() {
+        return locationDescription;
+    }
 }

@@ -1,6 +1,7 @@
 package com.project.textadventure.game;
 
 import com.project.textadventure.game.Locations.Location;
+import com.project.textadventure.game.Locations.Shed;
 
 import java.util.*;
 
@@ -136,7 +137,7 @@ public class GameState {
 //        GraniteRoom graniteRoom = new GraniteRoom(graniteRoomDescription, "You're at Granite Room", new ArrayList<>(Collections.singletonList(cube)), new ArrayList<>(), false, "granite room", false);
 //        MineEntrance mineEntrance = new MineEntrance(mineEntranceDescription, "You're at the entrance of an abandoned gold mine", new ArrayList<>(Collections.singletonList(gold)), new ArrayList<>(), new MineEntrance(), false, "mine entrance", false);
 //        RubyOnRails rubyOnRails = new RubyOnRails(rubyOnRailsDescription, "You're at Ruby On Rails", new ArrayList<>(Collections.singletonList(ruby)), new ArrayList<>(), false, "ruby on rails", false);
-//        Shed shed = new Shed(shedDescription, "You're standing before a cheerful little shed", new ArrayList<>(), new ArrayList<>(), new Shed(), false, "shed", false, false);
+        Shed shed = new Shed(shedDescription, "You're standing before a cheerful little shed", new ArrayList<>(), new ArrayList<>(), false, "shed", false, false);
 
         antHill.connectLocation(new ConnectingLocation(List.of("west", "w"), ditch));
         archeryRange.connectLocation(new ConnectingLocation(List.of("north", "n"), ditch));
@@ -218,7 +219,7 @@ public class GameState {
 //        outsideTavern.connectLocation(new ConnectingLocation(List.of("south", "s"), head towards colorado springs?));
         outsideTavern.connectLocation(new ConnectingLocation(List.of("east", "e"), insideTavern));
         outsideTavern.connectLocation(new ConnectingLocation(List.of("in"), insideTavern));
-//        picnicTable.connectLocation(new ConnectingLocation(List.of("north", "n"), shed));
+        picnicTable.connectLocation(new ConnectingLocation(List.of("north", "n"), shed));
         picnicTable.connectLocation(new ConnectingLocation(List.of("south", "s"), privateProperty));
         privateProperty.connectLocation(new ConnectingLocation(List.of("north", "n"), archeryRange));
         privateProperty.connectLocation(new ConnectingLocation(List.of("south", "s"), driveway));
@@ -227,7 +228,7 @@ public class GameState {
         roadInValley.connectLocation(new ConnectingLocation(List.of("north", "n"), fieldsOfGrass));
         roadInValley.connectLocation(new ConnectingLocation(List.of("south", "s"), eastEndOfSideStreet));
 //        rubyOnRails.connectLocation(new ConnectingLocation(List.of("up", "u"), dynamiteHoles));
-//        shed.connectLocation(new ConnectingLocation(List.of("south", "s"), picnicTable));
+        shed.connectLocation(new ConnectingLocation(List.of("south", "s"), picnicTable));
 //        tailings.connectLocation(new ConnectingLocation(List.of("south", "s"), mineEntrance));
         tailings.connectLocation(new ConnectingLocation(List.of("east", "e"), lake));
         tailings.connectLocation(new ConnectingLocation(List.of("north", "n"), intersection));
@@ -248,6 +249,7 @@ public class GameState {
         westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("north", "n"), outsideLogCabin));
         westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("east", "e"), topOfStairs));
 
-        return new Player(new ArrayList<>(), dirtRoad);
+        driveway.setVisited(true);
+        return new Player(new ArrayList<>(), driveway);
     }
 }

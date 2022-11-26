@@ -5,17 +5,15 @@ import com.project.textadventure.game.Player;
 
 import java.util.List;
 
-import static com.project.textadventure.game.Actions.dropItem;
-import static com.project.textadventure.game.Actions.getItem;
+import static com.project.textadventure.game.Actions.*;
 
 public class GameController {
     public String getResponse(String input) {
         Player player = GameState.getInstance().getGame();
-//        return player.getCurrentLocation().getDescription();
         return findAction(input, player);
     }
 
-    // Direction, get, drop, throw, look, inventory, open, unlock, turn, shoot, fill, solve)
+    // Direction, get, drop, throw, look, inventory, help, quit, open, unlock, turn, shoot, fill, solve)
     public String findAction(String input, Player player) {
         String[] splitInput = input.split(" ");
         if(splitInput.length > 2) {
@@ -24,22 +22,26 @@ public class GameController {
         String verb = splitInput[0];
         String noun = splitInput.length > 1 ? splitInput[1] : null;
 
-        if(isDirection(input)) {
-            // move
-            return "Moved " + input;
+        if(isDirection(verb)) {
+            return makeMove(verb, player);
         }
-        String result = "";
-        switch (verb) {
-            case "get":
-                result = getItem(noun, player);
-                break;
-            case "drop":
-                result = dropItem(noun, player);
-                break;
-            default:
-                // TODO more variants of IDK and random
-                result = "I don't know that word.";
-        }
+        String result = switch (verb) {
+            case "get" -> noun == null ? "What do you want to get?" : getItem(noun, player);
+            case "drop", "throw" -> noun == null ? "What do you want to drop?" : dropItem(noun, player);
+            case "look" -> look(player);
+            case "inventory", "inven", "invent", "invento", "inventor" -> inventory(player);
+            case "help" -> "help";
+            case "unlock", "unloc" -> "unlock";
+            case "open" -> "open";
+            case "fill" -> "fill";
+            case "shoot" -> "shoot";
+            case "turn" -> "turn";
+            case "solve" -> "solve";
+            case "quit" -> "quit";
+            default ->
+                // TODO more variants of IDK and make random
+                    "I don't know that word.";
+        };
 
         return result;
     }
