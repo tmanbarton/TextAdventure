@@ -1,8 +1,6 @@
 package com.project.textadventure.game;
 
 import com.project.textadventure.game.Locations.Location;
-import com.project.textadventure.game.Player;
-import com.project.textadventure.game.graph.ConnectingLocation;
 
 import java.util.*;
 

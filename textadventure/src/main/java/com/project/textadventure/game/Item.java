@@ -12,4 +12,8 @@ public class Item {
         this.inventoryDescription = inventoryDescription;
         this.name = name;
     }
+
+    public String getName() {
+        return name;
+    }
 }

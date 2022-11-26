@@ -1,4 +1,4 @@
-package com.project.textadventure.game.graph;
+package com.project.textadventure.game;
 
 import com.project.textadventure.game.Locations.Location;
 

@@ -1,7 +1,7 @@
 package com.project.textadventure.game.Locations;
 
 import com.project.textadventure.game.Item;
-import com.project.textadventure.game.graph.ConnectingLocation;
+import com.project.textadventure.game.ConnectingLocation;
 
 import java.util.List;
 
@@ -37,5 +37,22 @@ public class Location {
 
     public String getShortDescription() {
         return shortDescription;
+    }
+
+    public Item getItemByName(String name) {
+        for(Item item : this.items) {
+            if(name.equals(item.getName())) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public void addItemToLocation(Item item) {
+        items.add(item);
+    }
+
+    public void removeItemFromLocation(Item item) {
+        items.remove(item);
     }
 }
