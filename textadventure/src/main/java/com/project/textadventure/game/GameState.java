@@ -1,5 +1,6 @@
 package com.project.textadventure.game;
 
+import com.project.textadventure.game.Locations.Dam;
 import com.project.textadventure.game.Locations.Location;
 import com.project.textadventure.game.Locations.MineEntrance;
 import com.project.textadventure.game.Locations.Shed;
@@ -128,7 +129,7 @@ public class GameState {
         Location upstairsLogCabin = new Location(upstairsLogCabinDescription, "You're on the second floor of the log cabin", new ArrayList<>(), new ArrayList<>(), false, "upstairs log cabin");
         Location westEndOfSideStreet = new Location(westEndOfSideStreetDescription, "You're at the west end of the main street", new ArrayList<>(), new ArrayList<>(), false, "west end of side street");
 //        Boat boat = new Boat(boatDescription, "You're in a rickety wooden boat in an underground lake", new ArrayList<>(), new ArrayList<>(), new Boat(), false, "rickety wooden boat", false);
-//        Dam dam = new Dam(damDescription, "You're at Dam", new ArrayList<>(), new ArrayList<>(), new Dam(), false, "dam", false, false);
+        Dam dam = new Dam(damDescription, "You're at Dam", new ArrayList<>(), new ArrayList<>(), false, "dam", false, false);
 //        GraniteRoom graniteRoom = new GraniteRoom(graniteRoomDescription, "You're at Granite Room", new ArrayList<>(Collections.singletonList(cube)), new ArrayList<>(), false, "granite room", false);
         MineEntrance mineEntrance = new MineEntrance(mineEntranceDescription, "You're at the entrance of an abandoned gold mine", new ArrayList<>(Collections.singletonList(gold)), new ArrayList<>(), false, "mine entrance", false);
 //        RubyOnRails rubyOnRails = new RubyOnRails(rubyOnRailsDescription, "You're at Ruby On Rails", new ArrayList<>(Collections.singletonList(ruby)), new ArrayList<>(), false, "ruby on rails", false);
@@ -144,11 +145,11 @@ public class GameState {
         bottomOfVerticalMineShaft.connectLocation(new ConnectingLocation(List.of("west", "w"), dankPassage));
 //        bottomOfVerticalMineShaft.connectLocation.(new ConnectingLocation(List.of("in", "enter"), mine cage));
         brokenRock.connectLocation(new ConnectingLocation(List.of("down", "d"), dirtyPassage));
-//        dam.connectLocation.(new ConnectingLocation(List.of("north"), topOfStairs));
-//        dam.connectLocation.(new ConnectingLocation(List.of("south", "s"), lake));
-//        dam.connectLocation.(new ConnectingLocation(List.of("up", "u"), topOfStairs));
-//        dam.connectLocation.(new ConnectingLocation(null, lakeTown));
-//        dam.connectLocation.(new ConnectingLocation(null, lakeTown));
+        dam.connectLocation(new ConnectingLocation(List.of("north", "n"), topOfStairs));
+        dam.connectLocation(new ConnectingLocation(List.of("south", "s"), lake));
+        dam.connectLocation(new ConnectingLocation(List.of("up", "u"), topOfStairs));
+//        dam.connectLocation(new ConnectingLocation(null, lakeTown));
+//        dam.connectLocation(new ConnectingLocation(null, lakeTown));
         dankPassage.connectLocation(new ConnectingLocation(List.of("south", "s"), narrowCorridor));
         dankPassage.connectLocation(new ConnectingLocation(List.of("east", "e"), bottomOfVerticalMineShaft));
         dankPassage.connectLocation(new ConnectingLocation(List.of("west", "w"), mustyBend));
@@ -186,11 +187,11 @@ public class GameState {
         intersection.connectLocation(new ConnectingLocation(List.of("west", "w"), dirtRoad));
         insideTavern.connectLocation(new ConnectingLocation(List.of("west", "w"), outsideTavern));
         insideTavern.connectLocation(new ConnectingLocation(List.of("out", "exit"), outsideTavern));
-//        lake.connectLocation(new ConnectingLocation(List.of("north", "n"), dam));
+        lake.connectLocation(new ConnectingLocation(List.of("north", "n"), dam));
         lake.connectLocation(new ConnectingLocation(List.of("west", "w"), tailings));
-//        lakeTown.connectLocation(new ConnectingLocation(List.of("east", "e"), dam));
+        lakeTown.connectLocation(new ConnectingLocation(List.of("east", "e"), dam));
 //        lakeTown.connectLocation(new ConnectingLocation(List.of("west", "w"), farther into the town));
-//        lakeTown.connectLocation(new ConnectingLocation(List.of("up", "u"), dam));
+        lakeTown.connectLocation(new ConnectingLocation(List.of("up", "u"), dam));
         lightningTree.connectLocation(new ConnectingLocation(List.of("east", "e"), ditch));
         mineShaft.connectLocation(new ConnectingLocation(List.of("east", "e"), undergroundLakeWest));
         mineShaft.connectLocation(new ConnectingLocation(List.of("west", "w"), mineEntrance));
@@ -230,10 +231,10 @@ public class GameState {
         topOfHill.connectLocation(new ConnectingLocation(List.of("south", "s"), intersection));
         topOfHill.connectLocation(new ConnectingLocation(List.of("west", "w"), footPath));
         topOfHill.connectLocation(new ConnectingLocation(List.of("down", "d"), intersection));
-//        topOfStairs.connectLocation(new ConnectingLocation(List.of("south", "s"), dam));
+        topOfStairs.connectLocation(new ConnectingLocation(List.of("south", "s"), dam));
         topOfStairs.connectLocation(new ConnectingLocation(List.of("east", "e"), eastEndOfSideStreet));
         topOfStairs.connectLocation(new ConnectingLocation(List.of("west", "w"), westEndOfSideStreet));
-//        topOfStairs.connectLocation(new ConnectingLocation(List.of("down", "d"), dam));
+        topOfStairs.connectLocation(new ConnectingLocation(List.of("down", "d"), dam));
         undergroundLakeWest.connectLocation(new ConnectingLocation(List.of("south", "s"), mineShaft));
 //        undergroundLakeWest.connectLocation(new ConnectingLocation(List.of("in", "enter"), boat));
         undergroundLakeNE.connectLocation(new ConnectingLocation(List.of("east", "e"), dirtyPassage));
@@ -246,8 +247,8 @@ public class GameState {
 
         driveway.setVisited(true);
 //        return new Player(new ArrayList<>(), driveway, false);
-        Player player = new Player(new ArrayList<>(), mineEntrance, false);
-        player.addItemToInventory(new Item(5, "There is a jar here", "Jar", "jar"));
+        Player player = new Player(new ArrayList<>(), dam, false);
+//        player.addItemToInventory(new Item(5, "There is a jar here", "Jar", "jar"));
         return player;
 
     }

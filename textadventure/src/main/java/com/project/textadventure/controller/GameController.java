@@ -20,9 +20,9 @@ public class GameController {
                 player.setHasMoved(true);
                 return "You're on a mountain with several scattered mining towns. It's said that some of the mines are " +
                         "still accessible, but you've also heard stories that the local miners report seeing " +
-                        "tommyknockers in some of them. I will be your eyes and hands. Use one or two word commands to " +
-                        "guide me.<br>If you would like further information on how the game works, type \"info\"." +
-                        "<br><br>" + player.getCurrentLocation().getDescription();
+                        "tommyknockers in some of them. I will be your eyes and hands. Use commands in the form " +
+                        "\"verb noun\" to guide me.<br>If you would like further information on how the game works, type " +
+                        "\"info\".<br><br>" + player.getCurrentLocation().getDescription();
             }
             else if(input.equals("n") || input.equals("no")) {
                 player.setHasMoved(true);
@@ -49,7 +49,7 @@ public class GameController {
             case "open" -> splitInput.length > 1 ? open(noun) : open("");
             case "fill" -> "fill";
             case "shoot" -> "shoot";
-            case "turn" -> "turn";
+            case "turn" -> splitInput.length > 1 ? turnWheel(noun) : turnWheel("");
             case "solve" -> "solve";
             case "quit" -> "quit";
             case "info" -> infoString();

@@ -1,5 +1,6 @@
 package com.project.textadventure.game;
 
+import com.project.textadventure.game.Locations.Dam;
 import com.project.textadventure.game.Locations.Location;
 import com.project.textadventure.game.Locations.MineEntrance;
 import com.project.textadventure.game.Locations.Shed;
@@ -7,6 +8,12 @@ import com.project.textadventure.game.Locations.Shed;
 import java.util.List;
 
 public class Actions {
+    /**
+     * Loop over the current location's connecting locations. Check if the inputted direction matches one of the
+     * connecting location's directions. Update the current location to that connecting location if so.
+     * @param direction
+     * @return the description of the location the user has moved to, or "You can't go that way." if the inputted direction isn't allowed
+     */
     public static String makeMove(String direction) {
         Player player = GameState.getInstance().getGame();
         List<ConnectingLocation> connectingLocations = player.getCurrentLocation().getConnectingLocations();
@@ -35,6 +42,15 @@ public class Actions {
         return result.isEmpty() ? "" : "<br>" + result;
     }
 
+    /**
+     * Split the input to get the last word, which should be the item to get. Try to get the item by name from the
+     * location, and if it's there, remove it from the location and add it to the player's inventory.
+     * @param input Everything after "get" from the input, e.g. "the key" if input was "get the key" or "jar" if
+     *              input was "get jar"
+     * @return "OK" if the item is at the location and the get command was entered correctly ("get [item]" or "get the [item]"),
+     * "I don't see that here." if there's no item at the location that matches the input, or some other unique response
+     * for a specific input, e.g. trying to get a tree results in a special output.
+     */
     public static String getItem(String input) {
         Player player = GameState.getInstance().getGame();
         Location currentLocation = player.getCurrentLocation();
@@ -70,6 +86,16 @@ public class Actions {
                 || name.equals("private property") || name.equals("shed") || name.equals("top of hill") || name.equals("mountain pass");
     }
 
+    /**
+     * Split the input to get the last word, which should be the item to get. Try to get the item by name from the
+     * player's inventory, and if it's there, remove it from the inventory and add it to the location.
+     * @param input Everything after "drop" from the input, e.g. "the key" if input was "drop the key" or "magnet" if
+     *              input was "drop magnet"
+     * @return "OK" if the item is at the location and the get command was entered correctly ("drop [item]" or
+     * "drop the [item]"), "You're not carrying it!" if there's no item in the player's inventory that matches the
+     * input, or some other unique action happens for a specific input at a specific place, e.g. dropping magnet at
+     * the dam allows you to be able to turn the wheel
+     */
     public static String dropItem(String input) {
         Player player = GameState.getInstance().getGame();
         String[] splitInput = input.split(" ");
@@ -77,6 +103,9 @@ public class Actions {
         Item item = player.getInventoryItemByName(splitInput[splitInput.length - 1]);
         // Either input is "drop item" or "drop the item"
         if(item != null && (splitInput.length == 1 || (splitInput.length == 2 && splitInput[0].equals("the")))) {
+            if(player.getCurrentLocation() instanceof Dam && splitInput[splitInput.length - 1].equals("magnet")) {
+                ((Dam) player.getCurrentLocation()).setMagnetDropped(true);
+            }
             player.removeItemFromInventory(item);
             player.getCurrentLocation().addItemToLocation(item);
             return "OK";
@@ -85,7 +114,6 @@ public class Actions {
     }
 
     public static String look() {
-
         Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
         return currentLocation.getDescription()
                 + new Actions().listLocationItems(currentLocation.getItems());
@@ -103,6 +131,17 @@ public class Actions {
         return "You're carrying:" + result;
     }
 
+    /**
+     * 
+     * @param input Everything after "unlock" from the input, e.g. "the shed" if input was "unlock the shed", or "shed" if
+     *              input was "unlock shed", or just "" if input was "unlock"
+     * @return <ul><li>"The shed is now unlocked" if the player has the key and is at the shed</li>
+     * <li>"You need a key to unlock the shed" if the player is at the shed without a key</li>
+     * <li>"The shed is already unlocked" if the player is at the shed and has already unlocked the shed</li>
+     * <li>"You can't unlock something that doesn't have a lock." if the player is anywhere other than the shed</li>
+     * <li>The result of opening the shed if the player says to unlock and open the shed in one command and the conditions for unlocking are met</li>
+     * </ul>
+     */
     public static String unlock(String input) {
         String result = "What?";
         Item key = GameState.getInstance().getGame().getInventoryItemByName("key");
@@ -156,6 +195,18 @@ public class Actions {
                 input.equals("shed then open");
     }
 
+    /**
+     *
+     * @param input Everything after "open" from the input, e.g. "the shed" if input was "open the shed", or "shed" if
+     *              input was "open shed", or just "" if input was "open"
+     * @return <ul>
+     *     <li>"The shed is now open" if the shed was unlocked and the player is at the shed</li>
+     *     <li>"You need a key to unlock the shed" if the player is at the shed without a key</li>
+     *     <li>"The shed is already open" if the player is at the shed and has already opened the shed</li>
+     *     <li>"There's nothing here to open." if the player is anywhere other than the shed</li>
+     *     <li>"(First unlocking the shed) The shed is now open." if the user has the key, but has not unlocked the shed</li>
+     * </ul>
+     */
     public static String open(String input) {
         String result = "What?";
         Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
@@ -169,6 +220,8 @@ public class Actions {
                 if(!unlockResult.equals("The shed is now unlocked.")) {
                     return unlockResult;
                 }
+                currentLocation.setDescription("You stand before an open shed " +
+                        "with a picnic table to the north.");
                 ((Shed) currentLocation).openShed();
                 result = "(First unlocking the shed) The shed is now open." + new Actions().listLocationItems(currentLocation.getItems());
             }
@@ -178,6 +231,31 @@ public class Actions {
             }
             else {
                 result = "The shed is already open.";
+            }
+        }
+        return result;
+    }
+
+    /**
+     *
+     * @param input Everything after "turn" from the input, e.g. "the wheel" if input was "turn the wheel", or "wheel" if
+     *              input was "turn wheel", or just "" if input was "turn"
+     * @return <ul>
+     *     <li>Description of the lake draining if the player is at the dam and the magnet has been dropped.</li>
+     *     <li>"The wheel is locked firmly in place." if the player is at the dam but the magnet hasn't been dropped.</li>
+     *     <li>"There's nothing to turn here." if the player us anywhere other than the dam.</li>
+     * </ul>
+     */
+    public static String turnWheel(String input) {
+        String result = "There's nothing to turn here.";
+        Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
+        if(currentLocation instanceof Dam && (input.equals("wheel") || input.equals("") || input.equals("the wheel"))) {
+            if(((Dam) currentLocation).isMagnetDropped()) {
+                // Turn wheel
+                result = "Wheel hath been turned.";
+            }
+            else {
+                result = "The wheel is locked firmly in place.";
             }
         }
         return result;
