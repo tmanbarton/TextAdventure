@@ -12,6 +12,12 @@ public class GameController {
         return findAction(input);
     }
 
+    /**
+     * First check if the player has moved to do the game intro. Then split the input into the verb and noun and call
+     * the method in <code>Actions</code> corresponding to the inputted verb using a switch statement.
+     * @param input user's inputted command
+     * @return game response to the inputted command
+     */
     public String findAction(String input) {
         input = input.toLowerCase();
         Player player = GameState.getInstance().getGame();
@@ -38,7 +44,7 @@ public class GameController {
         String noun = splitInput.length > 1 ? splitInput[1] : null;
 
         if(isDirection(verb)) {
-            return makeMove(verb);
+            return move(verb);
         }
         String result = switch (verb) {
             case "get" -> noun == null ? "What do you want to get?" : getItem(noun);

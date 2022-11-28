@@ -37,9 +37,12 @@ public class Shed extends Location {
     public void unlockShed() {
         this.unlocked = true;
         this.setDescription("A cheerful little shed stands with it's lock hanging open with a picnic table to the north.");
+        this.setShortDescription("You're standing before a cheerful little shed with its lock hanging open.");
     }
 
     public void openShed() {
+        this.setDescription("You stand before an open shed with a picnic table to the north.");
+        this.setShortDescription("You're standing before a cheerful little, open shed.");
         this.open = true;
         Item hammer = new Item(2, "There is a hammer here", "Hammer", "hammer");
         Item bow = new Item(3, "There is a bow here, strung an ready for shooting", "Bow", "bow");

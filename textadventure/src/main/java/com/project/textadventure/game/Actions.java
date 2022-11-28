@@ -9,22 +9,22 @@ import java.util.List;
 
 public class Actions {
     /**
-     * Loop over the current location's connecting locations. Check if the inputted direction matches one of the
+     * Loop over the current location's connecting locations. Check if the inputted direction isn't null (would only
+     * happen for locations that are not connected to other locations until something happens) and it matches one of the
      * connecting location's directions. Update the current location to that connecting location if so.
      * @param direction
      * @return the description of the location the user has moved to, or "You can't go that way." if the inputted direction isn't allowed
      */
-    public static String makeMove(String direction) {
+    public static String move(String direction) {
         Player player = GameState.getInstance().getGame();
         List<ConnectingLocation> connectingLocations = player.getCurrentLocation().getConnectingLocations();
 
         for(ConnectingLocation connectingLocation : connectingLocations) {
-            if(connectingLocation.directions.contains(direction)) {
-                Location connection = connectingLocation.location;
+            if(connectingLocation.getDirections() != null && connectingLocation.getDirections().contains(direction)) {
+                Location connection = connectingLocation.getLocation();
                 player.setCurrentLocation(connection);
                 if(connection.isVisited()) {
-                    return connection.getShortDescription()
-                            + new Actions().listLocationItems(connection.getItems());
+                    return connection.getShortDescription() + new Actions().listLocationItems(connection.getItems());
                 }
                 connection.setVisited(true);
                 return connection.getDescription()
@@ -132,14 +132,16 @@ public class Actions {
     }
 
     /**
-     * 
+     * Check if player is trying to unlock the shed or unlock and open the shed. Verify conditions are met for unlocking
+     * shed and return correct response based on the conditions of key in inventory, current location, and locked/unlocked status.
      * @param input Everything after "unlock" from the input, e.g. "the shed" if input was "unlock the shed", or "shed" if
      *              input was "unlock shed", or just "" if input was "unlock"
-     * @return <ul><li>"The shed is now unlocked" if the player has the key and is at the shed</li>
-     * <li>"You need a key to unlock the shed" if the player is at the shed without a key</li>
-     * <li>"The shed is already unlocked" if the player is at the shed and has already unlocked the shed</li>
-     * <li>"You can't unlock something that doesn't have a lock." if the player is anywhere other than the shed</li>
-     * <li>The result of opening the shed if the player says to unlock and open the shed in one command and the conditions for unlocking are met</li>
+     * @return <ul>
+     *     <li>"The shed is now unlocked" if the player has the key and is at the shed</li>
+     *     <li>"You need a key to unlock the shed" if the player is at the shed without a key</li>
+     *     <li>"The shed is already unlocked" if the player is at the shed and has already unlocked the shed</li>
+     *     <li>"You can't unlock something that doesn't have a lock." if the player is anywhere other than the shed</li>
+     *     <li>The result of opening the shed if the player says to unlock and open the shed in one command and the conditions for unlocking are met</li>
      * </ul>
      */
     public static String unlock(String input) {
@@ -170,8 +172,6 @@ public class Actions {
                 result = "You need a key to unlock the shed.";
             }
             else {
-                currentLocation.setDescription("You stand before an open shed " +
-                        "with a picnic table to the north.");
                 result = open("");
             }
         }
@@ -196,7 +196,8 @@ public class Actions {
     }
 
     /**
-     *
+     * Verify conditions are met for unlocking shed and return correct response based on the conditions of key in
+     * inventory, current location, and locked/unlocked/open/unopened status.
      * @param input Everything after "open" from the input, e.g. "the shed" if input was "open the shed", or "shed" if
      *              input was "open shed", or just "" if input was "open"
      * @return <ul>
@@ -220,8 +221,6 @@ public class Actions {
                 if(!unlockResult.equals("The shed is now unlocked.")) {
                     return unlockResult;
                 }
-                currentLocation.setDescription("You stand before an open shed " +
-                        "with a picnic table to the north.");
                 ((Shed) currentLocation).openShed();
                 result = "(First unlocking the shed) The shed is now open." + new Actions().listLocationItems(currentLocation.getItems());
             }
@@ -251,7 +250,7 @@ public class Actions {
         Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
         if(currentLocation instanceof Dam && (input.equals("wheel") || input.equals("") || input.equals("the wheel"))) {
             if(((Dam) currentLocation).isMagnetDropped()) {
-                // Turn wheel
+                ((Dam) currentLocation).turnWheel();
                 result = "Wheel hath been turned.";
             }
             else {

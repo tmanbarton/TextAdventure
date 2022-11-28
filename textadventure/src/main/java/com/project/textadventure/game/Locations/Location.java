@@ -64,6 +64,14 @@ public class Location {
         this.description = description;
     }
 
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
+    public void setConnectingLocations(List<ConnectingLocation> connectingLocations) {
+        this.connectingLocations = connectingLocations;
+    }
+
     public Item getLocationItemByName(String name) {
         for(Item item : this.items) {
             if(name.equals(item.getName())) {

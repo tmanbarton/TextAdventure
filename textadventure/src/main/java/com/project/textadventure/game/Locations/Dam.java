@@ -3,6 +3,7 @@ package com.project.textadventure.game.Locations;
 import com.project.textadventure.game.ConnectingLocation;
 import com.project.textadventure.game.Item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Dam extends Location {
@@ -25,5 +26,11 @@ public class Dam extends Location {
 
     public void setMagnetDropped(boolean magnetDropped) {
         this.magnetDropped = magnetDropped;
+    }
+
+    public void turnWheel() {
+        this.getConnectingLocations().get(4).setDirections(List.of("east", "e"));
+        this.getConnectingLocations().get(5).setDirections(List.of("down", "d"));
+        wheelTurned = true;
     }
 }

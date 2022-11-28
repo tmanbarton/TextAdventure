@@ -86,54 +86,54 @@ public class GameState {
         String undergroundLakeNEDescription = "You are on the ne side of a large underground lake. There are passages to the west and east across the lake. Mine rails lead into a passage to the east from where you are.";
         String westEndOfSideStreetDescription = "You are at the west and of a side street in an abandoned gold mining town. Branching off from this street is a smaller road to the north.";
 
-        Item key = new Item(1, "There is a shiny key here", "Shiny key", "key");
+        Item key = new Item(1, "There is a shiny key here.", "Shiny key", "key");
         Item gold = new Item(6, "There are some gold flakes on the ground here.", "Gold flakes in jar", "gold");
         Item magnet = new Item(10, "There is a thick, circular magnet here, about the size of your palm.", "Magnet", "magnet");
-        Item ruby = new Item(11, "A large ruby lays on the ground", "Ruby", "ruby");
-//        Item cube = new Cube(12, "There is a plastic cube puzzle lying on the ground", "Cube", "cube", false, false);
+        Item ruby = new Item(11, "A large ruby lays on the ground.", "Ruby", "ruby");
+//        Item cube = new Cube(12, "There is a plastic cube puzzle lying on the ground.", "Cube", "cube", false, false);
 
         Location antHill = new Location(antHillDescription, "You're at a large ant hill.", new ArrayList<>(), new ArrayList<>(), false, "ant hill");
-        Location archeryRange = new Location(archeryRangeDescription, "You're at Archery Range", new ArrayList<>(), new ArrayList<>(), false, "archery range");
-        Location bottomOfVerticalMineShaft = new Location(bottomOfVerticalMineShaftDescription, "You are at the bottom of a vertical mine shaft", new ArrayList<>(), new ArrayList<>(), false, "bottom of vertical mine shaft");
+        Location archeryRange = new Location(archeryRangeDescription, "You're at Archery Range.", new ArrayList<>(), new ArrayList<>(), false, "archery range");
+        Location bottomOfVerticalMineShaft = new Location(bottomOfVerticalMineShaftDescription, "You are at the bottom of a vertical mine shaft.", new ArrayList<>(), new ArrayList<>(), false, "bottom of vertical mine shaft");
         Location brokenRock = new Location(brokenRockDescription, "The only thing up here is a bunch of broken rock.", new ArrayList<>(), new ArrayList<>(), false, "broken rock");
-        Location dankPassage = new Location(dankPassageDescription, "You're at Dank Passage", new ArrayList<>(), new ArrayList<>(), false, "dank passage");
-        Location dirtRoad = new Location(dirtRoadDescription, "You're at Dirt Road", new ArrayList<>(), new ArrayList<>(), false, "dirt road");
-        Location dirtyPassage = new Location(dirtyPassageDescription, "You're at Dirty Passage", new ArrayList<>(), new ArrayList<>(), false, "dirty passage");
-        Location ditch = new Location(ditchDescription, "You're in a ditch", new ArrayList<>(Collections.singletonList(key)), new ArrayList<>(), false, "ditch");
-        Location driveway = new Location(drivewayDescription, "You're at Driveway", new ArrayList<>(), new ArrayList<>(), false, "driveway");
-        Location dynamiteHoles = new Location(dynamiteHolesDescription, "You're by a section of wall with holes drilled for dynamite", new ArrayList<>(), new ArrayList<>(), false, "dynamite holes");
-        Location eastEndOfSideStreet = new Location(eastEndOfSideStreetDescription, "You're at the east end of the main street", new ArrayList<>(), new ArrayList<>(), false, "east end of side street");
-        Location fieldsOfGrass = new Location(fieldsOfGrassDescription, "You're surrounded by fields of grass", new ArrayList<>(), new ArrayList<>(), false, "fields of grass");
-        Location footPath = new Location(footPathDescription, "You're on a foot path", new ArrayList<>(), new ArrayList<>(), false, "foot path");
-        Location insideLogCabin = new Location(insideLogCabinDescription, "You're inside Log Cabin", new ArrayList<>(Collections.singletonList(magnet)), new ArrayList<>(), false, "inside log cabin");
-        Location intersection = new Location(intersectionDescription, "You're at an intersection in the road", new ArrayList<>(), new ArrayList<>(), false, "intersection");
-        Location lake = new Location(lakeDescription, "You're on the south side of a lake", new ArrayList<>(), new ArrayList<>(), false, "lake");
-        Location lakeTown = new Location(lakeTownDescription, "You are next to Lake Town", new ArrayList<>(), new ArrayList<>(), false, "lake town");
-        Location lightningTree = new Location(lightningTreeDescription, "You're at Lightning Tree", new ArrayList<>(), new ArrayList<>(), false, "lightning tree");
-        Location mineShaft = new Location(mineShaftDescription, "You're in Mine Shaft", new ArrayList<>(), new ArrayList<>(), false, "mine shaft");
-        Location mountainPass = new Location(mountainPassDescription, "You're at the top of a mountain pass", new ArrayList<>(), new ArrayList<>(), false, "mountain pass");
-        Location mustyBend = new Location(mustyBendDescription, "You're at a musty bend", new ArrayList<>(), new ArrayList<>(), false, "musty bend");
-        Location narrowCorridor = new Location(narrowCorridorDescription, "You're in a narrow corridor", new ArrayList<>(), new ArrayList<>(), false, "narrow corridor");
-        Location outsideLogCabin = new Location(outsideLogCabinDescription, "You're outside Log Cabin", new ArrayList<>(), new ArrayList<>(), false, "outside log cabin");
-        Location outsideTavern = new Location(outsideTavernDescription, "You're outside Tommyknocker Tavern", new ArrayList<>(), new ArrayList<>(), false, "outside Tommyknocker Tavern");
-        Location picnicTable = new Location(picnicTableDescription, "You're at Picnic Table", new ArrayList<>(), new ArrayList<>(), false, "picnic table");
-        Location privateProperty = new Location(privatePropertyDescription, "You're at Private Property", new ArrayList<>(), new ArrayList<>(), false, "private property");
-        Location roadInValley = new Location(roadInValleyDescription, "You're on a road in a valley", new ArrayList<>(), new ArrayList<>(), false, "road in a valley");
-        Location insideTavern = new Location(insideTavernDescription, "You're inside the Tommyknocker Tavern", new ArrayList<>(), new ArrayList<>(), false, "Tommyknocker Tavern");
-        Location tailings = new Location(tailingsDescription, "You're amongst piles of tailings", new ArrayList<>(), new ArrayList<>(), false, "abandoned gold mine");
-        Location topOfHill = new Location(topOfHillDescription, "You're at Top of Hill", new ArrayList<>(), new ArrayList<>(), false, "top of hill");
-        Location topOfStairs = new Location(topOfStairsDescription, "You're at Top of Stairs", new ArrayList<>(), new ArrayList<>(), false, "top of stairs");
-        Location undergroundLakeWest = new Location(undergroundLakeWestDescription, "You're on the west side of an underground lake", new ArrayList<>(), new ArrayList<>(), false, "underground lake west");
-        Location undergroundLakeEast = new Location(undergroundLakeEastDescription, "You're on the east side of an underground lake", new ArrayList<>(), new ArrayList<>(), false, "underground lake east");
-        Location undergroundLakeNE = new Location(undergroundLakeNEDescription, "You're on the ne side of an underground lake", new ArrayList<>(), new ArrayList<>(), false, "underground lake ne");
-        Location upstairsLogCabin = new Location(upstairsLogCabinDescription, "You're on the second floor of the log cabin", new ArrayList<>(), new ArrayList<>(), false, "upstairs log cabin");
-        Location westEndOfSideStreet = new Location(westEndOfSideStreetDescription, "You're at the west end of the main street", new ArrayList<>(), new ArrayList<>(), false, "west end of side street");
-//        Boat boat = new Boat(boatDescription, "You're in a rickety wooden boat in an underground lake", new ArrayList<>(), new ArrayList<>(), new Boat(), false, "rickety wooden boat", false);
-        Dam dam = new Dam(damDescription, "You're at Dam", new ArrayList<>(), new ArrayList<>(), false, "dam", false, false);
-//        GraniteRoom graniteRoom = new GraniteRoom(graniteRoomDescription, "You're at Granite Room", new ArrayList<>(Collections.singletonList(cube)), new ArrayList<>(), false, "granite room", false);
-        MineEntrance mineEntrance = new MineEntrance(mineEntranceDescription, "You're at the entrance of an abandoned gold mine", new ArrayList<>(Collections.singletonList(gold)), new ArrayList<>(), false, "mine entrance", false);
-//        RubyOnRails rubyOnRails = new RubyOnRails(rubyOnRailsDescription, "You're at Ruby On Rails", new ArrayList<>(Collections.singletonList(ruby)), new ArrayList<>(), false, "ruby on rails", false);
-        Shed shed = new Shed(shedDescription, "You're standing before a cheerful little shed", new ArrayList<>(), new ArrayList<>(), false, "shed", false, false);
+        Location dankPassage = new Location(dankPassageDescription, "You're at Dank Passage.", new ArrayList<>(), new ArrayList<>(), false, "dank passage");
+        Location dirtRoad = new Location(dirtRoadDescription, "You're at Dirt Road.", new ArrayList<>(), new ArrayList<>(), false, "dirt road");
+        Location dirtyPassage = new Location(dirtyPassageDescription, "You're at Dirty Passage.", new ArrayList<>(), new ArrayList<>(), false, "dirty passage");
+        Location ditch = new Location(ditchDescription, "You're in a ditch.", new ArrayList<>(Collections.singletonList(key)), new ArrayList<>(), false, "ditch");
+        Location driveway = new Location(drivewayDescription, "You're at Driveway.", new ArrayList<>(), new ArrayList<>(), false, "driveway");
+        Location dynamiteHoles = new Location(dynamiteHolesDescription, "You're by a section of wall with holes drilled for dynamite.", new ArrayList<>(), new ArrayList<>(), false, "dynamite holes");
+        Location eastEndOfSideStreet = new Location(eastEndOfSideStreetDescription, "You're at the east end of the main street.", new ArrayList<>(), new ArrayList<>(), false, "east end of side street");
+        Location fieldsOfGrass = new Location(fieldsOfGrassDescription, "You're surrounded by fields of grass.", new ArrayList<>(), new ArrayList<>(), false, "fields of grass");
+        Location footPath = new Location(footPathDescription, "You're on a foot path.", new ArrayList<>(), new ArrayList<>(), false, "foot path");
+        Location insideLogCabin = new Location(insideLogCabinDescription, "You're inside Log Cabin.", new ArrayList<>(Collections.singletonList(magnet)), new ArrayList<>(), false, "inside log cabin");
+        Location intersection = new Location(intersectionDescription, "You're at an intersection in the road.", new ArrayList<>(), new ArrayList<>(), false, "intersection");
+        Location lake = new Location(lakeDescription, "You're on the south side of a lake.", new ArrayList<>(), new ArrayList<>(), false, "lake");
+        Location lakeTown = new Location(lakeTownDescription, "You are next to Lake Town.", new ArrayList<>(), new ArrayList<>(), false, "lake town");
+        Location lightningTree = new Location(lightningTreeDescription, "You're at Lightning Tree.", new ArrayList<>(), new ArrayList<>(), false, "lightning tree");
+        Location mineShaft = new Location(mineShaftDescription, "You're in Mine Shaft.", new ArrayList<>(), new ArrayList<>(), false, "mine shaft");
+        Location mountainPass = new Location(mountainPassDescription, "You're at the top of a mountain pass.", new ArrayList<>(), new ArrayList<>(), false, "mountain pass");
+        Location mustyBend = new Location(mustyBendDescription, "You're at a musty bend.", new ArrayList<>(), new ArrayList<>(), false, "musty bend");
+        Location narrowCorridor = new Location(narrowCorridorDescription, "You're in a narrow corridor.", new ArrayList<>(), new ArrayList<>(), false, "narrow corridor");
+        Location outsideLogCabin = new Location(outsideLogCabinDescription, "You're outside Log Cabin.", new ArrayList<>(), new ArrayList<>(), false, "outside log cabin");
+        Location outsideTavern = new Location(outsideTavernDescription, "You're outside Tommyknocker Tavern.", new ArrayList<>(), new ArrayList<>(), false, "outside Tommyknocker Tavern");
+        Location picnicTable = new Location(picnicTableDescription, "You're at Picnic Table.", new ArrayList<>(), new ArrayList<>(), false, "picnic table");
+        Location privateProperty = new Location(privatePropertyDescription, "You're at Private Property.", new ArrayList<>(), new ArrayList<>(), false, "private property");
+        Location roadInValley = new Location(roadInValleyDescription, "You're on a road in a valley.", new ArrayList<>(), new ArrayList<>(), false, "road in a valley");
+        Location insideTavern = new Location(insideTavernDescription, "You're inside the Tommyknocker Tavern.", new ArrayList<>(), new ArrayList<>(), false, "Tommyknocker Tavern");
+        Location tailings = new Location(tailingsDescription, "You're amongst piles of tailings.", new ArrayList<>(), new ArrayList<>(), false, "abandoned gold mine");
+        Location topOfHill = new Location(topOfHillDescription, "You're at Top of Hill.", new ArrayList<>(), new ArrayList<>(), false, "top of hill");
+        Location topOfStairs = new Location(topOfStairsDescription, "You're at Top of Stairs.", new ArrayList<>(), new ArrayList<>(), false, "top of stairs");
+        Location undergroundLakeWest = new Location(undergroundLakeWestDescription, "You're on the west side of an underground lake.", new ArrayList<>(), new ArrayList<>(), false, "underground lake west");
+        Location undergroundLakeEast = new Location(undergroundLakeEastDescription, "You're on the east side of an underground lake.", new ArrayList<>(), new ArrayList<>(), false, "underground lake east");
+        Location undergroundLakeNE = new Location(undergroundLakeNEDescription, "You're on the ne side of an underground lake.", new ArrayList<>(), new ArrayList<>(), false, "underground lake ne");
+        Location upstairsLogCabin = new Location(upstairsLogCabinDescription, "You're on the second floor of the log cabin.", new ArrayList<>(), new ArrayList<>(), false, "upstairs log cabin");
+        Location westEndOfSideStreet = new Location(westEndOfSideStreetDescription, "You're at the west end of the main street.", new ArrayList<>(), new ArrayList<>(), false, "west end of side street");
+//        Boat boat = new Boat(boatDescription, "You're in a rickety wooden boat in an underground lake.", new ArrayList<>(), new ArrayList<>(), new Boat(), false, "rickety wooden boat", false);
+        Dam dam = new Dam(damDescription, "You're at Dam.", new ArrayList<>(), new ArrayList<>(), false, "dam", false, false);
+//        GraniteRoom graniteRoom = new GraniteRoom(graniteRoomDescription, "You're at Granite Room.", new ArrayList<>(Collections.singletonList(cube)), new ArrayList<>(), false, "granite room", false);
+        MineEntrance mineEntrance = new MineEntrance(mineEntranceDescription, "You're at the entrance of an abandoned gold mine.", new ArrayList<>(Collections.singletonList(gold)), new ArrayList<>(), false, "mine entrance", false);
+//        RubyOnRails rubyOnRails = new RubyOnRails(rubyOnRailsDescription, "You're at Ruby On Rails.", new ArrayList<>(Collections.singletonList(ruby)), new ArrayList<>(), false, "ruby on rails", false);
+        Shed shed = new Shed(shedDescription, "You're standing before a cheerful little shed.", new ArrayList<>(), new ArrayList<>(), false, "shed", false, false);
 
         antHill.connectLocation(new ConnectingLocation(List.of("west", "w"), ditch));
         archeryRange.connectLocation(new ConnectingLocation(List.of("north", "n"), ditch));
@@ -148,8 +148,8 @@ public class GameState {
         dam.connectLocation(new ConnectingLocation(List.of("north", "n"), topOfStairs));
         dam.connectLocation(new ConnectingLocation(List.of("south", "s"), lake));
         dam.connectLocation(new ConnectingLocation(List.of("up", "u"), topOfStairs));
-//        dam.connectLocation(new ConnectingLocation(null, lakeTown));
-//        dam.connectLocation(new ConnectingLocation(null, lakeTown));
+        dam.connectLocation(new ConnectingLocation(new ArrayList<>(), lakeTown));
+        dam.connectLocation(new ConnectingLocation(new ArrayList<>(), lakeTown));
         dankPassage.connectLocation(new ConnectingLocation(List.of("south", "s"), narrowCorridor));
         dankPassage.connectLocation(new ConnectingLocation(List.of("east", "e"), bottomOfVerticalMineShaft));
         dankPassage.connectLocation(new ConnectingLocation(List.of("west", "w"), mustyBend));
@@ -245,11 +245,13 @@ public class GameState {
         westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("north", "n"), outsideLogCabin));
         westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("east", "e"), topOfStairs));
 
-        driveway.setVisited(true);
+//        driveway.setVisited(true);
 //        return new Player(new ArrayList<>(), driveway, false);
+        //// DEBUGGING ////
+        dam.setVisited(true);
         Player player = new Player(new ArrayList<>(), dam, false);
-//        player.addItemToInventory(new Item(5, "There is a jar here", "Jar", "jar"));
+        player.addItemToInventory(new Item(10, "There is a thick, circular magnet here, about the size of your palm.", "Magnet", "magnet"));
+        ///////////////////
         return player;
-
     }
 }
