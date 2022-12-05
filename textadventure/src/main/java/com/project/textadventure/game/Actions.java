@@ -6,6 +6,7 @@ import com.project.textadventure.game.Locations.MineEntrance;
 import com.project.textadventure.game.Locations.Shed;
 
 import java.util.List;
+import java.util.Random;
 
 public class Actions {
     /**
@@ -145,34 +146,33 @@ public class Actions {
      * </ul>
      */
     public static String unlock(String input) {
-        String result = "What?";
+        String result = randomDontKnowWord();
         Item key = GameState.getInstance().getGame().getInventoryItemByName("key");
         Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
 
-        if(input.equals("shed") || input.equals("") || input.equals("the shed")) {
-            if(!(currentLocation instanceof Shed)) {
-                result = "You can't unlock something that doesn't have a lock.";
-            }
-            else if(key == null) {
-                result = "You need a key to unlock the shed.";
-            }
-            else if(((Shed) currentLocation).isUnlocked()) {
-                result = "The shed is already unlocked.";
-            }
-            else {
-                ((Shed) currentLocation).unlockShed();
-                result = "The shed is now unlocked.";
-            }
+        if (!(currentLocation instanceof Shed)) {
+            result = "There's nothing here to unlock.";
         }
-        else if(new Actions().unlockingAndOpeningShed(input)) {
-            if(!(currentLocation instanceof Shed)) {
-                result = "You can't unlock something that doesn't have a lock.";
+        else {
+            if (input.equals("shed") || input.equals("") || input.equals("the shed")) {
+                if (key == null) {
+                    result = "You need a key to unlock the shed.";
+                }
+                else if (((Shed) currentLocation).isUnlocked()) {
+                    result = "The shed is already unlocked.";
+                }
+                else {
+                    ((Shed) currentLocation).unlockShed();
+                    result = "The shed is now unlocked.";
+                }
             }
-            else if(key == null) {
-                result = "You need a key to unlock the shed.";
-            }
-            else {
-                result = open("");
+            else if (new Actions().unlockingAndOpeningShed(input)) {
+                if (key == null) {
+                    result = "You need a key to unlock the shed.";
+                }
+                else {
+                    result = open("");
+                }
             }
         }
         return result;
@@ -209,7 +209,7 @@ public class Actions {
      * </ul>
      */
     public static String open(String input) {
-        String result = "What?";
+        String result = randomDontKnowWord();
         Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
 
         if(input.equals("shed") || input.equals("") || input.equals("the shed")) {
@@ -266,7 +266,24 @@ public class Actions {
             case "fuck you" -> "Well fuck you too, that's not very nice.";
             case "shit" -> "Poop is gross.";
             case "damn", "damn it" -> "There's a dam around here, but no damn.";
+            case "bitch" -> ":(";
             default -> "Hey, watch your language.";
         };
+    }
+
+    public static String randomDontKnowWord() {
+        Random r = new Random();
+        int randomNum = r.nextInt(3);
+        String result = "";
+        if(randomNum == 0) {
+            result = "I don't understand that.";
+        }
+        else if(randomNum == 1) {
+            result = "What?";
+        }
+        else {
+            result = "I don't know that word.";
+        }
+        return result;
     }
 }

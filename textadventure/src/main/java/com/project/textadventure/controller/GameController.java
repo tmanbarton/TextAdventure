@@ -1,5 +1,6 @@
 package com.project.textadventure.controller;
 
+import com.project.textadventure.game.Actions;
 import com.project.textadventure.game.GameState;
 import com.project.textadventure.game.Player;
 
@@ -47,22 +48,25 @@ public class GameController {
             return move(verb);
         }
         String result = switch (verb) {
-            case "get" -> noun == null ? "What do you want to get?" : getItem(noun);
-            case "drop", "throw" -> noun == null ? "What do you want to drop?" : dropItem(noun);
-            case "look" -> look();
-            case "inventory", "inven", "invent", "invento", "inventor", "take inventory" -> inventory();
-            case "unlock" -> splitInput.length > 1 ? unlock(noun) : unlock("");
-            case "open" -> splitInput.length > 1 ? open(noun) : open("");
-            case "fill" -> "fill";
-            case "shoot" -> "shoot";
-            case "turn" -> splitInput.length > 1 ? turnWheel(noun) : turnWheel("");
-            case "solve" -> "solve";
-            case "quit" -> "quit";
-            case "info" -> infoString();
-            case "fuck", "shit", "damn" -> curse(input);
-            default ->
-                // TODO more variants of IDK and make random
-                    "I don't know that word.";
+            case "get"                           -> noun == null ? "What do you want to get?" : getItem(noun);
+            case "drop", "throw"                 -> noun == null ? "What do you want to drop?" : dropItem(noun);
+            case "look"                          -> look();
+            case "inventory",
+                    "inven",
+                    "invent",
+                    "invento",
+                    "inventor",
+                    "take inventory"             -> inventory();
+            case "unlock"                        -> splitInput.length > 1 ? unlock(noun) : unlock("");
+            case "open"                          -> splitInput.length > 1 ? open(noun) : open("");
+            case "fill"                          -> "fill";
+            case "shoot"                         -> "shoot";
+            case "turn"                          -> splitInput.length > 1 ? turnWheel(noun) : turnWheel("");
+            case "solve"                         -> "solve";
+            case "quit"                          -> "quit";
+            case "info"                          -> infoString();
+            case "fuck", "shit", "damn", "bitch" -> curse(input);
+            default                              -> randomDontKnowWord();
         };
 
         return result;
@@ -108,13 +112,3 @@ how much it will affect your score to accept the hints.  Finally, to
 save time, you may specify "brief", which tells me never to repeat the
 full description of a place unless you explicitly ask me to.*/
 }
-
-
-
-
-/*
-* do you want indtructions?
-* no or yes
-* create a graph
-* load a game
-* create a game from saved game*/
