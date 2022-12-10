@@ -245,13 +245,14 @@ public class GameState {
         westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("north", "n"), outsideLogCabin));
         westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("east", "e"), topOfStairs));
 
-//        driveway.setVisited(true);
-//        return new Player(new ArrayList<>(), driveway, false);
-        //// DEBUGGING ////
-        dam.setVisited(true);
-        Player player = new Player(new ArrayList<>(), dam, false);
-        player.addItemToInventory(new Item(10, "There is a thick, circular magnet here, about the size of your palm.", "Magnet", "magnet"));
+        driveway.setVisited(true);
+        return new Player(new ArrayList<>(), driveway, false);
+        //// Change start location for manual debugging. ////
+        //// Make sure to comment back out; it will make tests fail ////
+//        dam.setVisited(true);
+//        Player player = new Player(new ArrayList<>(), dam, false);
+//        player.addItemToInventory(new Item(10, "There is a thick, circular magnet here, about the size of your palm.", "Magnet", "magnet"));
+//        return player;
         ///////////////////
-        return player;
     }
 }

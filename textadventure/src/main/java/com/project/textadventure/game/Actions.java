@@ -274,17 +274,11 @@ public class Actions implements Comparator<Item> {
     public static String randomDontKnowWord() {
         Random r = new Random();
         int randomNum = r.nextInt(3);
-        String result = "";
-        if(randomNum == 0) {
-            result = "I don't understand that.";
-        }
-        else if(randomNum == 1) {
-            result = "What?";
-        }
-        else {
-            result = "I don't know that word.";
-        }
-        return result;
+        return switch (randomNum) {
+          case 0 -> "I don't understand that.";
+          case 1 -> "What?";
+          default -> "I don't know that word.";
+        };
     }
 
     @Override
