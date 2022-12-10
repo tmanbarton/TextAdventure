@@ -5,10 +5,9 @@ import com.project.textadventure.game.Locations.Location;
 import com.project.textadventure.game.Locations.MineEntrance;
 import com.project.textadventure.game.Locations.Shed;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
-public class Actions {
+public class Actions implements Comparator<Item> {
     /**
      * Loop over the current location's connecting locations. Check if the inputted direction isn't null (would only
      * happen for locations that are not connected to other locations until something happens) and it matches one of the
@@ -66,6 +65,7 @@ public class Actions {
                 return "Are you sure about that? The structure is very fragile and may fall apart and onto you.";
             }
             player.addItemToInventory(item);
+
             currentLocation.removeItemFromLocation(item);
             result = "OK";
             if(input.equals("tree") && new Actions().locationHasTrees(currentLocation)) {
@@ -285,5 +285,10 @@ public class Actions {
             result = "I don't know that word.";
         }
         return result;
+    }
+
+    @Override
+    public int compare(Item item1, Item item2) {
+        return item1.getOrder() - item2.getOrder();
     }
 }

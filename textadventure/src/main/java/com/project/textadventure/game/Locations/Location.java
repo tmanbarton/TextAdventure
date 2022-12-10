@@ -2,9 +2,11 @@ package com.project.textadventure.game.Locations;
 
 import com.project.textadventure.game.Item;
 import com.project.textadventure.game.ConnectingLocation;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class Location {
     private String description;
     private List<Item> items;
@@ -30,46 +32,6 @@ public class Location {
 
     public void connectLocation(ConnectingLocation locationToConnect) {
         this.connectingLocations.add(locationToConnect);
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getShortDescription() {
-        return shortDescription;
-    }
-
-    public List<ConnectingLocation> getConnectingLocations() {
-        return connectingLocations;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isVisited() {
-        return visited;
-    }
-
-    public void setVisited(boolean visited) {
-        this.visited = visited;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
-    }
-
-    public void setConnectingLocations(List<ConnectingLocation> connectingLocations) {
-        this.connectingLocations = connectingLocations;
     }
 
     public Item getLocationItemByName(String name) {

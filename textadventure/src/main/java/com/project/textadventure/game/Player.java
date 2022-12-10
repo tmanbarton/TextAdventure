@@ -1,9 +1,11 @@
 package com.project.textadventure.game;
 
 import com.project.textadventure.game.Locations.Location;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class Player {
     private List<Item> inventory;
     private Location currentLocation;
@@ -15,24 +17,8 @@ public class Player {
         this.hasMoved = hasMoved;
     }
 
-    public Location getCurrentLocation() {
-        return currentLocation;
-    }
-
-    public void setCurrentLocation(Location currentLocation) {
-        this.currentLocation = currentLocation;
-    }
-
-    public List<Item> getInventory() {
-        return inventory;
-    }
-
     public boolean hasPlayerMoved() {
         return hasMoved;
-    }
-
-    public void setHasMoved(boolean hasMoved) {
-        this.hasMoved = hasMoved;
     }
 
     public Item getInventoryItemByName(String name) {
