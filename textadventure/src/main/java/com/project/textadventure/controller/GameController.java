@@ -1,6 +1,5 @@
 package com.project.textadventure.controller;
 
-import com.project.textadventure.game.Actions;
 import com.project.textadventure.game.GameState;
 import com.project.textadventure.game.Player;
 
@@ -17,7 +16,7 @@ public class GameController {
      * First check if the player has moved to do the game intro. Then split the input into the verb and noun and call
      * the method in <code>Actions</code> corresponding to the inputted verb using a switch statement.
      * @param input user's inputted command
-     * @return game response to the inputted command
+     * @return the game's response to the inputted command
      */
     public String findAction(String input) {
         input = input.toLowerCase();
@@ -66,7 +65,7 @@ public class GameController {
             case "quit"                          -> "quit";
             case "info"                          -> infoString();
             case "fuck", "shit", "damn", "bitch" -> curse(input);
-            default                              -> randomDontKnowWord();
+            default                              -> getRandomDontKnowWord();
         };
 
         return result;

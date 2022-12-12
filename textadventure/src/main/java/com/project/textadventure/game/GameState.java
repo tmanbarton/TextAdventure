@@ -33,7 +33,7 @@ public class GameState {
         return player;
     }
 
-//    private Location getGame(UUID userId) {
+//    public Location getGame(UUID userId) {
 //        Player player = map.get(userId);
 //        if(player == null) {
 //            player = createGame();

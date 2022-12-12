@@ -32,6 +32,7 @@ public class Player {
 
     public void addItemToInventory(Item item) {
         inventory.add(item);
+        inventory.sort(new Actions());
     }
 
     public void removeItemFromInventory(Item item) {

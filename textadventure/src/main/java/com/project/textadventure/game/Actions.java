@@ -10,8 +10,8 @@ import java.util.*;
 public class Actions implements Comparator<Item> {
     /**
      * Loop over the current location's connecting locations. Check if the inputted direction isn't null (would only
-     * happen for locations that are not connected to other locations until something happens) and it matches one of the
-     * connecting location's directions. Update the current location to that connecting location if so.
+     * happen for locations that are not connected to other locations until sa specific action is taken) and it matches
+     * one of the connecting location's directions. Update the current location to that connecting location if so.
      * @param direction
      * @return the description of the location the user has moved to, or "You can't go that way." if the inputted direction isn't allowed
      */
@@ -57,20 +57,21 @@ public class Actions implements Comparator<Item> {
         String[] splitInput = input.split(" ");
         Item item = currentLocation.getLocationItemByName(splitInput[splitInput.length - 1]);
 
-        String result = "I don't see that here";
+        String result = "I don't see that here.";
         // Either input is "get item" or "get the item", or trying to get nails before you've shot them off with arrow
         if(item != null && (splitInput.length == 1 || (splitInput.length == 2 && splitInput[0].equals("the")))
                 || new Actions().gettingNailsAtMineEntrance(splitInput[splitInput.length - 1], currentLocation)) {
-            if(splitInput[splitInput.length - 1].equals("nails")) {
-                return "Are you sure about that? The structure is very fragile and may fall apart and onto you.";
-            }
             player.addItemToInventory(item);
 
             currentLocation.removeItemFromLocation(item);
             result = "OK";
-            if(input.equals("tree") && new Actions().locationHasTrees(currentLocation)) {
-                result = "You walk to the nearest tree and start pulling. After a couple minutes of this you give up. You can't get a tree.";
-            }
+
+        }
+        else if(input.equals("tree") && new Actions().locationHasTrees(currentLocation)) {
+            result = "You walk to the nearest tree and start pulling. After a couple minutes of this you give up.";
+        }
+        else if(splitInput[splitInput.length - 1].equals("nails")) {
+            return "Are you sure about that? The structure is very fragile and may fall apart and onto you.";
         }
         return result;
     }
@@ -146,7 +147,7 @@ public class Actions implements Comparator<Item> {
      * </ul>
      */
     public static String unlock(String input) {
-        String result = randomDontKnowWord();
+        String result = getRandomDontKnowWord();
         Item key = GameState.getInstance().getGame().getInventoryItemByName("key");
         Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
 
@@ -209,7 +210,7 @@ public class Actions implements Comparator<Item> {
      * </ul>
      */
     public static String open(String input) {
-        String result = randomDontKnowWord();
+        String result = getRandomDontKnowWord();
         Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
 
         if(input.equals("shed") || input.equals("") || input.equals("the shed")) {
@@ -271,7 +272,7 @@ public class Actions implements Comparator<Item> {
         };
     }
 
-    public static String randomDontKnowWord() {
+    public static String getRandomDontKnowWord() {
         Random r = new Random();
         int randomNum = r.nextInt(3);
         return switch (randomNum) {
