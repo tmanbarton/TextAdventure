@@ -1,4 +1,4 @@
-let caretPosition = 46;     // In pixels
+let caretPosition = 47;     // In pixels
 const userInput = $('#user-input');
 const caret = $('#caret');
 
@@ -6,25 +6,27 @@ const caret = $('#caret');
 $(function() {
     userInput.on('keydown', function(event) {
         caretPosition = getCaretPosition();
-        if(getCaretPosition() > 46 && event.key === 'ArrowLeft') {
+        if(getCaretPosition() > 47 && event.key === 'ArrowLeft') {
             stopBlinking();
             let width = userInput[0].offsetWidth;
             if(caretPosition <= width) {
-                moveCaret(caretPosition - 8);
+                caretPosition = (--userInput[0].selectionStart * 9.6016) + 47;
+                moveCaret(caretPosition);
             }
         }
-        else if(caretPosition < userInput.val().length * 8 + 46 && event.key === 'ArrowRight') {
+        else if(caretPosition < userInput.val().length * 9.6016 + 47 && event.key === 'ArrowRight') {
             stopBlinking();
             let width = userInput[0].offsetWidth;
             if(caretPosition <= width) {
-                moveCaret(caretPosition + 8);
+                caretPosition = ((userInput[0].selectionStart + 1) * 9.6016) + 47;
+                moveCaret(caretPosition);
             }
         }
     });
 
     // Move blinking caret to index in text where user clicked
     userInput.on('click', function() {
-        caretPosition = (userInput[0].selectionStart * 8) + 46;
+        caretPosition = (userInput[0].selectionStart * 9.6016) + 47;
         let width = userInput[0].offsetWidth;
         if(getCaretPosition() <= width) {
             moveCaret(caretPosition);
@@ -36,7 +38,7 @@ $(function() {
         stopBlinking();
         let input = userInput.val();
         input = input.replace(/\s/g, '&nbsp;');
-        caretPosition = (userInput[0].selectionStart * 8) + 46;
+        caretPosition = (userInput[0].selectionStart * 9.6016) + 47;
         let width = userInput[0].offsetWidth;
         if(caretPosition <= width) {
             moveCaret(caretPosition);
@@ -49,7 +51,7 @@ $(function() {
     });
 
     function moveCaret(pixels) {
-        caret[0].style.transform = 'translateX(' + pixels + 'px) translateY(-46px)';
+        caret[0].style.transform = 'translateX(' + pixels + 'px) translateY(-47px)';
     }
 
     function stopBlinking() {
@@ -68,5 +70,5 @@ $(function() {
 
 /* <script>$('#user-input').val('hacked');</script> */
 
-/* <script>setTimeout(function() {$('#user-input').val('hacked');}, 100);</script> */
+/* <script>setTimeout(function() {$('#user-input').val('hacked');}, 9.60160);</script> */
 /* <script>console.log('log');</script> */

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Item {
     private final String locationDescription;
-    private final String inventoryDescription;
+    private String inventoryDescription;
     private final String name;
     private final int order;
 
@@ -14,5 +14,9 @@ public class Item {
         this.locationDescription = locationDescription;
         this.inventoryDescription = inventoryDescription;
         this.name = name;
+    }
+
+    public void setInventoryDescription(String description) {
+        this.inventoryDescription = description;
     }
 }

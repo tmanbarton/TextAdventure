@@ -12,7 +12,7 @@ $(document).ready(
 				$.ajax({
 					type : "POST",
 					contentType : "application/json",
-					url : "userInput",
+					url : "gameController",
 					data : JSON.stringify(formData),
 					dataType : 'json',
 					success : function(result) {
@@ -20,7 +20,7 @@ $(document).ready(
 						    $('#user-input').val('');
 						    $('#caret')[0].style.transform = 'translateX(46px) translateY(-46px)';
 						    let currentDisplay = $('#display').html();
-							$('#display').html(currentDisplay + '<br><span>~</span> ' + result.data.input + '<br><br>' + result.data.response + '<br>');
+							$('#display').html(currentDisplay + '<br><span style="padding-right:10px;">~</span>' + result.data.input + '<br>' + result.data.response);
 						} else {
 							let currentDisplay = $('#display').html();
 							$('#display').html(currentDisplay + 'Failed response from the server. Report to xyz.<br>');

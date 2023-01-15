@@ -1,7 +1,9 @@
 * {
     margin: 0;
     color: #00ff00;
-    font-family: 'Ubuntu Mono';
+    /*font-family: monospace, monospace;*/
+    /*font-family: 'IBM Plex Mono', monospace;*/
+    font-family: 'Ubuntu-Mono', monospace;
 }
 
 body {
@@ -34,7 +36,7 @@ input:focus {
 
 #terminal {
     width: 800px;
-    height: 500px;
+    height: 510px;
     position: relative;
     margin: 20px;
     background-color: black;
@@ -43,14 +45,13 @@ input:focus {
 #display-container {
     position: relative;
     width: 780px;
-    height: 471px;
+    height: 480px;
     margin: 0 10px;
     overflow-y: hidden;
 }
 
 #display {
     width: inherit;
-    white-space: pre-wrap;
     white-space: -moz-pre-wrap;
     white-space: -pre-wrap;
     white-space: -o-pre-wrap;
@@ -63,23 +64,27 @@ input:focus {
     left: 0;
 }
 
+.ascii-art {
+    white-space: pre;
+}
+
 .caret-solid {
     background-color: #00ff00;
-    width: 7px;
+    width: 8px;
     height: 16px;
     position: absolute;
     z-index: 3;
-    transform: translateX(46px) translateY(-46px);
+    transform: translateX(47px) translateY(-46px);
 }
 
 .caret-blink {
     background-color: #00ff00;
     -webkit-animation: blink 1s step-end infinite;
-    width: 7px;
+    width: 8px;
     height: 16px;
     position: absolute;
     z-index: 3;
-    transform: translateX(46px) translateY(-46px);
+    transform: translateX(47px) translateY(-46px);
 }
 
 #prompt {
@@ -87,7 +92,8 @@ input:focus {
     position: absolute;
     z-index: 2;
     padding-left: 2px;
-    transform: translateY(-2px) translateX(8px);
+    padding-right: 10px;
+    transform: translateY(2px) translateX(8px);
 }
 
 #container {

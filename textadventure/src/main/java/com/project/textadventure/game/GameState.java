@@ -9,8 +9,8 @@ import java.util.*;
 
 public class GameState {
     private static GameState instance;
-    private Map<UUID, Player> map = new HashMap<>();
-    private Player player;
+    private Map<UUID, Game> map = new HashMap<>();
+    private Game game;
 
     private GameState() {
     }
@@ -26,11 +26,11 @@ public class GameState {
 //        return map;
 //    }
 
-    public Player getGame() {
-        if(player == null) {
-            player = createGame();
+    public Game getGame() {
+        if(game == null) {
+            game = createGame();
         }
-        return player;
+        return game;
     }
 
 //    public Location getGame(UUID userId) {
@@ -41,9 +41,9 @@ public class GameState {
 //        return player;
 //    }
 
-    private Player createGame() {
+    Game createGame() {
         String antHillDescription = "Nearby is an ant hill with little black ants scurrying about doing their business."; //TODO if input is "dig" and you have the shovel, reveal a salamander in ant hill. Then you can get the salamander
-        String archeryRangeDescription = "You step in front of two archery targets made of hay bales and spray-painted circles that are in an archery range made from a rope tied to four trees, creating a rectangle. There's a ditch to the north and a long driveway leading south.";
+        String archeryRangeDescription = "You stand before hay bale archery targets with spray-painted targets in a rope-enclosed range. There's a ditch to the north and a long driveway leading south.";
         String boatDescription = "You're sitting in a rickety wooden boat in a large underground lake with passages to the west, east, and northeast.";
         String bottomOfVerticalMineShaftDescription = "You are at the bottom of a vertical mine shaft with a working mine cage. Next to the mine cage is a button labeled \"Up/Down\". A mine railway starts here and runs west";
         String brokenRockDescription = "The only thing up here is a bunch of broken rock.";
@@ -63,7 +63,7 @@ public class GameState {
         String lakeDescription = "You are on the south side of a lake. The water sparkles in the intense sun and you can see far into the clear water but the lake is very deep and there's nothing to see but lake bottom from here. There's a path going west and there's a dam to the north.";    // TODO Get rid of lake when wheel turned
         String lakeTownDescription = "You are in what once was a charming little town. Now there is dripping wet plant life from the recently drained lake clinging to the buildings. The muddy ground squelches as you walk. To the east is the dam and you can go farther into the town to the west.";
         String lightningTreeDescription = "You're in a little clearing with a large tree in the middle that looks like it was struck by lightning a long time ago. The bark has long since fallen off and the remaining part of the tree is a reddish color.";
-        String mineEntranceDescription = "You've come to the entrance to this abandoned gold mine. The supports on it are looking a little worn and there are some loose nails that might come in handy if you could safely get them out of the rotten wood. You could enter to the east if you're very careful. Piles of tailings are all over leaving one path away from the entrance to the north.";
+        String mineEntranceDescription = "You're at the entrance of an abandoned gold mine. The supports on it are looking a little worn and there are some loose nails that might come in handy if you could safely get them out of the rotten wood. You could enter to the east if you're very careful. Piles of tailings scatter the area, leaving only one path leading away from the entrance, heading north.";
         String mineShaftDescription = "This is the mine shaft. It looks like it could cave in at any moment. There's a small wooden sign here that says \"BEWARE OF TOMMYKNOCKERS\" with an ugly picture of one the green-skinned, dwarf-sized creatures. The mine shaft continues east.";
         String mustyBendDescription = "You're at a bend in the rails with a musty feel in the air. The rails go east and south here.";
         String narrowCorridorDescription = "You are in a long, narrow corridor. At the end of the corridor the rails split. One set going down to the ne and one continuing on north. At the western end the corridor widens a bit.";
@@ -146,8 +146,8 @@ public class GameState {
 //        bottomOfVerticalMineShaft.connectLocation.(new ConnectingLocation(List.of("in", "enter"), mine cage));
         brokenRock.connectLocation(new ConnectingLocation(List.of("down", "d"), dirtyPassage));
         dam.connectLocation(new ConnectingLocation(List.of("north", "n"), topOfStairs));
-        dam.connectLocation(new ConnectingLocation(List.of("south", "s"), lake));
         dam.connectLocation(new ConnectingLocation(List.of("up", "u"), topOfStairs));
+        dam.connectLocation(new ConnectingLocation(List.of("south", "s"), lake));
         dam.connectLocation(new ConnectingLocation(new ArrayList<>(), lakeTown));
         dam.connectLocation(new ConnectingLocation(new ArrayList<>(), lakeTown));
         dankPassage.connectLocation(new ConnectingLocation(List.of("south", "s"), narrowCorridor));
@@ -183,6 +183,7 @@ public class GameState {
         insideLogCabin.connectLocation(new ConnectingLocation(List.of("up", "u"), upstairsLogCabin));
         insideLogCabin.connectLocation(new ConnectingLocation(List.of("out", "exit"), outsideLogCabin));
         intersection.connectLocation(new ConnectingLocation(List.of("north", "n"), topOfHill));
+        intersection.connectLocation(new ConnectingLocation(List.of("up", "u"), topOfHill));
         intersection.connectLocation(new ConnectingLocation(List.of("south", "s"), tailings));
         intersection.connectLocation(new ConnectingLocation(List.of("west", "w"), dirtRoad));
         insideTavern.connectLocation(new ConnectingLocation(List.of("west", "w"), outsideTavern));
@@ -245,14 +246,18 @@ public class GameState {
         westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("north", "n"), outsideLogCabin));
         westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("east", "e"), topOfStairs));
 
-        driveway.setVisited(true);
-        return new Player(new ArrayList<>(), driveway, false);
+//        driveway.setVisited(true);
+//        driveway.addItemToLocation(key);
+//        return new Game(new ArrayList<>(), driveway, false);
         //// Change start location for manual debugging. ////
         //// Make sure to comment back out; it will make tests fail ////
-//        dam.setVisited(true);
-//        Player player = new Player(new ArrayList<>(), dam, false);
-//        player.addItemToInventory(new Item(10, "There is a thick, circular magnet here, about the size of your palm.", "Magnet", "magnet"));
-//        return player;
+        mineEntrance.setVisited(true);
+        Game game = new Game(new ArrayList<>(), mineEntrance, false);
+//        game.addItemToInventory(key);
+        game.addItemToInventory(new Item(5, "There is a jar here", "Jar", "jar"));
+        game.addItemToInventory(new Item(3, "There is a bow here, strung an ready for shooting", "Bow", "bow"));
+        game.addItemToInventory(new Item(4, "There is an arrow here", "Arrow", "arrow"));
+        return game;
         ///////////////////
     }
 }
