@@ -106,6 +106,9 @@ public class Game implements Action, Comparator<Item> {
             result = "The jar is now full of gold flakes.";
         }
         else {
+            if(currentLocation.getName().equals("ruby on rails")) {
+                currentLocation.setDescription("You've reached a dead end. A crumpled mine cart, no longer able to run on the rails, is laying on its side.");
+            }
             addItemToInventory(item);
             currentLocation.removeItemFromLocation(item);
             result = "OK.";

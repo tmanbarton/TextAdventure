@@ -70,7 +70,7 @@ public class GameState {
         String picnicTableDescription = "A sturdy looking picnic table is in this little clearing you've stepped into and farther north a shed peeks through the trees. A tidy trail leads south.";
         String privatePropertyDescription = "All around you is a dense pine forest that gives the air a friendly smell. There are a couple \"public Property! Keep Off!\" signs nailed to trees, but no gates or anything so the owners aren't too concerned about dealing with trespassers. A driveway continues north and a tidy trail leads off into the forest to the northeast.";
         String roadInValleyDescription = "You're on a north-south road in the middle of a lush, green valley with grazing pastures all around. There is a little stream runs under the road where you are.";
-        String rubyOnRailsDescription = "You've reached a dead end. A crumpled mine cart, no longer able to run on the rails, has fallen on its side and dumped a large ruby onto the rails.";
+        String rubyOnRailsDescription = "You've reached a dead end. A crumpled mine cart, no longer able to run on the rails, is laying on its side having dumped a large ruby onto the rails.";
         String shedDescription = "Here is a cheerful shed with wood matching that of the picnic table's. Its doors are firmly shut and locked, the one and only thing that is on this plot of land.";
         String insideTavernDescription = "The Tommyknocker Tavern looks just as shabby on the inside as it does on the outside with all of its furnishings falling apart and a dusty smell in the air.";
         String tailingsDescription = "All around are piles of tailings that look like they have been puked into this valley. There's not much else to be seen except the entrance to a mine to the south. The shimmering is definitely a lake and there's a path leading east in that direction and another to the north.";
@@ -86,7 +86,7 @@ public class GameState {
         Item key = new Item(1, "There is a shiny key here.", "Shiny key", "key");
         Item gold = new Item(6, "There are some gold flakes on the ground here.", "Gold flakes in jar", "gold");
         Item magnet = new Item(10, "There is a thick, circular magnet here, about the size of your palm.", "Magnet", "magnet");
-        Item ruby = new Item(11, "A large ruby lays on the ground.", "Ruby", "ruby");
+        Item ruby = new Item(11, "There's a large ruby here.", "Ruby", "ruby");
 //        Item cube = new Cube(12, "There is a plastic cube puzzle lying on the ground.", "Cube", "cube", false, false);
 
         Location antHill = new Location(antHillDescription, "You're at a large ant hill.", new ArrayList<>(), new ArrayList<>(), false, "ant hill");
@@ -126,7 +126,7 @@ public class GameState {
         Dam dam = new Dam(damDescription, "You're at Dam.", new ArrayList<>(), new ArrayList<>(), false, "dam", false, false);
 //        GraniteRoom graniteRoom = new GraniteRoom(graniteRoomDescription, "You're at Granite Room.", new ArrayList<>(Collections.singletonList(cube)), new ArrayList<>(), false, "granite room", false);
         MineEntrance mineEntrance = new MineEntrance(mineEntranceDescription, "You're at the entrance of an abandoned gold mine.", new ArrayList<>(Collections.singletonList(gold)), new ArrayList<>(), false, "mine entrance", false);
-//        RubyOnRails rubyOnRails = new RubyOnRails(rubyOnRailsDescription, "You're at Ruby On Rails.", new ArrayList<>(Collections.singletonList(ruby)), new ArrayList<>(), false, "ruby on rails", false);
+        RubyOnRails rubyOnRails = new RubyOnRails(rubyOnRailsDescription, "You're at Ruby On Rails.", new ArrayList<>(Collections.singletonList(ruby)), new ArrayList<>(), false, "ruby on rails", false);
         Shed shed = new Shed(shedDescription, "You're standing before a cheerful little shed.", new ArrayList<>(), new ArrayList<>(), false, "shed", false, false);
         UndergroundLakeLocation undergroundLakeSE = new UndergroundLakeLocation(undergroundLakeSEDescription, "You're on the se side of an underground lake.", new ArrayList<>(), new ArrayList<>(), false, "underground lake se", false);
         UndergroundLakeLocation undergroundLakeNE = new UndergroundLakeLocation(undergroundLakeNEDescription, "You're on the ne side of an underground lake.", new ArrayList<>(), new ArrayList<>(), false, "underground lake ne", false);
@@ -164,7 +164,7 @@ public class GameState {
         dynamiteHoles.connectLocation(new ConnectingLocation(List.of("north", "n"), mustyBend));
         dynamiteHoles.connectLocation(new ConnectingLocation(List.of("southwest", "sw"), narrowCorridor));
         dynamiteHoles.connectLocation(new ConnectingLocation(List.of("up", "u"), narrowCorridor));
-//        dynamiteHoles.connectingLocations.add(new ConnectingLocation(down, rubyOnRails));
+        dynamiteHoles.connectLocation(new ConnectingLocation(List.of("down", "d"), rubyOnRails));
         eastEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("north", "n"), roadInValley));
         eastEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("south", "s"), outsideTavern));
         eastEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("west", "w"), topOfStairs));
