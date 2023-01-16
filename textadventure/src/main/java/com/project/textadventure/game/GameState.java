@@ -54,7 +54,7 @@ public class GameState {
         String eastEndOfSideStreetDescription = "You are at the east end of a side street in an abandoned gold mining town. The main street goes north and south form here.";
         String fieldsOfGrassDescription = "Fields of grass surround you. The road goes south into the valley and to the east it winds up the mountain, turning north.";
         String footPathDescription = "You're on a foot path in the middle of a dense forest. Large pine trees are all around you. The path goes south and east.";
-        String graniteRoomDescription = "On a polished granite pedestal, black as night, in the middle of this room with walls of the same black rock sits a plastic puzzle. It is a 3 x 3 x 3 cube with different colored stickers for each side in stark contrast of the black consuming the room. The sides can be turned. It is scrambled. The only exit is to the west.";
+        String graniteRoomDescription = "You're in a room of granite, black as night and in the middle of this room is a polished pedestal of the same black granite. On this rock sits a plastic puzzle. It is a 3 x 3 x 3 cube with different colored stickers for each side in stark contrast of the black consuming the room. The sides can be turned. It is scrambled. The only exit is to the west.";
         String insideLogCabinDescription = "You are inside a well-kept log cabin with a huge fireplace burning a magnificent fire inside. There's a little wooden sign hanging on the wall next to the fireplace that reads \"Run\" with 5 rectangles in a line carved into the wood. In one corner there's a spiral staircase going upstairs."; // TODO Put a deck of cards somewhere and fill the 5 rectangles with a run of cards
         String intersectionDescription = "You have reached an intersection in the road. It leads into the forest to the north and west and a southern road goes into a thinner part of the forest. A shimmering in the south looks like a lake.";
         String lakeDescription = "You are on the south side of a lake. The water sparkles in the intense sun and you can see far into the clear water but the lake is very deep and there's nothing to see but lake bottom from here. There's a path going west and there's a dam to the north.";
@@ -87,7 +87,7 @@ public class GameState {
         Item gold = new Item(6, "There are some gold flakes on the ground here.", "Gold flakes in jar", "gold");
         Item magnet = new Item(10, "There is a thick, circular magnet here, about the size of your palm.", "Magnet", "magnet");
         Item ruby = new Item(11, "There's a large ruby here.", "Ruby", "ruby");
-//        Item cube = new Cube(12, "There is a plastic cube puzzle lying on the ground.", "Cube", "cube", false, false);
+        Item cube = new Cube(12, "There is a plastic cube puzzle lying on the ground.", "Cube", "cube", false);
 
         Location antHill = new Location(antHillDescription, "You're at a large ant hill.", new ArrayList<>(), new ArrayList<>(), false, "ant hill");
         Location archeryRange = new Location(archeryRangeDescription, "You're at Archery Range.", new ArrayList<>(), new ArrayList<>(), false, "archery range");
@@ -124,18 +124,18 @@ public class GameState {
         Location upstairsLogCabin = new Location(upstairsLogCabinDescription, "You're on the second floor of the log cabin.", new ArrayList<>(), new ArrayList<>(), false, "upstairs log cabin");
         Location westEndOfSideStreet = new Location(westEndOfSideStreetDescription, "You're at the west end of the main street.", new ArrayList<>(), new ArrayList<>(), false, "west end of side street");
         Dam dam = new Dam(damDescription, "You're at Dam.", new ArrayList<>(), new ArrayList<>(), false, "dam", false, false);
-//        GraniteRoom graniteRoom = new GraniteRoom(graniteRoomDescription, "You're at Granite Room.", new ArrayList<>(Collections.singletonList(cube)), new ArrayList<>(), false, "granite room", false);
+        GraniteRoom graniteRoom = new GraniteRoom(graniteRoomDescription, "You're at Granite Room.", new ArrayList<>(Collections.singletonList(cube)), new ArrayList<>(), false, "granite room", false);
         MineEntrance mineEntrance = new MineEntrance(mineEntranceDescription, "You're at the entrance of an abandoned gold mine.", new ArrayList<>(Collections.singletonList(gold)), new ArrayList<>(), false, "mine entrance", false);
         RubyOnRails rubyOnRails = new RubyOnRails(rubyOnRailsDescription, "You're at Ruby On Rails.", new ArrayList<>(Collections.singletonList(ruby)), new ArrayList<>(), false, "ruby on rails", false);
         Shed shed = new Shed(shedDescription, "You're standing before a cheerful little shed.", new ArrayList<>(), new ArrayList<>(), false, "shed", false, false);
         UndergroundLakeLocation undergroundLakeSE = new UndergroundLakeLocation(undergroundLakeSEDescription, "You're on the se side of an underground lake.", new ArrayList<>(), new ArrayList<>(), false, "underground lake se", false);
         UndergroundLakeLocation undergroundLakeNE = new UndergroundLakeLocation(undergroundLakeNEDescription, "You're on the ne side of an underground lake.", new ArrayList<>(), new ArrayList<>(), false, "underground lake ne", false);
-        UndergroundLakeLocation undergroundLakeLocation = new UndergroundLakeLocation(undergroundLakeWestDescription, "You're on the west side of an underground lake.", new ArrayList<>(), new ArrayList<>(), false, "underground lake west", true);
+        UndergroundLakeLocation undergroundLakeWest = new UndergroundLakeLocation(undergroundLakeWestDescription, "You're on the west side of an underground lake.", new ArrayList<>(), new ArrayList<>(), false, "underground lake west", true);
 
         antHill.connectLocation(new ConnectingLocation(List.of("west", "w"), ditch));
         archeryRange.connectLocation(new ConnectingLocation(List.of("north", "n"), ditch));
         archeryRange.connectLocation(new ConnectingLocation(List.of("south", "s"), privateProperty));
-        boat.connectLocation(new ConnectingLocation(List.of("west", "w"), undergroundLakeLocation));
+        boat.connectLocation(new ConnectingLocation(List.of("west", "w"), undergroundLakeWest));
         boat.connectLocation(new ConnectingLocation(List.of("northeast", "ne"), undergroundLakeNE));
         boat.connectLocation(new ConnectingLocation(List.of("southeast", "se"), undergroundLakeSE));
         bottomOfVerticalMineShaft.connectLocation(new ConnectingLocation(List.of("west", "w"), dankPassage));
@@ -173,8 +173,8 @@ public class GameState {
         fieldsOfGrass.connectLocation(new ConnectingLocation(List.of("up", "u"), mountainPass));
         footPath.connectLocation(new ConnectingLocation(List.of("south", "s"), driveway));
         footPath.connectLocation(new ConnectingLocation(List.of("east", "e"), topOfHill));
-//        graniteRoom.connectLocation(new ConnectingLocation(List.of("west", "w"), undergroundLakeSE));
-//        graniteRoom.connectLocation(new ConnectingLocation(List.of("out", "exit"), undergroundLakeSE));
+        graniteRoom.connectLocation(new ConnectingLocation(List.of("west", "w"), undergroundLakeSE));
+        graniteRoom.connectLocation(new ConnectingLocation(List.of("out", "exit"), undergroundLakeSE));
         insideLogCabin.connectLocation(new ConnectingLocation(List.of("east", "e"), outsideLogCabin));
         insideLogCabin.connectLocation(new ConnectingLocation(List.of("up", "u"), upstairsLogCabin));
         insideLogCabin.connectLocation(new ConnectingLocation(List.of("out", "exit"), outsideLogCabin));
@@ -190,7 +190,7 @@ public class GameState {
 //        lakeTown.connectLocation(new ConnectingLocation(List.of("west", "w"), farther into the town));
         lakeTown.connectLocation(new ConnectingLocation(List.of("up", "u"), dam));
         lightningTree.connectLocation(new ConnectingLocation(List.of("east", "e"), ditch));
-        mineShaft.connectLocation(new ConnectingLocation(List.of("east", "e"), undergroundLakeLocation));
+        mineShaft.connectLocation(new ConnectingLocation(List.of("east", "e"), undergroundLakeWest));
         mineShaft.connectLocation(new ConnectingLocation(List.of("west", "w"), mineEntrance));
         mineShaft.connectLocation(new ConnectingLocation(List.of("out", "exit"), mineEntrance));
         mineEntrance.connectLocation(new ConnectingLocation(List.of("north", "n"), tailings));
@@ -232,11 +232,11 @@ public class GameState {
         topOfStairs.connectLocation(new ConnectingLocation(List.of("east", "e"), eastEndOfSideStreet));
         topOfStairs.connectLocation(new ConnectingLocation(List.of("west", "w"), westEndOfSideStreet));
         topOfStairs.connectLocation(new ConnectingLocation(List.of("down", "d"), dam));
-        undergroundLakeLocation.connectLocation(new ConnectingLocation(List.of("south", "s"), mineShaft));
-        undergroundLakeLocation.connectLocation(new ConnectingLocation(List.of("in", "enter"), boat));
+        undergroundLakeWest.connectLocation(new ConnectingLocation(List.of("south", "s"), mineShaft));
+        undergroundLakeWest.connectLocation(new ConnectingLocation(List.of("in", "enter"), boat));
         undergroundLakeNE.connectLocation(new ConnectingLocation(List.of("east", "e"), dirtyPassage));
         undergroundLakeNE.connectLocation(new ConnectingLocation(List.of("in", "enter"), boat));
-//        undergroundLakeSE.connectLocation(new ConnectingLocation(List.of("east", "e"), graniteRoom));
+        undergroundLakeSE.connectLocation(new ConnectingLocation(List.of("east", "e"), graniteRoom));
         undergroundLakeSE.connectLocation(new ConnectingLocation(List.of("in", "enter"), boat));
         upstairsLogCabin.connectLocation(new ConnectingLocation(List.of("down", "d"), insideLogCabin));
         westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of("north", "n"), outsideLogCabin));
@@ -247,12 +247,12 @@ public class GameState {
 //        return new Game(new ArrayList<>(), driveway, false);
         //// Change start location for manual debugging. ////
         //// Make sure to comment back out; it will make tests fail ////
-        undergroundLakeLocation.setVisited(true);
-        Game game = new Game(new ArrayList<>(), undergroundLakeLocation, false);
-        game.addItemToInventory(magnet);
-        game.addItemToInventory(new Item(5, "There is a jar here", "Jar", "jar"));
-        game.addItemToInventory(new Item(3, "There is a bow here, strung and ready for shooting", "Bow", "bow"));
-        game.addItemToInventory(new Item(4, "There is an arrow here", "Arrow", "arrow"));
+        undergroundLakeSE.setVisited(true);
+        Game game = new Game(new ArrayList<>(), undergroundLakeSE, false);
+//        game.addItemToInventory(magnet);
+//        game.addItemToInventory(new Item(5, "There is a jar here", "Jar", "jar"));
+//        game.addItemToInventory(new Item(3, "There is a bow here, strung and ready for shooting", "Bow", "bow"));
+//        game.addItemToInventory(new Item(4, "There is an arrow here", "Arrow", "arrow"));
         return game;
         ///////////////////
     }

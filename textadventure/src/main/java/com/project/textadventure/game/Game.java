@@ -77,6 +77,9 @@ public class Game implements Action, Comparator<Item> {
         else if(verb.equals("drop") || verb.equals("throw")) {
             result = dropItem(noun);
         }
+        else if(verb.equals("solve")) {
+            result = solveCube();
+        }
         return result;
     }
 
@@ -108,6 +111,9 @@ public class Game implements Action, Comparator<Item> {
         else {
             if(currentLocation.getName().equals("ruby on rails")) {
                 currentLocation.setDescription("You've reached a dead end. A crumpled mine cart, no longer able to run on the rails, is laying on its side.");
+            }
+            else if(currentLocation.getName().equals("granite room")) {
+                currentLocation.setDescription("You're in a room of granite, black as night and in the middle of this room is a polished pedestal of the same black granite. Other than that the room is featureless.");
             }
             addItemToInventory(item);
             currentLocation.removeItemFromLocation(item);
@@ -182,6 +188,10 @@ public class Game implements Action, Comparator<Item> {
             result.append("<br>").append(item.getInventoryDescription()).append(" ");
         }
         return "You're carrying:" + result;
+    }
+
+    private String solveCube() {
+        return null;
     }
 
     @Override
