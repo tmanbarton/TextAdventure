@@ -6,6 +6,7 @@ import com.project.textadventure.game.actions.LocationActions;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
@@ -89,29 +90,41 @@ public class Location implements Action {
         return response;
     }
 
-    private boolean isDirection(String input) {
+    boolean isDirection(String input) {
         return List.of("n", "s", "e", "w", "ne", "nw", "se", "sw", "u", "d",
                 "north", "south", "east", "west", "northeast", "north east","northwest", "north west",
                 "southeast", "south east", "southwest", "south west",
                 "up", "down", "in", "enter", "out", "exit").contains(input);
     }
 
-    public String move(String direction) {
+    private String move(String direction) {
         Game game = GameState.getInstance().getGame();
-        List<ConnectingLocation> connectingLocations = game.getCurrentLocation().getConnectingLocations();
+        Location currentLocation = game.getCurrentLocation();
+        Optional<ConnectingLocation> optionalConnection = currentLocation.getConnectingLocations()
+                .stream()
+                .filter(connectingLocation -> connectingLocation.getDirections().contains(direction))
+                .findFirst();
 
-        for(ConnectingLocation connectingLocation : connectingLocations) {
-            if(connectingLocation.getDirections() != null && connectingLocation.getDirections().contains(direction)) {
-                Location connection = connectingLocation.getLocation();
-                game.setCurrentLocation(connection);
-                if(connection.isVisited()) {
-                    return connection.getShortDescription() + listLocationItems(connection.getItems());
-                }
-                connection.setVisited(true);
-                return connection.getDescription() + listLocationItems(connection.getItems());
-            }
+        if (optionalConnection.isEmpty()) {
+            return "You can't go that way.";
         }
-        return "You can't go that way.";
+        ConnectingLocation connectingLocation = optionalConnection.get();
+        if(currentLocation instanceof UndergroundLakeLocation && ((UndergroundLakeLocation) currentLocation).boatAtLocation) {
+            return moveToLocation(connectingLocation);
+        }
+        return moveToLocation(connectingLocation);
+    }
+
+    private String moveToLocation(ConnectingLocation connectingLocation) {
+        Location connection = connectingLocation.getLocation();
+        Game game = GameState.getInstance().getGame();
+        game.setCurrentLocation(connection);
+
+        if(connection.isVisited()) {
+            return connection.getShortDescription() + listLocationItems(connection.getItems());
+        }
+        connection.setVisited(true);
+        return connection.getDescription() + listLocationItems(connection.getItems());
     }
 
     public String look() {
@@ -162,6 +175,10 @@ public class Location implements Action {
 
     private String shootArrow(Item arrow) {
         Game game = GameState.getInstance().getGame();
+        if(game.getCurrentLocation().getName().equals("boat")) {
+            game.removeItemFromInventory(arrow);
+            return "Your arrow goes flying off into the the distance and splashes into the water, never to be found again.";
+        }
         game.removeItemFromInventory(arrow);
         addItemToLocation(arrow);
         return "Your arrow goes flying off into the the distance and lands with a thud on the ground.";

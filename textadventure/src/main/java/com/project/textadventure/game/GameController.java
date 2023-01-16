@@ -24,8 +24,9 @@ public class GameController {
 
     @PostMapping("/gameController")
     public ResponseEntity<ServiceResponse<Response>> executeCommand(@RequestBody Input input) {
+        String inputString = input.getInput().toLowerCase();
         Game game = GameState.getInstance().getGame();
-        List<Pair<String , String>> commands = parseInput(input.getInput());
+        List<Pair<String , String>> commands = parseInput(inputString);
         String result = "";
         for(Pair<String, String> command : commands) {
             if(!game.hasPlayerMoved()) {
@@ -39,7 +40,6 @@ public class GameController {
             }
             result += "<br>" + action.takeAction(command.getKey(), command.getValue()) + "<br>";
         }
-//        result += "<br>";
 
         Response resp = new Response(result, input.getInput());
         ServiceResponse<Response> response = new ServiceResponse<>("success", resp);

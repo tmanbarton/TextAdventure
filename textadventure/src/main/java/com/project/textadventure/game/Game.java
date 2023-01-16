@@ -161,6 +161,10 @@ public class Game implements Action, Comparator<Item> {
             return "You drop the magnet and as it's falling it snaps to the shiny center of the wheel. You can hear " +
                     "some mechanical clicking somewhere inside the dam.";
         }
+        if(currentLocation.getName().equals("boat")) {
+            removeItemFromInventory(item);
+            return "You're " + item.getName() + " splashes into the water next to the boat and sinks to the bottom, never to be found again.";
+        }
         removeItemFromInventory(item);
         currentLocation.addItemToLocation(item);
         return "OK.";
