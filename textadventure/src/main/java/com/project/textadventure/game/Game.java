@@ -1,6 +1,7 @@
 package com.project.textadventure.game;
 
 import com.project.textadventure.controller.Action;
+import com.project.textadventure.game.Locations.Dam;
 import com.project.textadventure.game.Locations.Location;
 import com.project.textadventure.game.actions.PlayerActions;
 import lombok.Data;
@@ -76,7 +77,7 @@ public class Game implements Action, Comparator<Item> {
         else if(verb.equals("drop") || verb.equals("throw")) {
             result = dropItem(noun);
         }
-        return result + "<br><br>";
+        return result;
     }
 
     private String getItem(String noun) {
@@ -88,6 +89,9 @@ public class Game implements Action, Comparator<Item> {
         Item jar = getInventoryItemByName("jar");
         if(getInventoryItemByName(noun) != null) {
             result = "You're already carrying it!";
+        }
+        else if(noun.equals("magnet") && currentLocation instanceof Dam && ((Dam) currentLocation).isMagnetDropped()) {
+            result = "The magnet is firmly attached to the wheel";
         }
         else if(!currentLocation.isItemAtLocation(noun)) {
             result = "I don't see that here.";
@@ -137,7 +141,7 @@ public class Game implements Action, Comparator<Item> {
         String result = "";
         Item item = getInventoryItemByName(noun);
         if(item == null) {
-            return "You're not carrying it!";
+            return "You're not carrying that!";
         }
         if(noun.equals("jar")) {
             Item gold = getInventoryItemByName("gold");
@@ -151,34 +155,15 @@ public class Game implements Action, Comparator<Item> {
             Item jar = getInventoryItemByName("jar");
             jar.setInventoryDescription("Jar");
         }
+        if(noun.equals("magnet") && currentLocation instanceof Dam) {
+            removeItemFromInventory(item);
+            ((Dam) currentLocation).setMagnetDropped(true);
+            return "You drop the magnet and as it's falling it snaps to the shiny center of the wheel. You can hear " +
+                    "some mechanical clicking somewhere inside the dam.";
+        }
         removeItemFromInventory(item);
         currentLocation.addItemToLocation(item);
         return "OK.";
-
-//
-//        Item jar = getInventoryItemByName("jar");
-//        Item gold = getInventoryItemByName("gold");
-//        if(!isItemInInventory(noun)) {
-//            result = "You're not carrying it!";
-//        }
-//        // drop jar with gold in it
-//        else if(noun.equals("jar") && isItemInInventory("gold")) {
-//            jar.setInventoryDescription("Jar full of gold flakes");
-//            currentLocation.addItemToLocation(item);
-//            removeItemFromInventory(item);
-//            currentLocation.addItemToLocation(gold);
-//            removeItemFromInventory(gold);
-//            result = "OK.";
-//        }
-//        else {
-//            if(noun.equals("gold")) {
-//                jar.setInventoryDescription("Jar");
-//            }
-//            removeItemFromInventory(item);
-//            currentLocation.addItemToLocation(item);
-//            result = "OK.";
-//        }
-//        return result;
     }
 
     private String takeInventory() {

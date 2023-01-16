@@ -83,10 +83,10 @@ public class Location implements Action {
             response = parseShootCommand(noun);
         }
         else if(verb.equals("turn")) {
-            response = turn(verb, noun);
+            response = turn();
         }
 
-        return response + "<br><br>";
+        return response;
     }
 
     private boolean isDirection(String input) {
@@ -161,10 +161,13 @@ public class Location implements Action {
     }
 
     private String shootArrow(Item arrow) {
-        return "(not actually)Your arrow goes flying off into the the distance and lands with a soft thud into the ground.";
+        Game game = GameState.getInstance().getGame();
+        game.removeItemFromInventory(arrow);
+        addItemToLocation(arrow);
+        return "Your arrow goes flying off into the the distance and lands with a thud on the ground.";
     }
 
-    private String turn(String verb, String noun) {
-        return "turn at location other than dam";
+    private String turn() {
+        return "There's nothing here to turn.";
     }
 }

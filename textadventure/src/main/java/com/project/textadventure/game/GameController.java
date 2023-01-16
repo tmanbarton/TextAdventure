@@ -29,16 +29,17 @@ public class GameController {
         String result = "";
         for(Pair<String, String> command : commands) {
             if(!game.hasPlayerMoved()) {
-                result = introduceGame(command.getKey()) + "<br><br>";
+                result = introduceGame(command.getKey());
                 break;
             }
             Action action = ActionFactory.getActionObject(command.getKey(), command.getValue());
             if(action == null) {
-                result = generateRandomUnknownCommandResponse();
+                result = "<br>" + generateRandomUnknownCommandResponse() + "<br>";
                 break;
             }
-            result += action.takeAction(command.getKey(), command.getValue());
+            result += "<br>" + action.takeAction(command.getKey(), command.getValue()) + "<br>";
         }
+//        result += "<br>";
 
         Response resp = new Response(result, input.getInput());
         ServiceResponse<Response> response = new ServiceResponse<>("success", resp);

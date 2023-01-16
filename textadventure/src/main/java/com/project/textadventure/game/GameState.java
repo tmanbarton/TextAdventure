@@ -52,15 +52,15 @@ public class GameState {
         String dirtRoadDescription = "You are on a badly washboarded dirt road in dire need of maintenance that extends far west. It runs winding down the hill to the east. Pine forests hug the road on both sides.";
         String dirtyPassageDescription = "You're in a dirty broken passage. To the west the passage gets wider. To the east the passage narrows. Above you part of the ceiling caved in, leaving a hole and a pile of debris that cover the rails.";
         String ditchDescription = "You are in the middle of the forest standing in a small ditch running east and west.";
-        String drivewayDescription = "You are at the west end of a dirt road surrounded by a forest of pine trees. There is a small gap to the north that exposes a steep, dirt driveway sloping down into the forest. Looking down the road to the east you can see over the trees and into the valley. There you see what might be the shimmering of a lake in the mountain sun. There's also a foot path going northwest.";
+        String drivewayDescription = "You are at the west end of a dirt road surrounded by a forest of pine trees. There is a small gap to the north that exposes a steep, dirt driveway sloping down into the forest. Looking down the road to the east you can see over the trees and into the valley. There's also a foot path going northwest.";
         String dynamiteHolesDescription = "There are a bunch of holes drilled in the wall here. The miners of old must have thought about using dynamite to blow up this part but changed their minds. The rails split again. The railway now leads down, north, and up a slope to the sw.";
         String eastEndOfSideStreetDescription = "You are at the east end of a side street in an abandoned gold mining town. The main street goes north and south form here.";
         String fieldsOfGrassDescription = "Fields of grass surround you. The road goes south into the valley and to the east it winds up the mountain, turning north.";
         String footPathDescription = "You're on a foot path in the middle of a dense forest. Large pine trees are all around you. The path goes south and east.";
         String graniteRoomDescription = "On a polished granite pedestal, black as night, in the middle of this room with walls of the same black rock sits a plastic puzzle. It is a 3 x 3 x 3 cube with different colored stickers for each side in stark contrast of the black consuming the room. The sides can be turned. It is scrambled. The only exit is to the west.";
         String insideLogCabinDescription = "You are inside a well-kept log cabin with a huge fireplace burning a magnificent fire inside. There's a little wooden sign hanging on the wall next to the fireplace that reads \"Run\" with 5 rectangles in a line carved into the wood. In one corner there's a spiral staircase going upstairs."; // TODO Put a deck of cards somewhere and fill the 5 rectangles with a run of cards
-        String intersectionDescription = "You have reached an intersection in the road. It leads into the forest to the north and west and a southern road goes into a thinner part of the forest. The shimmering, which is now in the south, looks very much like a lake now.";
-        String lakeDescription = "You are on the south side of a lake. The water sparkles in the intense sun and you can see far into the clear water but the lake is very deep and there's nothing to see but lake bottom from here. There's a path going west and there's a dam to the north.";    // TODO Get rid of lake when wheel turned
+        String intersectionDescription = "You have reached an intersection in the road. It leads into the forest to the north and west and a southern road goes into a thinner part of the forest. A shimmering in the south looks like a lake.";
+        String lakeDescription = "You are on the south side of a lake. The water sparkles in the intense sun and you can see far into the clear water but the lake is very deep and there's nothing to see but lake bottom from here. There's a path going west and there's a dam to the north.";
         String lakeTownDescription = "You are in what once was a charming little town. Now there is dripping wet plant life from the recently drained lake clinging to the buildings. The muddy ground squelches as you walk. To the east is the dam and you can go farther into the town to the west.";
         String lightningTreeDescription = "You're in a little clearing with a large tree in the middle that looks like it was struck by lightning a long time ago. The bark has long since fallen off and the remaining part of the tree is a reddish color.";
         String mineEntranceDescription = "You're at the entrance of an abandoned gold mine. The supports on it are looking a little worn and there are some loose nails that might come in handy if you could safely get them out of the rotten wood. You could enter to the east if you're very careful. Piles of tailings scatter the area, leaving only one path leading away from the entrance, heading north.";
@@ -251,12 +251,12 @@ public class GameState {
 //        return new Game(new ArrayList<>(), driveway, false);
         //// Change start location for manual debugging. ////
         //// Make sure to comment back out; it will make tests fail ////
-        mineEntrance.setVisited(true);
-        Game game = new Game(new ArrayList<>(), mineEntrance, false);
-//        game.addItemToInventory(key);
-        game.addItemToInventory(new Item(5, "There is a jar here", "Jar", "jar"));
-        game.addItemToInventory(new Item(3, "There is a bow here, strung an ready for shooting", "Bow", "bow"));
-        game.addItemToInventory(new Item(4, "There is an arrow here", "Arrow", "arrow"));
+        dam.setVisited(true);
+        Game game = new Game(new ArrayList<>(), dam, false);
+        game.addItemToInventory(magnet);
+//        game.addItemToInventory(new Item(5, "There is a jar here", "Jar", "jar"));
+//        game.addItemToInventory(new Item(3, "There is a bow here, strung an ready for shooting", "Bow", "bow"));
+//        game.addItemToInventory(new Item(4, "There is an arrow here", "Arrow", "arrow"));
         return game;
         ///////////////////
     }

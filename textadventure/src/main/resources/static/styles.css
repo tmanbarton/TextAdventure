@@ -45,7 +45,7 @@ input:focus {
 #display-container {
     position: relative;
     width: 780px;
-    height: 480px;
+    height: 456px;
     margin: 0 10px;
     overflow-y: hidden;
 }
@@ -93,7 +93,7 @@ input:focus {
     z-index: 2;
     padding-left: 2px;
     padding-right: 10px;
-    transform: translateY(2px) translateX(8px);
+    transform: translateY(25px) translateX(8px);
 }
 
 #container {

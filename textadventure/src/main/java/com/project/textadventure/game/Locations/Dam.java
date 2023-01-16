@@ -22,17 +22,25 @@ public class Dam extends Location implements Action {
         this.magnetDropped = magnetDropped;
     }
 
+    public boolean isMagnetDropped() {
+        return magnetDropped;
+    }
+
+    public void setMagnetDropped(boolean magnetDropped) {
+        this.magnetDropped = magnetDropped;
+    }
+
     @Override
     public String takeAction(String verb, String noun) {
-        String response = "";
-
         if(verb.equals("turn")) {
-            response = parseTurnCommand(noun);
+            return parseTurnCommand(noun);
+        }
+        else if(verb.equals("get")) {
+            return getMagnet(verb, noun);
         }
         else {
-            response = super.takeAction(verb, noun);
+            return super.takeAction(verb, noun);
         }
-        return response;
     }
 
     private String parseTurnCommand(String noun) {
@@ -40,8 +48,8 @@ public class Dam extends Location implements Action {
         Location currentLocation = game.getCurrentLocation();
         String response = "";
 
-        // only "turn" or "" does something at dam
-        if(noun.equals("turn") || noun.equals("") && currentLocation instanceof Dam) {
+        // only "turn wheel" or "turn" does something at dam
+        if(noun == null || noun.equals("wheel")) {
             if(magnetDropped && !wheelTurned) {
                 response = turnWheel();
             }
@@ -50,7 +58,7 @@ public class Dam extends Location implements Action {
             }
         }
         else {
-            response = generateRandomUnknownCommandResponse();
+            response = "There's nothing to turn here.";
         }
         return response;
     }
@@ -61,10 +69,10 @@ public class Dam extends Location implements Action {
      * since there is no more lake.
      */
     public String turnWheel() {
-        this.getConnectingLocations().get(3).setDirections(List.of("east", "e"));
+        this.getConnectingLocations().get(3).setDirections(List.of("west", "w"));
         this.getConnectingLocations().get(4).setDirections(List.of("down", "d"));
 
-        Location lake = this.getConnectingLocations().get(1).getLocation();
+        Location lake = this.getConnectingLocations().get(2).getLocation();
         lake.setDescription("You are on the south side of an empty lake. There's a path going west and there's a dam to the north.");
         lake.setShortDescription("You're on the south side of an empty lake.");
 
@@ -74,12 +82,19 @@ public class Dam extends Location implements Action {
         Location intersection = tailings.getConnectingLocations().get(2).getLocation();
         intersection.setDescription("You have reached an intersection in the road. It leads into the forest to the north and west and a southern road goes into a thinner part of the forest.");
 
-        Location driveway = intersection.getConnectingLocations().get(2).getLocation()
-                .getConnectingLocations().get(1).getLocation();
-        driveway.setDescription("You are at the west end of a dirt road surrounded by a forest of pine trees. There is a small gap to the north that exposes a steep, dirt driveway sloping down into the forest. Looking down the road to the east you can see over the trees and into the valley. There's also a foot path going northwest.");
-
         wheelTurned = true;
 
         return "The ground starts to rumble and you see a massive concrete wall start to rise out of the water on\nthe opposite side of the lake, blocking the flow of water from the river into the lake. There's\nanother shudder and a huge whirl pool form near the middle of the lake and the water level starts\ngoing down. Soon the water is completely gone, revealing a town that had been under water only a\nfew minutes ago. You can probably get to the town if you go down the dam to the west.";
+    }
+
+    private String getMagnet(String verb, String noun) {
+        Game game = GameState.getInstance().getGame();
+        if(!noun.equals("magnet")) {
+            return game.takeAction(verb, noun);
+        }
+        Item magnet = game.getInventoryItemByName("magnet");
+        game.removeItemFromInventory(magnet);
+        this.setDescription("You're on a short dam that created this lake by stopping up a large river. The dam goes north and south along the east end of the lake. Close by is a wheel with its axel extending deep into the dam. Its orange metal has faded to rust except for some different metal at the center, shining in the sun. There's a large magnet stuck to this part of the wheel. South leads around the lake and to the north there's a set of stairs.");
+        return ":)";
     }
 }
