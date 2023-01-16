@@ -22,26 +22,12 @@ public class Dam extends Location implements Action {
         this.magnetDropped = magnetDropped;
     }
 
-    public Dam() {}
-
-    public boolean isWheelTurned() {
-        return wheelTurned;
-    }
-
-    public boolean isMagnetDropped() {
-        return magnetDropped;
-    }
-
-    public void setMagnetDropped(boolean magnetDropped) {
-        this.magnetDropped = magnetDropped;
-    }
-
     @Override
     public String takeAction(String verb, String noun) {
         String response = "";
 
         if(verb.equals("turn")) {
-            response = parseTurnCommand(verb, noun);
+            response = parseTurnCommand(noun);
         }
         else {
             response = super.takeAction(verb, noun);
@@ -49,7 +35,7 @@ public class Dam extends Location implements Action {
         return response;
     }
 
-    private String parseTurnCommand(String verb, String noun) {
+    private String parseTurnCommand(String noun) {
         Game game = GameState.getInstance().getGame();
         Location currentLocation = game.getCurrentLocation();
         String response = "";
