@@ -3,6 +3,7 @@ package com.project.textadventure.game;
 import com.project.textadventure.controller.Action;
 import com.project.textadventure.game.Locations.Dam;
 import com.project.textadventure.game.Locations.Location;
+import com.project.textadventure.game.Locations.MineEntrance;
 import com.project.textadventure.game.actions.PlayerActions;
 import lombok.Data;
 
@@ -15,6 +16,8 @@ public class Game implements Action, Comparator<Item> {
     private List<Item> inventory;
     private Location currentLocation;
     private boolean playerMoved;
+    private boolean takingNails = false;
+
     PlayerActions possibleActions;
 
     public Game(List<Item> inventory, Location currentLocation, boolean playerMoved) {
@@ -77,9 +80,6 @@ public class Game implements Action, Comparator<Item> {
         else if(verb.equals("drop") || verb.equals("throw")) {
             result = dropItem(noun);
         }
-        else if(verb.equals("solve")) {
-            result = solveCube();
-        }
         return result;
     }
 
@@ -96,6 +96,10 @@ public class Game implements Action, Comparator<Item> {
         else if(noun.equals("magnet") && currentLocation instanceof Dam && ((Dam) currentLocation).isMagnetDropped()) {
             result = "The magnet is firmly attached to the wheel";
         }
+        else if(noun.equals("nails") && currentLocation instanceof MineEntrance && !((MineEntrance) currentLocation).areNailsOff()) {
+            result = "Are you sure you want to get the nails? The structure is very fragile and may fall apart and onto you.";
+            ((MineEntrance) currentLocation).setTakingNails(true);
+        }
         else if(!currentLocation.isItemAtLocation(noun)) {
             result = "I don't see that here.";
         }
@@ -109,7 +113,7 @@ public class Game implements Action, Comparator<Item> {
             result = "The jar is now full of gold flakes.";
         }
         else {
-            if(currentLocation.getName().equals("ruby on rails")) {
+            if(currentLocation.getName().equals("crumpled mine cart")) {
                 currentLocation.setDescription("You've reached a dead end. A crumpled mine cart, no longer able to run on the rails, is laying on its side.");
             }
             else if(currentLocation.getName().equals("granite room")) {
@@ -188,10 +192,6 @@ public class Game implements Action, Comparator<Item> {
             result.append("<br>").append(item.getInventoryDescription()).append(" ");
         }
         return "You're carrying:" + result;
-    }
-
-    private String solveCube() {
-        return null;
     }
 
     @Override

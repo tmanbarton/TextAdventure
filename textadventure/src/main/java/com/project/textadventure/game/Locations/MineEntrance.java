@@ -14,12 +14,25 @@ import java.util.concurrent.Callable;
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
 public class MineEntrance extends Location implements Action {
-    boolean nailsOff;
+    private boolean nailsOff;
+    private boolean takingNails;
     MineEntranceActions possibleActions; // TODO use in ActionFactory
 
     public MineEntrance(String description, String shortDescription, List<Item> items, List<ConnectingLocation> connectingLocations, boolean visited, String name, boolean nailsOff) {
         super(description, shortDescription, items, connectingLocations, visited, name);
         this.nailsOff = nailsOff;
+    }
+
+    public boolean isTakingNails() {
+        return takingNails;
+    }
+
+    public void setTakingNails(boolean takingNails) {
+        this.takingNails = takingNails;
+    }
+
+    public boolean areNailsOff() {
+        return nailsOff;
     }
 
     @Override
@@ -83,9 +96,9 @@ public class MineEntrance extends Location implements Action {
 
         currentLocation.setDescription("You're at the entrance of an abandoned gold mine, a recent cave-in preventing " +
                 "entry. Piles of tailings scatter the area, leaving only one path leading away from the entrance, heading north.");
-        response = "You shoot the arrow and the nails go flying off with a small ringing sound as your arrow glances " +
-                "off of them. The nails and your arrow land a few feet away then there's a loud crack of the support " +
-                "and the entrance caves in with an even louder crash and cloud of dust. Good thing you didn't try to take them by hand.";
+        response = "You shoot the arrow and it glances off the nails with a small ringing sound. The nails and your " +
+                "arrow land a few feet away then there's a loud crack of the support and the entrance caves in with an " +
+                "even louder crash and cloud of dust. Good thing you didn't try to take them by hand.";
 
         return response;
     }

@@ -5,6 +5,7 @@ import com.project.textadventure.dto.Input;
 import com.project.textadventure.dto.Response;
 import com.project.textadventure.dto.ServiceResponse;
 
+import com.project.textadventure.game.Locations.MineEntrance;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,19 +29,23 @@ public class GameController {
         Game game = GameState.getInstance().getGame();
         List<Pair<String , String>> commands = parseInput(inputString);
         String result = "";
-        for(Pair<String, String> command : commands) {
-            if(!game.hasPlayerMoved()) {
-                result = introduceGame(command.getKey());
-                break;
-            }
-            Action action = ActionFactory.getActionObject(command.getKey(), command.getValue());
-            if(action == null) {
-                result = "<br>" + generateRandomUnknownCommandResponse() + "<br>";
-                break;
-            }
-            result += "<br>" + action.takeAction(command.getKey(), command.getValue()) + "<br>";
+        if(game.getCurrentLocation() instanceof MineEntrance && ((MineEntrance) game.getCurrentLocation()).isTakingNails()) {
+            result = attemptGetNailsByHand(inputString);
         }
-
+        else {
+            for (Pair<String, String> command : commands) {
+                if (!game.hasPlayerMoved()) {
+                    result = introduceGame(command.getKey()) + "<br>";
+                    break;
+                }
+                Action action = ActionFactory.getActionObject(command.getKey(), command.getValue());
+                if (action == null) {
+                    result = "<br>" + generateRandomUnknownCommandResponse() + "<br>";
+                    break;
+                }
+                result += "<br>" + action.takeAction(command.getKey(), command.getValue()) + "<br>";
+            }
+        }
         Response resp = new Response(result, input.getInput());
         ServiceResponse<Response> response = new ServiceResponse<>("success", resp);
 
@@ -61,6 +66,24 @@ public class GameController {
             parsedCommands.add(commandPair);
         }
         return parsedCommands;
+    }
+
+    private String attemptGetNailsByHand(String input) {
+        Game game = GameState.getInstance().getGame();
+        if(input.equals("yes") || input.equals("y")) {
+            ((MineEntrance) game.getCurrentLocation()).setTakingNails(false);
+            return "OK. I warned you. You walk up to the wooden supports and start to remove the loose nails and, " +
+                    "before you can even get them out, there is a loud crack and the support you were working on " +
+                    "snaps and the ceiling comes crashing down on top of you. Unfortunately being crushed by a " +
+                    "mountain and old wood is very dangerous, thus this decision has cost you your life.";
+        }
+        else if(input.equals("n") || input.equals("no")) {
+            ((MineEntrance) game.getCurrentLocation()).setTakingNails(false);
+            return "Good choice.";
+        }
+        else {
+            return "Please answer the question";
+        }
     }
 
     private String introduceGame(String input) {

@@ -9,8 +9,6 @@ import com.project.textadventure.game.actions.DamActions;
 
 import java.util.List;
 
-import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
-
 public class Dam extends Location implements Action {
     private boolean wheelTurned;
     private boolean magnetDropped;
