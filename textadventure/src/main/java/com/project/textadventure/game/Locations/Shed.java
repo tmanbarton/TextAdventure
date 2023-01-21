@@ -7,6 +7,7 @@ import com.project.textadventure.game.GameState;
 import com.project.textadventure.game.Item;
 import com.project.textadventure.game.actions.ShedActions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
@@ -101,6 +102,7 @@ public class Shed extends Location implements Action {
         this.setDescription("You stand before an open shed with a picnic table to the north.");
         this.setShortDescription("You're standing before a cheerful little, open shed.");
         this.open = true;
+//        List<Item> ditchItems = this.game != null && this.game.getInventoryItemByName("key") != null ? new ArrayList<>() : new ArrayList<>(List.of(key)); TODO: this but for these
         Item hammer = new Item(2, "There is a hammer here", "Hammer", "hammer");
         Item bow = new Item(3, "There is a bow here, strung and ready for shooting", "Bow", "bow");
         Item arrow = new Item(4, "There is an arrow here", "Arrow", "arrow");

@@ -7,9 +7,7 @@ import com.project.textadventure.game.Locations.MineEntrance;
 import com.project.textadventure.game.actions.PlayerActions;
 import lombok.Data;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Data
 public class Game implements Action, Comparator<Item> {
@@ -192,6 +190,58 @@ public class Game implements Action, Comparator<Item> {
             result.append("<br>").append(item.getInventoryDescription()).append(" ");
         }
         return "You're carrying:" + result;
+    }
+
+    /**
+     * Drop everything from inventory to current location and move player to start location of the game
+     * by setting current location to dirt road
+     */
+    public void die() {
+        List<Item> inventoryCopy = new ArrayList<>(inventory);
+        for(Item item : inventoryCopy) {
+            removeItemFromInventory(item);
+            currentLocation.addItemToLocation(item);
+        }
+        currentLocation = findStartLocation();
+    }
+
+    /**
+     * Breadth first search to find the start location of the game, which is the driveway. Start the search from
+     * the current location
+     * @return driveway location if it's found or null if it's not. Should never return null.
+     */
+    private Location findStartLocation() {
+        String targetLocationName = "driveway";
+        // if you're at the dirt road, just return
+        if(currentLocation.getName().equals(targetLocationName)) {
+            return currentLocation;
+        }
+        LinkedList<Location> queue = new LinkedList<>();
+        queue.add(currentLocation);
+
+        // BFS algorithm
+        while(!queue.isEmpty()) {
+            Location current = queue.removeFirst();
+            if(current.bfsIsVisited) {
+                continue;
+            }
+
+            if(current.getName().equals(targetLocationName)) {
+                return current;
+            }
+            current.bfsIsVisited = true;
+            List<ConnectingLocation> neighbors = current.getConnectingLocations();
+
+            if(neighbors == null) {
+                continue;
+            }
+            for(ConnectingLocation neighbor : neighbors) {
+                if(!neighbor.getLocation().bfsIsVisited) {
+                    queue.add(neighbor.getLocation());
+                }
+            }
+        }
+        return null;
     }
 
     @Override

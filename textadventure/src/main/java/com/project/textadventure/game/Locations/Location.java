@@ -16,6 +16,7 @@ public class Location implements Action {
     private List<Item> items;
     private List<ConnectingLocation> connectingLocations;
     private boolean visited;
+    public boolean bfsIsVisited;
     private String name;
     private String shortDescription;
     String[] commands;
@@ -34,6 +35,7 @@ public class Location implements Action {
         this.visited = visited;
         this.name = name;
         this.shortDescription = shortDescription;
+        this.bfsIsVisited = false;
     }
 
     public Location() {}

@@ -72,17 +72,18 @@ public class GameController {
         Game game = GameState.getInstance().getGame();
         if(input.equals("yes") || input.equals("y")) {
             ((MineEntrance) game.getCurrentLocation()).setTakingNails(false);
-            return "OK. I warned you. You walk up to the wooden supports and start to remove the loose nails and, " +
+            game.die();
+            return "<br>OK. I warned you. You walk up to the wooden supports and start to remove the loose nails and, " +
                     "before you can even get them out, there is a loud crack and the support you were working on " +
                     "snaps and the ceiling comes crashing down on top of you. Unfortunately being crushed by a " +
-                    "mountain and old wood is very dangerous, thus this decision has cost you your life.";
+                    "mountain and old wood is very dangerous, thus this decision has cost you your life.<br>";
         }
         else if(input.equals("n") || input.equals("no")) {
             ((MineEntrance) game.getCurrentLocation()).setTakingNails(false);
-            return "Good choice.";
+            return "<br>Good choice.<br>";
         }
         else {
-            return "Please answer the question";
+            return "<br>Please answer the question.<br>";
         }
     }
 
@@ -90,7 +91,7 @@ public class GameController {
         Game game = GameState.getInstance().getGame();
         if(input.equals("yes") || input.equals("y")) {
             game.setPlayerMoved(true);
-            return "You're on a mountain with several scattered mining towns. It's said that some of the mines are " +
+            return "<br>You're on a mountain with several scattered mining towns. It's said that some of the mines are " +
                     "still accessible, but you've also heard stories that the local miners report seeing " +
                     "tommyknockers in some of them. I will be your eyes and hands. Use commands in the form " +
                     "\"verb noun\" to guide me.<br>If you would like further information on how the game works, type " +
@@ -98,10 +99,10 @@ public class GameController {
         }
         else if(input.equals("n") || input.equals("no")) {
             game.setPlayerMoved(true);
-            return game.getCurrentLocation().getDescription();
+            return "<br>" + game.getCurrentLocation().getDescription();
         }
         else {
-            return "Please answer the question";
+            return "<br>Please answer the question";
         }
     }
 

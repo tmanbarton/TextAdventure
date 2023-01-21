@@ -21,6 +21,7 @@ public class MineEntrance extends Location implements Action {
     public MineEntrance(String description, String shortDescription, List<Item> items, List<ConnectingLocation> connectingLocations, boolean visited, String name, boolean nailsOff) {
         super(description, shortDescription, items, connectingLocations, visited, name);
         this.nailsOff = nailsOff;
+        this.takingNails = false;
     }
 
     public boolean isTakingNails() {
