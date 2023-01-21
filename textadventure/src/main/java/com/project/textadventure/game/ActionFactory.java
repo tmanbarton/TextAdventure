@@ -1,6 +1,6 @@
 package com.project.textadventure.game;
 
-import com.project.textadventure.controller.Action;
+import com.project.textadventure.controllers.Action;
 
 public class ActionFactory {
     public static Action getActionObject(String verb, String noun) {

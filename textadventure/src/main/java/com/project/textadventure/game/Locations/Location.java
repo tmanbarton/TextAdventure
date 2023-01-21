@@ -1,6 +1,6 @@
 package com.project.textadventure.game.Locations;
 
-import com.project.textadventure.controller.Action;
+import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.*;
 import com.project.textadventure.game.actions.LocationActions;
 import lombok.Data;
@@ -188,5 +188,10 @@ public class Location implements Action {
 
     private String turn() {
         return "There's nothing here to turn.";
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

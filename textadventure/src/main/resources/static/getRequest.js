@@ -11,7 +11,7 @@ $(document).ready(
 			function ajaxGet() {
 				$.ajax({
 					type : "GET",
-					url : "getBooks",
+					url : "api/getUsers",
 					success : function(result) {
 						if (result.status == "success") {
 							$('#getResultDiv ul').empty();

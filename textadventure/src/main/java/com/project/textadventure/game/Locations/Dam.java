@@ -1,6 +1,6 @@
 package com.project.textadventure.game.Locations;
 
-import com.project.textadventure.controller.Action;
+import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.ConnectingLocation;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;

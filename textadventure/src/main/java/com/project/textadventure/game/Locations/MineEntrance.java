@@ -1,15 +1,13 @@
 package com.project.textadventure.game.Locations;
 
-import com.project.textadventure.controller.Action;
+import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.ConnectingLocation;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
 import com.project.textadventure.game.Item;
 import com.project.textadventure.game.actions.MineEntranceActions;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 

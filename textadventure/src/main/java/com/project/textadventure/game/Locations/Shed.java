@@ -1,13 +1,12 @@
 package com.project.textadventure.game.Locations;
 
-import com.project.textadventure.controller.Action;
+import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.ConnectingLocation;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
 import com.project.textadventure.game.Item;
 import com.project.textadventure.game.actions.ShedActions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;

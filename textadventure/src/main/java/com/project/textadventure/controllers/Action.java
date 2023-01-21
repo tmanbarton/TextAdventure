@@ -1,4 +1,4 @@
-package com.project.textadventure.controller;
+package com.project.textadventure.controllers;
 
 public interface Action {
     /**

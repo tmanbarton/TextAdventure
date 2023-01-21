@@ -1,6 +1,6 @@
 package com.project.textadventure.game;
 
-import com.project.textadventure.controller.Action;
+import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.Locations.Dam;
 import com.project.textadventure.game.Locations.Location;
 import com.project.textadventure.game.Locations.MineEntrance;

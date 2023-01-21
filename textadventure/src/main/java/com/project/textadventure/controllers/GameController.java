@@ -1,27 +1,59 @@
-package com.project.textadventure.game;
+package com.project.textadventure.controllers;
 
-import com.project.textadventure.controller.Action;
+import com.project.textadventure.dao.UserDaoImpl;
+import com.project.textadventure.dao.User;
 import com.project.textadventure.dto.Input;
 import com.project.textadventure.dto.Response;
 import com.project.textadventure.dto.ServiceResponse;
 
+import com.project.textadventure.game.ActionFactory;
+import com.project.textadventure.game.Game;
+import com.project.textadventure.game.GameState;
 import com.project.textadventure.game.Locations.MineEntrance;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
 @RestController
+@RequestMapping("/api")
 public class GameController {
+    @Resource
+    UserController userController;
+
+    @GetMapping("/getUsers")
+    public ResponseEntity<List<User>> getUsers() {
+        return ResponseEntity.ok(userController.findAll());
+    }
+
+    @PostMapping("/addUser")
+    public void addUser(@RequestBody User user) {
+        userController.insertUser(user);
+    }
+
+    @PutMapping("/updateUser")
+    public void updateUser(@RequestBody User user) {
+        userController.updateUser(user);
+    }
+
+    @PutMapping("/executeUpdateUser")
+    public void executeUpdateUser(@RequestBody User user) {
+        userController.executeUpdateUser(user);
+    }
+
+    @DeleteMapping("/deleteUser")
+    public void deleteUser(@RequestBody User user) {
+        userController.deleteUser(user);
+    }
 
     @PostMapping("/gameController")
     public ResponseEntity<ServiceResponse<Response>> executeCommand(@RequestBody Input input) {
