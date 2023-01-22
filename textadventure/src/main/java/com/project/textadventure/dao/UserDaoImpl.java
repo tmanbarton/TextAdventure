@@ -30,31 +30,31 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void insertUser(User user) {
-        final String query = "INSERT INTO users(userId, username) VALUES(:userId, :username)";
+        final String query = "INSERT INTO users (user_id, username) VALUES(:user_id, :username)";
         KeyHolder holder = new GeneratedKeyHolder();
         SqlParameterSource param = new MapSqlParameterSource()
-                .addValue("userId", user.getUserId())
+                .addValue("user_id", user.getUserId())
                 .addValue("username", user.getUsername());
         template.update(query, param, holder);
     }
 
     @Override
     public void updateUser(User user) {
-        final String query = "UPDATE users SET username=:username WHERE userId=:userId";
+        final String query = "UPDATE users SET username=:username WHERE user_id=:user_id";
 
         KeyHolder holder = new GeneratedKeyHolder();
         SqlParameterSource param = new MapSqlParameterSource()
-                .addValue("userId", user.getUserId())
+                .addValue("user_id", user.getUserId())
                 .addValue("username", user.getUsername());
         template.update(query, param, holder);
     }
 
     @Override
     public void executeUpdateUser(User user) {
-        final String query = "UPDATE users SET username=:username WHERE userId=:userId";
+        final String query = "UPDATE users SET username=:username WHERE user_id=:user_id";
 
         Map<String, Object> map = new HashMap<>();
-        map.put("userId", user.getUserId());
+        map.put("user_id", user.getUserId());
         map.put("username", user.getUsername());
 
         template.execute(query, map, (PreparedStatementCallback<Object>) PreparedStatement::executeUpdate);
@@ -62,10 +62,10 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void deleteUser(User user) {
-        final String query = "DELETE FROM users WHERE userId=:userId";
+        final String query = "DELETE FROM users WHERE user_id=:user_id";
 
         Map<String, Object> map =  new HashMap<>();
-        map.put("userId", user.getUserId());
+        map.put("user_id", user.getUserId());
 
         template.execute(query, map, new PreparedStatementCallback<Object>() {
             @Override

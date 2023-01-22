@@ -1,10 +1,10 @@
 package com.project.textadventure.dto;
 
-public class Response {
-    private String response;
-    private String input;
+public class GameResponse {
+    private final String response;
+    private final String input;
 
-    public Response(String response, String input) {
+    public GameResponse(String response, String input) {
         this.response = response;
         this.input = input;
     }

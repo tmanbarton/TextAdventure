@@ -1,9 +1,9 @@
 package com.project.textadventure.controllers;
 
-import com.project.textadventure.dao.UserDaoImpl;
 import com.project.textadventure.dao.User;
+import com.project.textadventure.dto.GetUserResponse;
 import com.project.textadventure.dto.Input;
-import com.project.textadventure.dto.Response;
+import com.project.textadventure.dto.GameResponse;
 import com.project.textadventure.dto.ServiceResponse;
 
 import com.project.textadventure.game.ActionFactory;
@@ -11,7 +11,6 @@ import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
 import com.project.textadventure.game.Locations.MineEntrance;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +30,11 @@ public class GameController {
     UserController userController;
 
     @GetMapping("/getUsers")
-    public ResponseEntity<List<User>> getUsers() {
-        return ResponseEntity.ok(userController.findAll());
+    public ResponseEntity<ServiceResponse<GetUserResponse>> getUsers() {
+        GetUserResponse userResponse = new GetUserResponse(userController.findAll());
+        ServiceResponse<GetUserResponse> response = new ServiceResponse<>("success", userResponse);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/addUser")
@@ -56,7 +58,7 @@ public class GameController {
     }
 
     @PostMapping("/gameController")
-    public ResponseEntity<ServiceResponse<Response>> executeCommand(@RequestBody Input input) {
+    public ResponseEntity<ServiceResponse<GameResponse>> executeCommand(@RequestBody Input input) {
         String inputString = input.getInput().toLowerCase();
         Game game = GameState.getInstance().getGame();
         List<Pair<String , String>> commands = parseInput(inputString);
@@ -78,8 +80,8 @@ public class GameController {
                 result += "<br>" + action.takeAction(command.getKey(), command.getValue()) + "<br>";
             }
         }
-        Response resp = new Response(result, input.getInput());
-        ServiceResponse<Response> response = new ServiceResponse<>("success", resp);
+        GameResponse resp = new GameResponse(result, input.getInput());
+        ServiceResponse<GameResponse> response = new ServiceResponse<>("success", resp);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

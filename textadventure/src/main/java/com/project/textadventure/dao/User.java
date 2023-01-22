@@ -1,5 +1,7 @@
 package com.project.textadventure.dao;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.UUID;
 
@@ -7,9 +9,10 @@ import java.util.UUID;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    @Column(name="userId")
+    @Column(name="user_id", columnDefinition="uuid")
+    @Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID userId;
 
     @Column(name="username")
