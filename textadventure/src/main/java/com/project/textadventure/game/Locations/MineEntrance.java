@@ -33,6 +33,9 @@ public class MineEntrance extends Location implements Action {
     public boolean areNailsOff() {
         return nailsOff;
     }
+    public void setNailsOff(boolean nailsOff) {
+        this.nailsOff = nailsOff;
+    }
 
     @Override
     public String takeAction(String verb, String noun) {

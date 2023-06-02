@@ -1,14 +1,14 @@
 package com.project.textadventure.controllers;
 
-import com.project.textadventure.dao.User;
-import com.project.textadventure.dto.GetUserResponse;
 import com.project.textadventure.dto.Input;
 import com.project.textadventure.dto.GameResponse;
 import com.project.textadventure.dto.ServiceResponse;
 
 import com.project.textadventure.game.ActionFactory;
+import com.project.textadventure.game.ConnectingLocation;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
+import com.project.textadventure.game.Locations.Location;
 import com.project.textadventure.game.Locations.MineEntrance;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.http.HttpStatus;
@@ -17,47 +17,16 @@ import org.springframework.web.bind.annotation.*;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/vots/game")
 public class GameController {
-    @Resource
-    UserController userController;
 
-    @GetMapping("/getUsers")
-    public ResponseEntity<ServiceResponse<GetUserResponse>> getUsers() {
-        GetUserResponse userResponse = new GetUserResponse(userController.findAll());
-        ServiceResponse<GetUserResponse> response = new ServiceResponse<>("success", userResponse);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @PostMapping("/addUser")
-    public void addUser(@RequestBody User user) {
-        userController.insertUser(user);
-    }
-
-    @PutMapping("/updateUser")
-    public void updateUser(@RequestBody User user) {
-        userController.updateUser(user);
-    }
-
-    @PutMapping("/executeUpdateUser")
-    public void executeUpdateUser(@RequestBody User user) {
-        userController.executeUpdateUser(user);
-    }
-
-    @DeleteMapping("/deleteUser")
-    public void deleteUser(@RequestBody User user) {
-        userController.deleteUser(user);
-    }
-
-    @PostMapping("/gameController")
+    @PostMapping("/gameRequest")
     public ResponseEntity<ServiceResponse<GameResponse>> executeCommand(@RequestBody Input input) {
         String inputString = input.getInput().toLowerCase();
         Game game = GameState.getInstance().getGame();
@@ -104,8 +73,25 @@ public class GameController {
 
     private String attemptGetNailsByHand(String input) {
         Game game = GameState.getInstance().getGame();
+        Location currentLocation = game.getCurrentLocation();
         if(input.equals("yes") || input.equals("y")) {
             ((MineEntrance) game.getCurrentLocation()).setTakingNails(false);
+            // Set nails off to true so if player comes back to mine entrance and tries to shoot arrow, the nails don't get added to the location
+            ((MineEntrance) game.getCurrentLocation()).setNailsOff(true);
+            // 2 ways to get to mine shaft. Find and remove both
+            List<ConnectingLocation> connectingLocations = currentLocation.getConnectingLocations();
+            connectingLocations.removeIf(location -> location.getLocation().getName().equals("mine shaft"));
+
+            for (ConnectingLocation connectingLocation : currentLocation.getConnectingLocations()) {
+                if (connectingLocation.getLocation().getName().equals("mine shaft")) {
+                    connectingLocation.getLocation().getConnectingLocations().removeIf(
+                            mineShaftLocation -> mineShaftLocation.getLocation().getName().equals("mine entrance")
+                    );
+                }
+            }
+
+            currentLocation.setDescription("You're at the entrance of an abandoned gold mine, a recent cave-in preventing " +
+                    "entry. Piles of tailings scatter the area, leaving only one path leading away from the entrance, heading north.");
             game.die();
             return "<br>OK. I warned you. You walk up to the wooden supports and start to remove the loose nails and, " +
                     "before you can even get them out, there is a loud crack and the support you were working on " +
@@ -139,10 +125,4 @@ public class GameController {
             return "<br>Please answer the question";
         }
     }
-
-//    @GetMapping("/getBooks")
-//    public ResponseEntity<Object> getAllBooks() {
-//        ServiceResponse<List<Input>> response = new ServiceResponse<>("success", inputList);
-//        return new ResponseEntity<Object>(response, HttpStatus.OK);
-//    }
 }

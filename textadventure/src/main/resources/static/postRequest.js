@@ -12,7 +12,7 @@ $(document).ready(
 				$.ajax({
 					type : "POST",
 					contentType : "application/json",
-					url : "api/gameController",
+					url : "/api/vots/game/gameRequest",
 					data : JSON.stringify(formData),
 					dataType : 'json',
 					success : function(result) {

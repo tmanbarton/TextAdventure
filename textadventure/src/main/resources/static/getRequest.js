@@ -9,35 +9,6 @@ $(document).ready(
 
 			// DO GET
 			function ajaxGet() {
-//			    $.ajax({
-//                    type : "GET",
-//                    contentType : "application/json",
-//                    url : "api/getUsers",
-//                    data : JSON.stringify(formData),
-//                    dataType : 'json',
-//                    success : function(result) {
-//                        if (result.status == "success") {
-//                            $('#getResultDiv ul').empty();
-//                            $.each(result.data,
-//                                    function(i, user) {
-////                                        var user = "User Name: "
-////                                                + book.bookName
-////                                                + ", Author: " + book.author
-////                                                + "<br>";
-//                                        $('#getResultDiv .list-group').append(
-//                                                user.username)
-//                                    });
-//
-//                            console.log("Success: ", result);
-//                        } else {
-//                            let currentDisplay = $('#display').html();
-//                            $('#display').html(currentDisplay + 'Failed response from the server. Report to xyz.<br>');
-//                        }
-//                    },
-//                    error : function(e) {
-//                        console.log("ERROR: ", e);
-//                    }
-//                });
 
 				$.ajax({
 					type : "GET",
@@ -53,7 +24,6 @@ $(document).ready(
 									    console.log();
 									    $('#getResultDiv ul').append('<li>' +
                                             userInfo.username + '</li>');
-
 									});
 							console.log("Success: ", result);
 						} else {

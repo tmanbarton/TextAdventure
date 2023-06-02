@@ -111,7 +111,7 @@ public class Location implements Action {
             return "You can't go that way.";
         }
         ConnectingLocation connectingLocation = optionalConnection.get();
-        if(currentLocation instanceof UndergroundLakeLocation && ((UndergroundLakeLocation) currentLocation).boatAtLocation) {
+        if(currentLocation instanceof UndergroundLake && ((UndergroundLake) currentLocation).boatAtLocation) {
             return moveToLocation(connectingLocation);
         }
         return moveToLocation(connectingLocation);

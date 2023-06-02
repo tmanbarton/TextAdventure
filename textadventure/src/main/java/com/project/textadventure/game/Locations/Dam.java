@@ -33,9 +33,6 @@ public class Dam extends Location implements Action {
         if(verb.equals("turn")) {
             return parseTurnCommand(noun);
         }
-        else if(verb.equals("get")) {
-            return getMagnet(verb, noun);
-        }
         else {
             return super.takeAction(verb, noun);
         }
@@ -82,17 +79,6 @@ public class Dam extends Location implements Action {
 
         wheelTurned = true;
 
-        return "The ground starts to rumble and you see a massive concrete wall start to rise out of the water on\nthe opposite side of the lake, blocking the flow of water from the river into the lake. There's\nanother shudder and a huge whirl pool form near the middle of the lake and the water level starts\ngoing down. Soon the water is completely gone, revealing a town that had been under water only a\nfew minutes ago. You can probably get to the town if you go down the dam to the west.";
-    }
-
-    private String getMagnet(String verb, String noun) {
-        Game game = GameState.getInstance().getGame();
-        if(!noun.equals("magnet")) {
-            return game.takeAction(verb, noun);
-        }
-        Item magnet = game.getInventoryItemByName("magnet");
-        game.removeItemFromInventory(magnet);
-        this.setDescription("You're on a short dam that created this lake by stopping up a large river. The dam goes north and south along the east end of the lake. Close by is a wheel with its axel extending deep into the dam. Its orange metal has faded to rust except for some different metal at the center, shining in the sun. There's a large magnet stuck to this part of the wheel. South leads around the lake and to the north there's a set of stairs.");
-        return ":)";
+        return "The ground begins to rumble and you see a massive wall slowly rise from the water on the far side of the lake, blocking the flow of water from the river into the lake. There's another shudder and the water begins to recede as a huge whirl pool form near the middle of the lake. Soon the water is completely gone, revealing a town that had been submerged only a few moments ago. You can get to the town to the west, down the dam.";
     }
 }

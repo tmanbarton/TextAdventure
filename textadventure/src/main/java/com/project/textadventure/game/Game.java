@@ -5,11 +5,13 @@ import com.project.textadventure.game.Locations.Dam;
 import com.project.textadventure.game.Locations.Location;
 import com.project.textadventure.game.Locations.MineEntrance;
 import com.project.textadventure.game.actions.PlayerActions;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.*;
 
-@Data
+@Getter
+@Setter
 public class Game implements Action, Comparator<Item> {
     private List<Item> inventory;
     private Location currentLocation;
@@ -169,6 +171,7 @@ public class Game implements Action, Comparator<Item> {
         if(noun.equals("magnet") && currentLocation instanceof Dam) {
             removeItemFromInventory(item);
             ((Dam) currentLocation).setMagnetDropped(true);
+            currentLocation.setDescription("You're on a short dam that created this lake by stopping up a large river. The dam goes north and south along the east end of the lake. Close by is a wheel with its axel extending deep into the dam. Its orange metal has faded to rust except for some different metal at the center, shining in the sun. There's a large magnet stuck to this part of the wheel. South leads around the lake and to the north there's a set of stairs.");
             return "You drop the magnet and as it's falling it snaps to the shiny center of the wheel. You can hear " +
                     "some mechanical clicking somewhere inside the dam.";
         }
@@ -193,7 +196,7 @@ public class Game implements Action, Comparator<Item> {
     }
 
     /**
-     * Drop everything from inventory to current location and move player to start location of the game
+     * Drop everything from inventory at current location and move player to start location of the game
      * by setting current location to dirt road
      */
     public void die() {
@@ -246,6 +249,6 @@ public class Game implements Action, Comparator<Item> {
 
     @Override
     public int compare(Item item1, Item item2) {
-        return item1.getOrder() - item2.getOrder();
+        return item1.getDisplayOrder() - item2.getDisplayOrder();
     }
 }
