@@ -4,8 +4,6 @@ import com.project.textadventure.constants.Constants;
 import com.project.textadventure.constants.LocationNames;
 import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.ConnectingLocation;
-import com.project.textadventure.game.Game;
-import com.project.textadventure.game.GameState;
 import com.project.textadventure.game.Item;
 
 import java.util.List;
@@ -64,9 +62,15 @@ public class Dam extends Location implements Action {
      * since there is no more lake.
      */
     public String turnWheel() {
-        // Connect dam to Lake Town location, which is always third in the list of locations in its list of connecting locations
-        this.getConnectingLocations().get(2).setDirections(List.of(Constants.WEST, Constants.W, Constants.DOWN, Constants.D));
+        // Find the edge of the graph (ConnectingLocation object) that connects the dam to the lake town and set the directions to down and west
+        for(final ConnectingLocation connectingLocation : this.getConnectingLocations()) {
+            if (connectingLocation.getLocation().getName().equals(LocationNames.LAKE_TOWN)) {
+                connectingLocation.setDirections(List.of(Constants.WEST, Constants.W, Constants.DOWN, Constants.D));
+            }
+        }
 
+        // The lake, tailings, and intersection locations all reference the lake in their description
+        // Find them and change the descriptions to not include the lake
         final Location lake = findLocation(this, LocationNames.LAKE);
         lake.setDescription("You are on the south side of an empty lake. There's a path going west and there's a dam to the north.");
         lake.setShortDescription("You're on the south side of an empty lake.");
