@@ -1,5 +1,6 @@
 package com.project.textadventure.game.Locations;
 
+import com.project.textadventure.constants.ItemConstants;
 import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.ConnectingLocation;
 import com.project.textadventure.game.Game;
@@ -80,7 +81,7 @@ public class MineEntrance extends Location implements Action {
 
         game.removeItemFromInventory(arrow);
         addItemToLocation(arrow);
-        Item nails = new Item(7, "There are some nails scattered on the ground here", "Some nails", "nails");
+        Item nails = new Item(7, ItemConstants.NAILS_LOCATION_DESCRIPTION, ItemConstants.NAILS_INVENTORY_DESCRIPTION, ItemConstants.NAILS_NAME);
         currentLocation.addItemToLocation(nails);
         nailsOff = true;
 

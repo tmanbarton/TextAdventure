@@ -1,5 +1,7 @@
 package com.project.textadventure.game.Locations;
 
+import com.project.textadventure.constants.Constants;
+import com.project.textadventure.constants.LocationNames;
 import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.ConnectingLocation;
 import com.project.textadventure.game.Game;
@@ -64,10 +66,11 @@ public class Dam extends Location implements Action {
      * since there is no more lake.
      */
     public String turnWheel() {
-        this.getConnectingLocations().get(3).setDirections(List.of("west", "w"));
-        this.getConnectingLocations().get(4).setDirections(List.of("down", "d"));
+        // Connect dam to Lake Town location, which is always third in the list of locations in its list of connecting locations
+        this.getConnectingLocations().get(2).setDirections(List.of(Constants.WEST, Constants.W, Constants.DOWN, Constants.D));
 
-        Location lake = this.getConnectingLocations().get(2).getLocation();
+        Location lake = this.getConnectingLocations().get(1).getLocation();
+        Location lake1 = findConnectingLocation(this, LocationNames.LAKE);
         lake.setDescription("You are on the south side of an empty lake. There's a path going west and there's a dam to the north.");
         lake.setShortDescription("You're on the south side of an empty lake.");
 
@@ -80,5 +83,9 @@ public class Dam extends Location implements Action {
         wheelTurned = true;
 
         return "The ground begins to rumble and you see a massive wall slowly rise from the water on the far side of the lake, blocking the flow of water from the river into the lake. There's another shudder and the water begins to recede as a huge whirl pool form near the middle of the lake. Soon the water is completely gone, revealing a town that had been submerged only a few moments ago. You can get to the town to the west, down the dam.";
+    }
+
+    Location findConnectingLocation(Location location, String targetLocationName) {
+        return location;
     }
 }

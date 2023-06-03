@@ -1,5 +1,6 @@
 package com.project.textadventure.game.Locations;
 
+import com.project.textadventure.constants.ItemConstants;
 import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.ConnectingLocation;
 import com.project.textadventure.game.Game;
@@ -102,12 +103,12 @@ public class Shed extends Location implements Action {
         this.setShortDescription("You're standing before a cheerful little, open shed.");
         this.open = true;
 //        List<Item> ditchItems = this.game != null && this.game.getInventoryItemByName("key") != null ? new ArrayList<>() : new ArrayList<>(List.of(key)); TODO: this but for these
-        Item hammer = new Item(2, "There is a hammer here", "Hammer", "hammer");
-        Item bow = new Item(3, "There is a bow here, strung and ready for shooting", "Bow", "bow");
-        Item arrow = new Item(4, "There is an arrow here", "Arrow", "arrow");
-        Item jar = new Item(5, "There is a jar here", "Jar", "jar");
-        Item shovel = new Item(8, "There is a rusty shovel here.", "Rusty shovel", "shovel");
-        Item tent = new Item(9, "There is a tent here, packed neatly in a bag.", "Tent in bag", "tent");
+        Item hammer = new Item(2, ItemConstants.HAMMER_LOCATION_DESCRIPTION, ItemConstants.HAMMER_INVENTORY_DESCRIPTION, ItemConstants.HAMMER_NAME);
+        Item bow = new Item(3, ItemConstants.BOW_LOCATION_DESCRIPTION, ItemConstants.BOW_INVENTORY_DESCRIPTION, ItemConstants.BOW_NAME);
+        Item arrow = new Item(4, ItemConstants.ARROW_LOCATION_DESCRIPTION, ItemConstants.ARROW_INVENTORY_DESCRIPTION, ItemConstants.ARROW_NAME);
+        Item jar = new Item(5, ItemConstants.JAR_LOCATION_DESCRIPTION, ItemConstants.JAR_INVENTORY_DESCRIPTION, ItemConstants.JAR_NAME);
+        Item shovel = new Item(8, ItemConstants.SHOVEL_LOCATION_DESCRIPTION, ItemConstants.SHOVEL_INVENTORY_DESCRIPTION, ItemConstants.SHOVEL_NAME);
+        Item tent = new Item(9, ItemConstants.TENT_LOCATION_DESCRIPTION, ItemConstants.TENT_INVENTORY_DESCRIPTION, ItemConstants.TENT_NAME);
         this.addItemToLocation(hammer);
         this.addItemToLocation(bow);
         this.addItemToLocation(arrow);

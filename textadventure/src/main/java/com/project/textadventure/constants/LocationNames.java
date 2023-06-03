@@ -1,0 +1,47 @@
+package com.project.textadventure.constants;
+
+public class LocationNames {
+    public static final String ANT_HILL = "ant hill";
+    public static final String ARCHERY_RANGE = "archery range";
+    public static final String BOAT = "boat";
+    public static final String BOTTOM_OF_VERTICAL_MINE_SHAFT = "bottom of vertical mine shaft";
+    public static final String BROKEN_ROCK = "broken rock";
+    public static final String CRUMPLED_MINE_CART = "crumpled mine cart";
+    public static final String DAM = "dam";
+    public static final String DANK_PASSAGE = "dank passage";
+    public static final String DIRT_ROAD = "dirt road";
+    public static final String DIRTY_PASSAGE = "dirty passage";
+    public static final String DITCH = "ditch";
+    public static final String DRIVEWAY = "driveway";
+    public static final String DYNAMITE_HOLES = "dynamite holes";
+    public static final String EAST_END_SIDE_STREET = "east end of side street";
+    public static final String FIELDS_OF_GRASS = "fields of grass";
+    public static final String FOOT_PATH = "foot path";
+    public static final String GRANITE_ROOM = "granite room";
+    public static final String INSIDE_LOG_CABIN = "inside log cabin";
+    public static final String INSIDE_TAVERN = "tommyknocker tavern";
+    public static final String INTERSECTION = "intersection";
+    public static final String LAKE = "lake";
+    public static final String LAKE_TOWN = "lake town";
+    public static final String LIGHTNING_TREE = "lightning tree";
+    public static final String MINE_ENTRANCE = "mine entrance";
+    public static final String MINE_SHAFT = "mine shaft";
+    public static final String MOUNTAIN_PASS = "mountain pass";
+    public static final String MUSTY_BEND = "musty bend";
+    public static final String NARROW_CORRIDOR = "narrow corridor";
+    public static final String OUTSIDE_LOG_CABIN = "outside log cabin";
+    public static final String OUTSIDE_MINE_CAGE = "outside mine cage";
+    public static final String OUTSIDE_TAVERN = "outside tavern";
+    public static final String PICNIC_TABLE = "picnic table";
+    public static final String PRIVATE_PROPERTY = "private property";
+    public static final String ROAD_IN_VALLEY = "road in a valley";
+    public static final String SHED = "shed";
+    public static final String TAILINGS = "tailings";
+    public static final String TOP_OF_HILL = "top of hill";
+    public static final String TOP_OF_STAIRS = "top of stairs";
+    public static final String UPSTAIRS_LOG_CABIN = "upstairs log cabin";
+    public static final String UNDERGROUND_LAKE_WEST = "underground lake west";
+    public static final String UNDERGROUND_LAKE_SE = "underground lake se";
+    public static final String UNDERGROUND_LAKE_NE = "underground lake ne";
+    public static final String WEST_END_SIDE_STREET = "west end of side street";
+}

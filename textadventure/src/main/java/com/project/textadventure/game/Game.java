@@ -1,5 +1,6 @@
 package com.project.textadventure.game;
 
+import com.project.textadventure.constants.LocationNames;
 import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.Locations.Dam;
 import com.project.textadventure.game.Locations.Location;
@@ -205,7 +206,7 @@ public class Game implements Action, Comparator<Item> {
             removeItemFromInventory(item);
             currentLocation.addItemToLocation(item);
         }
-        currentLocation = findStartLocation();
+        currentLocation = findLocation(LocationNames.DRIVEWAY);
     }
 
     /**
@@ -213,8 +214,7 @@ public class Game implements Action, Comparator<Item> {
      * the current location
      * @return driveway location if it's found or null if it's not. Should never return null.
      */
-    private Location findStartLocation() {
-        String targetLocationName = "driveway";
+    private Location findLocation(final String targetLocationName) {
         // if you're at the dirt road, just return
         if(currentLocation.getName().equals(targetLocationName)) {
             return currentLocation;
