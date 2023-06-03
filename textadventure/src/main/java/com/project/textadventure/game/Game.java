@@ -5,7 +5,6 @@ import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.Locations.Dam;
 import com.project.textadventure.game.Locations.Location;
 import com.project.textadventure.game.Locations.MineEntrance;
-import com.project.textadventure.game.actions.PlayerActions;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,11 +16,10 @@ public class Game implements Action, Comparator<Item> {
     private List<Item> inventory;
     private Location currentLocation;
     private boolean playerMoved;
-    private boolean takingNails = false;
+    final private boolean takingNails = false;
 
-    PlayerActions possibleActions;
 
-    public Game(List<Item> inventory, Location currentLocation, boolean playerMoved) {
+    public Game(final List<Item> inventory, final Location currentLocation, final boolean playerMoved) {
         this.inventory = inventory;
         this.currentLocation = currentLocation;
         this.playerMoved = playerMoved;
@@ -33,8 +31,8 @@ public class Game implements Action, Comparator<Item> {
         return playerMoved;
     }
 
-    public Item getInventoryItemByName(String name) {
-        for(Item item : this.inventory) {
+    public Item getInventoryItemByName(final String name) {
+        for(final Item item : this.inventory) {
             if(name.equals(item.getName())) {
                 return item;
             }
@@ -42,22 +40,22 @@ public class Game implements Action, Comparator<Item> {
         return null;
     }
 
-    public boolean isItemInInventory(String itemName) {
+    public boolean isItemInInventory(final String itemName) {
         return getInventoryItemByName(itemName) != null;
     }
 
-    public void addItemToInventory(Item item) {
+    public void addItemToInventory(final Item item) {
         inventory.add(item);
         inventory.sort(new Game());
     }
 
-    public void removeItemFromInventory(Item item) {
+    public void removeItemFromInventory(final Item item) {
         inventory.remove(item);
     }
 
     public static String generateRandomUnknownCommandResponse() {
-        Random r = new Random();
-        int randomNum = r.nextInt(3);
+        final Random r = new Random();
+        final int randomNum = r.nextInt(3);
         return switch (randomNum) {
           case 0 -> "I don't understand that.";
           case 1 -> "What?";
@@ -65,9 +63,9 @@ public class Game implements Action, Comparator<Item> {
         };
     }
 
-    //"solve", "quit", "score", "info", "restart"
+    // "quit", "score", "info", "restart"
     @Override
-    public String takeAction(String verb, String noun) {
+    public String takeAction(final String verb, final String noun) {
         String result = "";
         if(verb.equals("get") || verb.equals("take")) {
             result = getItem(noun);
@@ -84,13 +82,13 @@ public class Game implements Action, Comparator<Item> {
         return result;
     }
 
-    private String getItem(String noun) {
+    private String getItem(final String noun) {
         if(noun == null) {
             return "What to want to get?";
         }
-        String result = "";
-        Item item = currentLocation.getLocationItemByName(noun);
-        Item jar = getInventoryItemByName("jar");
+        String result;
+        final Item item = currentLocation.getLocationItemByName(noun);
+        final Item jar = getInventoryItemByName("jar");
         if(getInventoryItemByName(noun) != null) {
             result = "You're already carrying it!";
         }
@@ -127,12 +125,12 @@ public class Game implements Action, Comparator<Item> {
         return result;
     }
 
-    private String fill(String noun) {
+    private String fill(final String noun) {
         if(!(noun == null || noun.equals("jar"))) {
             return "That's not something you can fill.";
         }
-        Item jar = getInventoryItemByName("jar");
-        Item gold = currentLocation.getLocationItemByName("gold");
+        final Item jar = getInventoryItemByName("jar");
+        final Item gold = currentLocation.getLocationItemByName("gold");
         if(jar == null) {
             return "You don't have anything to fill.";
         }
@@ -148,17 +146,16 @@ public class Game implements Action, Comparator<Item> {
         return  "The jar is now full of gold flakes.";
     }
 
-    private String dropItem(String noun) {
+    private String dropItem(final String noun) {
         if(noun == null) {
             return "What to want to drop?";
         }
-        String result = "";
-        Item item = getInventoryItemByName(noun);
+        final Item item = getInventoryItemByName(noun);
         if(item == null) {
             return "You're not carrying that!";
         }
         if(noun.equals("jar")) {
-            Item gold = getInventoryItemByName("gold");
+            final Item gold = getInventoryItemByName("gold");
             if(gold != null) {
                 item.setInventoryDescription("Jar");
                 currentLocation.addItemToLocation(gold);
@@ -166,7 +163,7 @@ public class Game implements Action, Comparator<Item> {
             }
         }
         if(noun.equals("gold")) {
-            Item jar = getInventoryItemByName("jar");
+            final Item jar = getInventoryItemByName("jar");
             jar.setInventoryDescription("Jar");
         }
         if(noun.equals("magnet") && currentLocation instanceof Dam) {
@@ -189,7 +186,7 @@ public class Game implements Action, Comparator<Item> {
         if(this.inventory.isEmpty()) {
             return "You're not carrying anything!";
         }
-        StringBuilder result = new StringBuilder();
+        final StringBuilder result = new StringBuilder();
         for(Item item : this.inventory) {
             result.append("<br>").append(item.getInventoryDescription()).append(" ");
         }
@@ -201,12 +198,13 @@ public class Game implements Action, Comparator<Item> {
      * by setting current location to dirt road
      */
     public void die() {
-        List<Item> inventoryCopy = new ArrayList<>(inventory);
+        final List<Item> inventoryCopy = new ArrayList<>(inventory);
         for(Item item : inventoryCopy) {
             removeItemFromInventory(item);
             currentLocation.addItemToLocation(item);
         }
-        currentLocation = findLocation(LocationNames.DRIVEWAY);
+        // Set current location to driveway by doing a breadth first search starting from current location
+        currentLocation = findLocation(currentLocation, LocationNames.DRIVEWAY);
     }
 
     /**
@@ -214,41 +212,48 @@ public class Game implements Action, Comparator<Item> {
      * the current location
      * @return driveway location if it's found or null if it's not. Should never return null.
      */
-    private Location findLocation(final String targetLocationName) {
+    public static Location findLocation(final Location startLocation, final String targetLocationName) {
         // if you're at the dirt road, just return
-        if(currentLocation.getName().equals(targetLocationName)) {
-            return currentLocation;
+        if(startLocation.getName().equals(targetLocationName)) {
+            return startLocation;
         }
-        LinkedList<Location> queue = new LinkedList<>();
-        queue.add(currentLocation);
+        final LinkedList<Location> queue = new LinkedList<>();
+        queue.add(startLocation);
 
+        final List<Location> locationsVisited = new ArrayList<>();
         // BFS algorithm
         while(!queue.isEmpty()) {
-            Location current = queue.removeFirst();
+            final Location current = queue.removeFirst();
             if(current.bfsIsVisited) {
                 continue;
             }
 
             if(current.getName().equals(targetLocationName)) {
+                // Set bfsIsVisited to false for every node that was visited in case we need to do a search again
+                locationsVisited.forEach(location -> location.setBfsIsVisited(false));
                 return current;
             }
             current.bfsIsVisited = true;
-            List<ConnectingLocation> neighbors = current.getConnectingLocations();
+            locationsVisited.add(current);
+            final List<ConnectingLocation> neighbors = current.getConnectingLocations();
 
             if(neighbors == null) {
                 continue;
             }
-            for(ConnectingLocation neighbor : neighbors) {
+            for(final ConnectingLocation neighbor : neighbors) {
                 if(!neighbor.getLocation().bfsIsVisited) {
                     queue.add(neighbor.getLocation());
                 }
             }
         }
+
+        // Set bfsIsVisited to false for every node that was visited in case we need to do a search again
+        locationsVisited.forEach(location -> location.setBfsIsVisited(false));
         return null;
     }
 
     @Override
-    public int compare(Item item1, Item item2) {
+    public int compare(final Item item1, final Item item2) {
         return item1.getDisplayOrder() - item2.getDisplayOrder();
     }
 }

@@ -7,5 +7,5 @@ public interface Action {
      * @param noun
      * @return
      */
-    String takeAction(String verb, String noun);
+    String takeAction(final String verb, final String noun);
 }

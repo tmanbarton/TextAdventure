@@ -1,8 +1,10 @@
 package com.project.textadventure.game.Locations;
 
+import com.project.textadventure.constants.Constants;
+import com.project.textadventure.constants.ItemConstants;
+import com.project.textadventure.constants.LocationNames;
 import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.*;
-import com.project.textadventure.game.actions.LocationActions;
 import lombok.Data;
 
 import java.util.List;
@@ -20,15 +22,14 @@ public class Location implements Action {
     private String name;
     private String shortDescription;
     String[] commands;
-    LocationActions possibleActions;
 
     public Location(
-            String fullDescription,
-            String shortDescription,
-            List<Item> items,
-            List<ConnectingLocation> connectingLocations,
-            boolean visited,
-            String name) {
+            final String fullDescription,
+            final String shortDescription,
+            final List<Item> items,
+            final List<ConnectingLocation> connectingLocations,
+            final boolean visited,
+            final String name) {
         this.description = fullDescription;
         this.items = items;
         this.connectingLocations = connectingLocations;
@@ -40,12 +41,12 @@ public class Location implements Action {
 
     public Location() {}
 
-    public void connectLocation(ConnectingLocation locationToConnect) {
+    public void connectLocation(final ConnectingLocation locationToConnect) {
         this.connectingLocations.add(locationToConnect);
     }
 
-    public Item getLocationItemByName(String name) {
-        for(Item item : this.items) {
+    public Item getLocationItemByName(final String name) {
+        for(final Item item : this.items) {
             if(name.equals(item.getName())) {
                 return item;
             }
@@ -53,22 +54,20 @@ public class Location implements Action {
         return null;
     }
 
-    public boolean isItemAtLocation(String itemName) {
+    public boolean isItemAtLocation(final String itemName) {
         return getLocationItemByName(itemName) != null;
     }
 
-    public void addItemToLocation(Item item) {
+    public void addItemToLocation(final Item item) {
         items.add(item);
     }
 
-    public void removeItemFromLocation(Item item) {
+    public void removeItemFromLocation(final Item item) {
         items.remove(item);
     }
 
-// "open", "unlock", "shoot", "turn"
     @Override
-    public String takeAction(String verb, String noun) {
-        Game game = GameState.getInstance().getGame();
+    public String takeAction(final String verb, final String noun) {
         String response = "";
         if(isDirection(verb)) {
             response = move(verb);
@@ -92,17 +91,14 @@ public class Location implements Action {
         return response;
     }
 
-    boolean isDirection(String input) {
-        return List.of("n", "s", "e", "w", "ne", "nw", "se", "sw", "u", "d",
-                "north", "south", "east", "west", "northeast", "north east","northwest", "north west",
-                "southeast", "south east", "southwest", "south west",
-                "up", "down", "in", "enter", "out", "exit").contains(input);
+    boolean isDirection(final String input) {
+        return Constants.ALL_DIRECTIONS.contains(input);
     }
 
-    private String move(String direction) {
-        Game game = GameState.getInstance().getGame();
-        Location currentLocation = game.getCurrentLocation();
-        Optional<ConnectingLocation> optionalConnection = currentLocation.getConnectingLocations()
+    private String move(final String direction) {
+        final Game game = GameState.getInstance().getGame();
+        final Location currentLocation = game.getCurrentLocation();
+        final Optional<ConnectingLocation> optionalConnection = currentLocation.getConnectingLocations()
                 .stream()
                 .filter(connectingLocation -> connectingLocation.getDirections().contains(direction))
                 .findFirst();
@@ -110,16 +106,16 @@ public class Location implements Action {
         if (optionalConnection.isEmpty()) {
             return "You can't go that way.";
         }
-        ConnectingLocation connectingLocation = optionalConnection.get();
+        final ConnectingLocation connectingLocation = optionalConnection.get();
         if(currentLocation instanceof UndergroundLake && ((UndergroundLake) currentLocation).boatAtLocation) {
             return moveToLocation(connectingLocation);
         }
         return moveToLocation(connectingLocation);
     }
 
-    private String moveToLocation(ConnectingLocation connectingLocation) {
-        Location connection = connectingLocation.getLocation();
-        Game game = GameState.getInstance().getGame();
+    private String moveToLocation(final ConnectingLocation connectingLocation) {
+        final Location connection = connectingLocation.getLocation();
+        final Game game = GameState.getInstance().getGame();
         game.setCurrentLocation(connection);
 
         if(connection.isVisited()) {
@@ -130,13 +126,13 @@ public class Location implements Action {
     }
 
     public String look() {
-        Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
+        final Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
         return currentLocation.getDescription() + listLocationItems(currentLocation.getItems());
     }
 
-    String listLocationItems(List<Item> items) {
-        StringBuilder result = new StringBuilder();
-        for(Item item : items) {
+    String listLocationItems(final List<Item> items) {
+        final StringBuilder result = new StringBuilder();
+        for(final Item item : items) {
             result.append("<br>").append(item.getLocationDescription());
         }
         return result.isEmpty() ? "" : "<br>" + result;
@@ -150,22 +146,22 @@ public class Location implements Action {
         return "There's nothing to open here.";
     }
 
-    private String parseShootCommand(String noun) {
-        Game game = GameState.getInstance().getGame();
+    private String parseShootCommand(final String noun) {
+        final Game game = GameState.getInstance().getGame();
         String response = "";
 
         // only "shoot" or "shoot arrow" does something at mine entrance
-        if(noun == null || noun.equals("arrow")) {
+        if(noun == null || noun.equals(ItemConstants.ARROW_NAME)) {
             // Must have the bow and arrow in your inventory
-            if(!game.isItemInInventory("bow")) {
+            if(!game.isItemInInventory(ItemConstants.BOW_NAME)) {
                 response = "You don't have anything to shoot with.";
             }
-            else if(!game.isItemInInventory("arrow")) {
+            else if(!game.isItemInInventory(ItemConstants.ARROW_NAME)) {
                 response = "You don't have anything to shoot.";
             }
             // Shoot the arrow
             else {
-                Item arrow = game.getInventoryItemByName("arrow");
+                final Item arrow = game.getInventoryItemByName(ItemConstants.ARROW_NAME);
                 response = shootArrow(arrow);
             }
         }
@@ -175,9 +171,9 @@ public class Location implements Action {
         return response;
     }
 
-    private String shootArrow(Item arrow) {
-        Game game = GameState.getInstance().getGame();
-        if(game.getCurrentLocation().getName().equals("boat")) {
+    private String shootArrow(final Item arrow) {
+        final Game game = GameState.getInstance().getGame();
+        if(game.getCurrentLocation().getName().equals(LocationNames.BOAT)) {
             game.removeItemFromInventory(arrow);
             return "Your arrow goes flying off into the the distance and splashes into the water, never to be found again.";
         }

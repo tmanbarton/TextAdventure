@@ -6,7 +6,6 @@ import com.project.textadventure.game.ConnectingLocation;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
 import com.project.textadventure.game.Item;
-import com.project.textadventure.game.actions.MineEntranceActions;
 
 import java.util.List;
 
@@ -15,9 +14,8 @@ import static com.project.textadventure.game.Game.generateRandomUnknownCommandRe
 public class MineEntrance extends Location implements Action {
     private boolean nailsOff;
     private boolean takingNails;
-    MineEntranceActions possibleActions; // TODO use in ActionFactory
 
-    public MineEntrance(String description, String shortDescription, List<Item> items, List<ConnectingLocation> connectingLocations, boolean visited, String name, boolean nailsOff) {
+    public MineEntrance(final String description, final String shortDescription, final List<Item> items, final List<ConnectingLocation> connectingLocations, final boolean visited, final String name, final boolean nailsOff) {
         super(description, shortDescription, items, connectingLocations, visited, name);
         this.nailsOff = nailsOff;
         this.takingNails = false;
@@ -27,19 +25,19 @@ public class MineEntrance extends Location implements Action {
         return takingNails;
     }
 
-    public void setTakingNails(boolean takingNails) {
+    public void setTakingNails(final boolean takingNails) {
         this.takingNails = takingNails;
     }
 
     public boolean areNailsOff() {
         return nailsOff;
     }
-    public void setNailsOff(boolean nailsOff) {
+    public void setNailsOff(final boolean nailsOff) {
         this.nailsOff = nailsOff;
     }
 
     @Override
-    public String takeAction(String verb, String noun) {
+    public String takeAction(final String verb, final String noun) {
         if(verb.equals("shoot") && !this.nailsOff) {
             return parseShootCommand(noun);
         }
@@ -49,14 +47,14 @@ public class MineEntrance extends Location implements Action {
         }
     }
 
-    private String parseShootCommand(String noun) {
-        Game game = GameState.getInstance().getGame();
+    private String parseShootCommand(final String noun) {
+        final Game game = GameState.getInstance().getGame();
         String response = "";
 
         // only "shoot" or "shoot arrow" does something at mine entrance
         if(noun == null || noun.equals("arrow")) {
-            Item bow = game.getInventoryItemByName("bow");
-            Item arrow = game.getInventoryItemByName("arrow");
+            final Item bow = game.getInventoryItemByName("bow");
+            final Item arrow = game.getInventoryItemByName("arrow");
             // Must have the bow and arrow in your inventory
             if(bow == null) {
                 response = "You don't have anything to shoot with.";
@@ -74,22 +72,22 @@ public class MineEntrance extends Location implements Action {
         return response;
     }
 
-    private String shootArrow(Item arrow) {
-        Game game = GameState.getInstance().getGame();
-        Location currentLocation = game.getCurrentLocation();
+    private String shootArrow(final Item arrow) {
+        final Game game = GameState.getInstance().getGame();
+        final Location currentLocation = game.getCurrentLocation();
         String response = "";
 
         game.removeItemFromInventory(arrow);
         addItemToLocation(arrow);
-        Item nails = new Item(7, ItemConstants.NAILS_LOCATION_DESCRIPTION, ItemConstants.NAILS_INVENTORY_DESCRIPTION, ItemConstants.NAILS_NAME);
+        final Item nails = new Item(7, ItemConstants.NAILS_LOCATION_DESCRIPTION, ItemConstants.NAILS_INVENTORY_DESCRIPTION, ItemConstants.NAILS_NAME);
         currentLocation.addItemToLocation(nails);
         nailsOff = true;
 
         // 2 ways to get to mine shaft. Find and remove both
-        List<ConnectingLocation> connectingLocations = currentLocation.getConnectingLocations();
+        final List<ConnectingLocation> connectingLocations = currentLocation.getConnectingLocations();
         connectingLocations.removeIf(location -> location.getLocation().getName().equals("mine shaft"));
 
-        for (ConnectingLocation connectingLocation : currentLocation.getConnectingLocations()) {
+        for (final ConnectingLocation connectingLocation : currentLocation.getConnectingLocations()) {
             if (connectingLocation.getLocation().getName().equals("mine shaft")) {
                 connectingLocation.getLocation().getConnectingLocations().removeIf(
                         mineShaftLocation -> mineShaftLocation.getLocation().getName().equals("mine entrance")

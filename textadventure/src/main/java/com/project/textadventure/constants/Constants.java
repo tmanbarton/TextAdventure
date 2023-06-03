@@ -1,5 +1,7 @@
 package com.project.textadventure.constants;
 
+import java.util.List;
+
 public class Constants {
 //    public final String gameIntro = "You're on a mountain with several scattered mining towns. It's said that some of the mines are " +
     public static final String GAME_INTRO = "<be>You're on a mountain with several scattered mining towns. It's said that some of the mines are " +
@@ -40,4 +42,6 @@ public class Constants {
     public static final String ENTER = "enter";
     public static final String OUT = "out";
     public static final String EXIT = "exit";
+
+    public static final List<String> ALL_DIRECTIONS = List.of(N, S, E, W, NE, NW, SE, SW, U, D, NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST, UP, DOWN, IN, ENTER, OUT, EXIT);
 }

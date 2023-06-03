@@ -7,9 +7,9 @@ import java.util.List;
 
 @Data
 public class ConnectingLocation {
-    private List<String> directions;
+    private final List<String> directions;
     private final Location location;
-    public ConnectingLocation(List<String> directions, Location location) {
+    public ConnectingLocation(final List<String> directions, final Location location) {
         this.directions = directions;
         this.location = location;
     }

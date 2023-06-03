@@ -9,14 +9,14 @@ public class Item {
     private final String name;
     private final int displayOrder;
 
-    public Item(int displayOrder, String locationDescription, String inventoryDescription, String name) {
+    public Item(final int displayOrder, final String locationDescription, final String inventoryDescription, final String name) {
         this.displayOrder = displayOrder;
         this.locationDescription = locationDescription;
         this.inventoryDescription = inventoryDescription;
         this.name = name;
     }
 
-    public void setInventoryDescription(String description) {
+    public void setInventoryDescription(final String description) {
         this.inventoryDescription = description;
     }
 }

@@ -6,7 +6,6 @@ import com.project.textadventure.game.ConnectingLocation;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
 import com.project.textadventure.game.Item;
-import com.project.textadventure.game.actions.ShedActions;
 
 import java.util.List;
 
@@ -15,15 +14,14 @@ import static com.project.textadventure.game.Game.generateRandomUnknownCommandRe
 public class Shed extends Location implements Action {
     boolean unlocked;
     boolean open;
-    ShedActions possibleActions; // TODO use in ActionFactory
-    public Shed(String description,
-                String shortDescription,
-                List<Item> items,
-                List<ConnectingLocation> connectingLocations,
-                boolean visited,
-                String name,
-                boolean unlocked,
-                boolean open) {
+    public Shed(final String description,
+                final String shortDescription,
+                final List<Item> items,
+                final List<ConnectingLocation> connectingLocations,
+                final boolean visited,
+                final String name,
+                final boolean unlocked,
+                final boolean open) {
         super(description,
                 shortDescription,
                 items,
@@ -35,7 +33,7 @@ public class Shed extends Location implements Action {
     }
 
     @Override
-    public String takeAction(String verb, String noun) {
+    public String takeAction(final String verb, final String noun) {
         String response = "";
         if(verb.equals("unlock") || verb.equals("open")) {
             response = parseUnlockAndOpenCommand(verb, noun);
@@ -54,10 +52,9 @@ public class Shed extends Location implements Action {
      * @return String message from successfully unlocking/opening shed or
      * a "don't know command" type message
      */
-    private String parseUnlockAndOpenCommand(String verb, String noun) {
-        Game game = GameState.getInstance().getGame();
-        Location currentLocation = game.getCurrentLocation();
-        Item key = game.getInventoryItemByName("key");
+    private String parseUnlockAndOpenCommand(final String verb, final String noun) {
+        final Game game = GameState.getInstance().getGame();
+        final Item key = game.getInventoryItemByName("key");
         String response;
         // Check if the verb is "unlock"
         if (verb.equals("unlock")) {
@@ -103,12 +100,12 @@ public class Shed extends Location implements Action {
         this.setShortDescription("You're standing before a cheerful little, open shed.");
         this.open = true;
 //        List<Item> ditchItems = this.game != null && this.game.getInventoryItemByName("key") != null ? new ArrayList<>() : new ArrayList<>(List.of(key)); TODO: this but for these
-        Item hammer = new Item(2, ItemConstants.HAMMER_LOCATION_DESCRIPTION, ItemConstants.HAMMER_INVENTORY_DESCRIPTION, ItemConstants.HAMMER_NAME);
-        Item bow = new Item(3, ItemConstants.BOW_LOCATION_DESCRIPTION, ItemConstants.BOW_INVENTORY_DESCRIPTION, ItemConstants.BOW_NAME);
-        Item arrow = new Item(4, ItemConstants.ARROW_LOCATION_DESCRIPTION, ItemConstants.ARROW_INVENTORY_DESCRIPTION, ItemConstants.ARROW_NAME);
-        Item jar = new Item(5, ItemConstants.JAR_LOCATION_DESCRIPTION, ItemConstants.JAR_INVENTORY_DESCRIPTION, ItemConstants.JAR_NAME);
-        Item shovel = new Item(8, ItemConstants.SHOVEL_LOCATION_DESCRIPTION, ItemConstants.SHOVEL_INVENTORY_DESCRIPTION, ItemConstants.SHOVEL_NAME);
-        Item tent = new Item(9, ItemConstants.TENT_LOCATION_DESCRIPTION, ItemConstants.TENT_INVENTORY_DESCRIPTION, ItemConstants.TENT_NAME);
+        final Item hammer = new Item(2, ItemConstants.HAMMER_LOCATION_DESCRIPTION, ItemConstants.HAMMER_INVENTORY_DESCRIPTION, ItemConstants.HAMMER_NAME);
+        final Item bow = new Item(3, ItemConstants.BOW_LOCATION_DESCRIPTION, ItemConstants.BOW_INVENTORY_DESCRIPTION, ItemConstants.BOW_NAME);
+        final Item arrow = new Item(4, ItemConstants.ARROW_LOCATION_DESCRIPTION, ItemConstants.ARROW_INVENTORY_DESCRIPTION, ItemConstants.ARROW_NAME);
+        final Item jar = new Item(5, ItemConstants.JAR_LOCATION_DESCRIPTION, ItemConstants.JAR_INVENTORY_DESCRIPTION, ItemConstants.JAR_NAME);
+        final Item shovel = new Item(8, ItemConstants.SHOVEL_LOCATION_DESCRIPTION, ItemConstants.SHOVEL_INVENTORY_DESCRIPTION, ItemConstants.SHOVEL_NAME);
+        final Item tent = new Item(9, ItemConstants.TENT_LOCATION_DESCRIPTION, ItemConstants.TENT_INVENTORY_DESCRIPTION, ItemConstants.TENT_NAME);
         this.addItemToLocation(hammer);
         this.addItemToLocation(bow);
         this.addItemToLocation(arrow);

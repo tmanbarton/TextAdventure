@@ -8,7 +8,7 @@ import java.util.List;
 public class UndergroundLake extends Location {
     boolean boatAtLocation;
 
-    public UndergroundLake(String description, String shortDescription, List<Item> items, List<ConnectingLocation> connectingLocations, boolean visited, String name, boolean boatAtLocation) {
+    public UndergroundLake(final String description, final String shortDescription, final List<Item> items, final List<ConnectingLocation> connectingLocations, final boolean visited, final String name, final boolean boatAtLocation) {
         super(description, shortDescription, items, connectingLocations, visited, name);
         this.boatAtLocation = boatAtLocation;
     }
