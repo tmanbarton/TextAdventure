@@ -1,5 +1,9 @@
 package com.project.textadventure.controllers;
 
+import com.project.textadventure.constants.Constants;
+import com.project.textadventure.constants.LocationDescriptions;
+import com.project.textadventure.constants.LocationNames;
+import com.project.textadventure.constants.ResponseConstants;
 import com.project.textadventure.dto.Input;
 import com.project.textadventure.dto.GameResponse;
 import com.project.textadventure.dto.ServiceResponse;
@@ -32,7 +36,7 @@ public class GameController {
         Game game = GameState.getInstance().getGame();
         List<Pair<String , String>> commands = parseInput(inputString);
         String result = "";
-        if(game.getCurrentLocation() instanceof MineEntrance && ((MineEntrance) game.getCurrentLocation()).isTakingNails()) {
+        if (game.getCurrentLocation() instanceof MineEntrance && ((MineEntrance) game.getCurrentLocation()).isTakingNails()) {
             result = attemptGetNailsByHand(inputString);
         }
         else {
@@ -74,55 +78,47 @@ public class GameController {
     private String attemptGetNailsByHand(String input) {
         Game game = GameState.getInstance().getGame();
         Location currentLocation = game.getCurrentLocation();
-        if(input.equals("yes") || input.equals("y")) {
+        if (input.equals("yes") || input.equals("y")) {
             ((MineEntrance) game.getCurrentLocation()).setTakingNails(false);
             // Set nails off to true so if player comes back to mine entrance and tries to shoot arrow, the nails don't get added to the location
             ((MineEntrance) game.getCurrentLocation()).setNailsOff(true);
             // 2 ways to get to mine shaft. Find and remove both
             List<ConnectingLocation> connectingLocations = currentLocation.getConnectingLocations();
-            connectingLocations.removeIf(location -> location.getLocation().getName().equals("mine shaft"));
+            connectingLocations.removeIf(location -> location.getLocation().getName().equals(LocationNames.MINE_SHAFT));
 
             for (ConnectingLocation connectingLocation : currentLocation.getConnectingLocations()) {
-                if (connectingLocation.getLocation().getName().equals("mine shaft")) {
+                if (connectingLocation.getLocation().getName().equals(LocationNames.MINE_SHAFT)) {
                     connectingLocation.getLocation().getConnectingLocations().removeIf(
-                            mineShaftLocation -> mineShaftLocation.getLocation().getName().equals("mine entrance")
+                            mineShaftLocation -> mineShaftLocation.getLocation().getName().equals(LocationNames.MINE_ENTRANCE)
                     );
                 }
             }
 
-            currentLocation.setDescription("You're at the entrance of an abandoned gold mine, a recent cave-in preventing " +
-                    "entry. Piles of tailings scatter the area, leaving only one path leading away from the entrance, heading north.");
+            currentLocation.setDescription(LocationDescriptions.MINE_ENTRANCE_RECENT_CAVE_IN);
             game.die();
-            return "<br>OK. I warned you. You walk up to the wooden supports and start to remove the loose nails and, " +
-                    "before you can even get them out, there is a loud crack and the support you were working on " +
-                    "snaps and the ceiling comes crashing down on top of you. Unfortunately being crushed by a " +
-                    "mountain and old wood is very dangerous, thus this decision has cost you your life.<br>";
+            return Constants.DEATH_BY_MINE_SHAFT;
         }
-        else if(input.equals("n") || input.equals("no")) {
+        else if (input.equals("n") || input.equals("no")) {
             ((MineEntrance) game.getCurrentLocation()).setTakingNails(false);
             return "<br>Good choice.<br>";
         }
         else {
-            return "<br>Please answer the question.<br>";
+            return "<br> " + ResponseConstants.PLEASE_ANSWER_QUESTION + "<br>";
         }
     }
 
     private String introduceGame(String input) {
         Game game = GameState.getInstance().getGame();
-        if(input.equals("yes") || input.equals("y")) {
+        if (input.equals("yes") || input.equals("y")) {
             game.setPlayerMoved(true);
-            return "<br>You're on a mountain with several scattered mining towns. It's said that some of the mines are " +
-                    "still accessible, but you've also heard stories that the local miners report seeing " +
-                    "tommyknockers in some of them. I will be your eyes and hands. Use commands in the form " +
-                    "\"verb noun\" to guide me.<br>If you would like further information on how the game works, type " +
-                    "\"info\".<br><br>" + game.getCurrentLocation().getDescription();
+            return Constants.GAME_INTRO + game.getCurrentLocation().getDescription();
         }
-        else if(input.equals("n") || input.equals("no")) {
+        else if (input.equals("n") || input.equals("no")) {
             game.setPlayerMoved(true);
             return "<br>" + game.getCurrentLocation().getDescription();
         }
         else {
-            return "<br>Please answer the question";
+            return "<br>" + ResponseConstants.PLEASE_ANSWER_QUESTION;
         }
     }
 }

@@ -20,10 +20,10 @@
 //        List<ConnectingLocation> connectingLocations = game.getCurrentLocation().getConnectingLocations();
 //
 //        for(ConnectingLocation connectingLocation : connectingLocations) {
-//            if(connectingLocation.getDirections() != null && connectingLocation.getDirections().contains(direction)) {
+//            if (connectingLocation.getDirections() != null && connectingLocation.getDirections().contains(direction)) {
 //                Location connection = connectingLocation.getLocation();
 //                game.setCurrentLocation(connection);
-//                if(connection.isVisited()) {
+//                if (connection.isVisited()) {
 //                    return connection.getShortDescription() + new Actions().listLocationItems(connection.getItems());
 //                }
 //                connection.setVisited(true);
@@ -47,7 +47,7 @@
 //     * location, and if it's there, remove it from the location and add it to the player's inventory.
 //     * @param input Everything after "get" from the input, e.g. "the key" if input was "get the key" or "jar" if
 //     *              input was "get jar"
-//     * @return "OK." if the item is at the location and the get command was entered correctly ("get [item]" or "get the [item]"),
+//     * @return ResponseConstants.OK if the item is at the location and the get command was entered correctly ("get [item]" or "get the [item]"),
 //     * "I don't see that here." if there's no item at the location that matches the input, or some other unique response
 //     * for a specific input, e.g. trying to get a tree results in a special output.
 //     */
@@ -59,18 +59,18 @@
 //
 //        String result = "I don't see that here.";
 //        // Either input is "get item" or "get the item", or trying to get nails before you've shot them off with arrow
-//        if(item != null && (splitInput.length == 1 || (splitInput.length == 2 && splitInput[0].equals("the")))
+//        if (item != null && (splitInput.length == 1 || (splitInput.length == 2 && splitInput[0].equals("the")))
 //                || new Actions().gettingNailsAtMineEntrance(splitInput[splitInput.length - 1], currentLocation)) {
 //            game.addItemToInventory(item);
 //
 //            currentLocation.removeItemFromLocation(item);
-//            result = "OK.";
+//            result = ResponseConstants.OK;
 //
 //        }
-//        else if(input.equals("tree") && new Actions().locationHasTrees(currentLocation)) {
+//        else if (input.equals("tree") && new Actions().locationHasTrees(currentLocation)) {
 //            result = "You walk to the nearest tree and start pulling. After a couple minutes of this you give up.";
 //        }
-//        else if(splitInput[splitInput.length - 1].equals("nails")) {
+//        else if (splitInput[splitInput.length - 1].equals("nails")) {
 //            return "Are you sure about that? The structure is very fragile and may fall apart and onto you.";
 //        }
 //        return result;
@@ -93,7 +93,7 @@
 //     * player's inventory, and if it's there, remove it from the inventory and add it to the location.
 //     * @param input Everything after "drop" from the input, e.g. "the key" if input was "drop the key" or "magnet" if
 //     *              input was "drop magnet"
-//     * @return "OK." if the item is at the location and the get command was entered correctly ("drop [item]" or
+//     * @return ResponseConstants.OK if the item is at the location and the get command was entered correctly ("drop [item]" or
 //     * "drop the [item]"), "You're not carrying it!" if there's no item in the player's inventory that matches the
 //     * input, or some other unique action happens for a specific input at a specific place, e.g. dropping magnet at
 //     * the dam allows you to be able to turn the wheel
@@ -104,13 +104,13 @@
 //
 //        Item item = game.getInventoryItemByName(splitInput[splitInput.length - 1]);
 //        // Either input is "drop item" or "drop the item"
-//        if(item != null && (splitInput.length == 1 || (splitInput.length == 2 && splitInput[0].equals("the")))) {
-//            if(game.getCurrentLocation() instanceof Dam && splitInput[splitInput.length - 1].equals("magnet")) {
+//        if (item != null && (splitInput.length == 1 || (splitInput.length == 2 && splitInput[0].equals("the")))) {
+//            if (game.getCurrentLocation() instanceof Dam && splitInput[splitInput.length - 1].equals("magnet")) {
 //                ((Dam) game.getCurrentLocation()).setMagnetDropped(true);
 //            }
 //            game.removeItemFromInventory(item);
 //            game.getCurrentLocation().addItemToLocation(item);
-//            return "OK.";
+//            return ResponseConstants.OK;
 //        }
 //        return "You're not carrying it!";
 //    }
@@ -123,7 +123,7 @@
 //
 //    public static String inventory() {
 //        Game game = GameState.getInstance().getGame();
-//        if(game.getInventory().isEmpty()) {
+//        if (game.getInventory().isEmpty()) {
 //            return "You're not carrying anything!";
 //        }
 //        StringBuilder result = new StringBuilder();
@@ -213,19 +213,19 @@
 //        String result = getRandomDontKnowWord();
 //        Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
 //
-//        if(input.equals("shed") || input.equals("") || input.equals("the shed")) {
-//            if(!(currentLocation instanceof Shed)) {
+//        if (input.equals("shed") || input.equals("") || input.equals("the shed")) {
+//            if (!(currentLocation instanceof Shed)) {
 //                result = "There's nothing here to open.";
 //            }
-//            else if(!((Shed) currentLocation).isUnlocked()) {
+//            else if (!((Shed) currentLocation).isUnlocked()) {
 //                String unlockResult = unlock("");
-//                if(!unlockResult.equals("The shed is now unlocked.")) {
+//                if (!unlockResult.equals("The shed is now unlocked.")) {
 //                    return unlockResult;
 //                }
 //                ((Shed) currentLocation).openShed();
 //                result = "(First unlocking the shed) The shed is now open." + new Actions().listLocationItems(currentLocation.getItems());
 //            }
-//            else if(!((Shed) currentLocation).isOpen()) {
+//            else if (!((Shed) currentLocation).isOpen()) {
 //                ((Shed) currentLocation).openShed();
 //                result = "The shed is now open." + new Actions().listLocationItems(currentLocation.getItems());
 //            }
@@ -249,8 +249,8 @@
 //    public static String turnWheel(String input) {
 //        String result = "There's nothing to turn here.";
 //        Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
-//        if(currentLocation instanceof Dam && (input.equals("wheel") || input.equals("") || input.equals("the wheel"))) {
-//            if(((Dam) currentLocation).isMagnetDropped()) {
+//        if (currentLocation instanceof Dam && (input.equals("wheel") || input.equals("") || input.equals("the wheel"))) {
+//            if (((Dam) currentLocation).isMagnetDropped()) {
 //                ((Dam) currentLocation).turnWheel();
 //                result = "Wheel hath been turned.";
 //            }

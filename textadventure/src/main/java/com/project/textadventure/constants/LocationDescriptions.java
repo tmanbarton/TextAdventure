@@ -1,6 +1,7 @@
 package com.project.textadventure.constants;
 
 public class LocationDescriptions {
+    // Short descriptions for when location has already been visited
     public static final String ANT_HILL_SHORT_DESCRIPTION = "You're at a large ant hill.";
     public static final String ARCHERY_RANGE_SHORT_DESCRIPTION = "You're at Archery Range.";
     public static final String BOAT_SHORT_DESCRIPTION = "You're in a rickety wooden boat in an underground lake.";
@@ -46,6 +47,7 @@ public class LocationDescriptions {
     public static final String WEST_END_SIDE_STREET_SHORT_DESCRIPTION = "You're at the west end of a side street.";
 
 
+    // Long descriptions for when location has not been visited or "look" command is used
     public static final String ANT_HILL_LONG_DESCRIPTION = "Nearby is an ant hill with little black ants scurrying about doing their business.";
     public static final String ARCHERY_RANGE_LONG_DESCRIPTION = "You stand before hay bale archery targets with spray-painted targets in a rope-enclosed range. There's a ditch to the north and a long driveway leading south.";
     public static final String BOAT_LONG_DESCRIPTION = "You're sitting in a rickety wooden boat in a large underground lake with passages to the west, southeast, and northeast.";
@@ -89,4 +91,12 @@ public class LocationDescriptions {
     public static final String UNDERGROUND_LAKE_SE_LONG_DESCRIPTION = "You are on the se side of a large underground lake. There are passages to the west an ne across the lake. There's a dim light coming from the west passage and the tunnel you're in now continues to the east.";
     public static final String UNDERGROUND_LAKE_NE_LONG_DESCRIPTION = "You are on the ne side of a large underground lake. There are passages to the west and se across the lake. There's a dim light coming from the west passage and mine rails lead into a passage to the east from here.";
     public static final String WEST_END_SIDE_STREET_LONG_DESCRIPTION = "You are at the west and of a side street in an abandoned gold mining town. Branching off from this street is a smaller road to the north.";
+
+    // Modified descriptions for when something changes at a location
+    public static final String MINE_ENTRANCE_RECENT_CAVE_IN = "You're at the entrance of an abandoned gold mine, a recent cave-in preventing entry. Piles of tailings scatter the area, leaving only one path leading away from the entrance, heading north.";
+    public static final String LAKE_LONG_DESCRIPTION_EMPTY_LAKE = "You are on the south side of an empty lake. There's a path going west and there's a dam to the north.";
+    public static final String LAKE_SHORT_DESCRIPTION_EMPTY_LAKE = "You're on the south side of an empty lake.";
+    public static final String TAILINGS_LONG_DESCRIPTION_EMPTY_LAKE = "All around are piles of tailings that look like they have been puked into this valley. There's not much else to be seen except the entrance to a mine to the south. There's a path leading east and another going north.";
+    public static final String INTERSECTION_LONG_DESCRIPTION_EMPTY_LAKE = "You have reached an intersection in the road. It leads into the forest to the north and west and a southern road goes into a thinner part of the forest.";
+
 }

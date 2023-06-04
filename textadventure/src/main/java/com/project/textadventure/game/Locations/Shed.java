@@ -35,7 +35,7 @@ public class Shed extends Location implements Action {
     @Override
     public String takeAction(final String verb, final String noun) {
         String response = "";
-        if(verb.equals("unlock") || verb.equals("open")) {
+        if (verb.equals("unlock") || verb.equals("open")) {
             response = parseUnlockAndOpenCommand(verb, noun);
         }
         else {
@@ -61,7 +61,7 @@ public class Shed extends Location implements Action {
             if (this.unlocked) {
                 response = "The shed is already unlocked.";
             }
-            else if(key == null) {
+            else if (key == null) {
                 response = "You need a key to unlock the shed.";
             }
             else {

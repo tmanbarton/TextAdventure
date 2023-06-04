@@ -23,8 +23,8 @@
 //        String noun = input.length > 1 ? input[1] : null;
 //
 //        Game game = GameState.getInstance().getGame();
-//        if(!game.hasPlayerMoved()) {
-//            if(input.equals("yes") || input.equals("y")) {
+//        if (!game.hasPlayerMoved()) {
+//            if (input.equals("yes") || input.equals("y")) {
 //                game.setHasPlayerMoved(true);
 //                return "You're on a mountain with several scattered mining towns. It's said that some of the mines are " +
 //                        "still accessible, but you've also heard stories that the local miners report seeing " +
@@ -32,7 +32,7 @@
 //                        "\"verb noun\" to guide me.<br>If you would like further information on how the game works, type " +
 //                        "\"info\".<br><br>" + game.getCurrentLocation().getDescription();
 //            }
-//            else if(input.equals("n") || input.equals("no")) {
+//            else if (input.equals("n") || input.equals("no")) {
 //                game.setHasPlayerMoved(true);
 //                return game.getCurrentLocation().getDescription();
 //            }
@@ -41,7 +41,7 @@
 //            }
 //        }
 //
-//        if(isDirection(verb)) {
+//        if (isDirection(verb)) {
 //            return move(verb);
 //        }
 //        String result = switch (verb) {

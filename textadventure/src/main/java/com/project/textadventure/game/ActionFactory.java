@@ -6,7 +6,7 @@ import com.project.textadventure.controllers.Action;
 public class ActionFactory {
     public static Action getActionObject(final String verb, final String noun) {
         final Game game = GameState.getInstance().getGame();
-        if(verb.equals("pick") && noun.startsWith("up")) {
+        if (verb.equals("pick") && noun.startsWith("up")) {
             return game;
         }
         final Actions action;

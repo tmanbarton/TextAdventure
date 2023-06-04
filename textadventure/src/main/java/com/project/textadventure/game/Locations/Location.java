@@ -47,7 +47,7 @@ public class Location implements Action {
 
     public Item getLocationItemByName(final String name) {
         for(final Item item : this.items) {
-            if(name.equals(item.getName())) {
+            if (name.equals(item.getName())) {
                 return item;
             }
         }
@@ -69,22 +69,22 @@ public class Location implements Action {
     @Override
     public String takeAction(final String verb, final String noun) {
         String response = "";
-        if(isDirection(verb)) {
+        if (isDirection(verb)) {
             response = move(verb);
         }
-        else if(verb.equals("look") || verb.equals("l")) {
+        else if (verb.equals("look") || verb.equals("l")) {
             response = look();
         }
-        else if(verb.equals("unlock")) {
+        else if (verb.equals("unlock")) {
             response = unlock();
         }
-        else if(verb.equals("open")) {
+        else if (verb.equals("open")) {
             response = open();
         }
-        else if(verb.equals("shoot")) {
+        else if (verb.equals("shoot")) {
             response = parseShootCommand(noun);
         }
-        else if(verb.equals("turn")) {
+        else if (verb.equals("turn")) {
             response = turn();
         }
 
@@ -107,7 +107,7 @@ public class Location implements Action {
             return "You can't go that way.";
         }
         final ConnectingLocation connectingLocation = optionalConnection.get();
-        if(currentLocation instanceof UndergroundLake && ((UndergroundLake) currentLocation).boatAtLocation) {
+        if (currentLocation instanceof UndergroundLake && ((UndergroundLake) currentLocation).boatAtLocation) {
             return moveToLocation(connectingLocation);
         }
         return moveToLocation(connectingLocation);
@@ -118,7 +118,7 @@ public class Location implements Action {
         final Game game = GameState.getInstance().getGame();
         game.setCurrentLocation(connection);
 
-        if(connection.isVisited()) {
+        if (connection.isVisited()) {
             return connection.getShortDescription() + listLocationItems(connection.getItems());
         }
         connection.setVisited(true);
@@ -151,12 +151,12 @@ public class Location implements Action {
         String response = "";
 
         // only "shoot" or "shoot arrow" does something at mine entrance
-        if(noun == null || noun.equals(ItemConstants.ARROW_NAME)) {
+        if (noun == null || noun.equals(ItemConstants.ARROW_NAME)) {
             // Must have the bow and arrow in your inventory
-            if(!game.isItemInInventory(ItemConstants.BOW_NAME)) {
+            if (!game.isItemInInventory(ItemConstants.BOW_NAME)) {
                 response = "You don't have anything to shoot with.";
             }
-            else if(!game.isItemInInventory(ItemConstants.ARROW_NAME)) {
+            else if (!game.isItemInInventory(ItemConstants.ARROW_NAME)) {
                 response = "You don't have anything to shoot.";
             }
             // Shoot the arrow
@@ -173,7 +173,7 @@ public class Location implements Action {
 
     private String shootArrow(final Item arrow) {
         final Game game = GameState.getInstance().getGame();
-        if(game.getCurrentLocation().getName().equals(LocationNames.BOAT)) {
+        if (game.getCurrentLocation().getName().equals(LocationNames.BOAT)) {
             game.removeItemFromInventory(arrow);
             return "Your arrow goes flying off into the the distance and splashes into the water, never to be found again.";
         }

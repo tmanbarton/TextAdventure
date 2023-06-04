@@ -38,7 +38,7 @@ public class MineEntrance extends Location implements Action {
 
     @Override
     public String takeAction(final String verb, final String noun) {
-        if(verb.equals("shoot") && !this.nailsOff) {
+        if (verb.equals("shoot") && !this.nailsOff) {
             return parseShootCommand(noun);
         }
         else {
@@ -52,14 +52,14 @@ public class MineEntrance extends Location implements Action {
         String response = "";
 
         // only "shoot" or "shoot arrow" does something at mine entrance
-        if(noun == null || noun.equals("arrow")) {
+        if (noun == null || noun.equals("arrow")) {
             final Item bow = game.getInventoryItemByName("bow");
             final Item arrow = game.getInventoryItemByName("arrow");
             // Must have the bow and arrow in your inventory
-            if(bow == null) {
+            if (bow == null) {
                 response = "You don't have anything to shoot with.";
             }
-            else if(arrow == null) {
+            else if (arrow == null) {
                 response = "You don't have anything to shoot.";
             }
             else {

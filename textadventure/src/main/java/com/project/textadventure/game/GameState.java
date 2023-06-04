@@ -25,7 +25,7 @@ public class GameState {
     }
 
     public static GameState getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new GameState();
         }
         return instance;
@@ -36,7 +36,7 @@ public class GameState {
 //    }
 
     public Game getGame() {
-        if(game == null) {
+        if (game == null) {
             game = createGame();
         }
         return game;
@@ -44,7 +44,7 @@ public class GameState {
 
 //    public Location getGame(UUID userId) {
 //        Player player = map.get(userId);
-//        if(player == null) {
+//        if (player == null) {
 //            player = createGame();
 //        }
 //        return player;

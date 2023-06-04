@@ -1,6 +1,7 @@
 package com.project.textadventure.game.Locations;
 
 import com.project.textadventure.constants.Constants;
+import com.project.textadventure.constants.LocationDescriptions;
 import com.project.textadventure.constants.LocationNames;
 import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.ConnectingLocation;
@@ -30,7 +31,7 @@ public class Dam extends Location implements Action {
 
     @Override
     public String takeAction(final String verb, final String noun) {
-        if(verb.equals("turn")) {
+        if (verb.equals("turn")) {
             return parseTurnCommand(noun);
         }
         else {
@@ -42,11 +43,11 @@ public class Dam extends Location implements Action {
         String response = "";
 
         // only "turn wheel" or "turn" does something at dam
-        if(noun == null || noun.equals("wheel")) {
-            if(magnetDropped && !wheelTurned) {
+        if (noun == null || noun.equals(Constants.WHEEL)) {
+            if (magnetDropped && !wheelTurned) {
                 response = turnWheel();
             }
-            else if(!magnetDropped) {
+            else if (!magnetDropped) {
                 response = "The wheel is locked firmly in place.";
             }
         }
@@ -72,17 +73,17 @@ public class Dam extends Location implements Action {
         // The lake, tailings, and intersection locations all reference the lake in their description
         // Find them and change the descriptions to not include the lake
         final Location lake = findLocation(this, LocationNames.LAKE);
-        lake.setDescription("You are on the south side of an empty lake. There's a path going west and there's a dam to the north.");
-        lake.setShortDescription("You're on the south side of an empty lake.");
+        lake.setDescription(LocationDescriptions.LAKE_LONG_DESCRIPTION_EMPTY_LAKE);
+        lake.setShortDescription(LocationDescriptions.LAKE_SHORT_DESCRIPTION_EMPTY_LAKE);
 
         final Location tailings = findLocation(this, LocationNames.TAILINGS);
-        tailings.setDescription("All around are piles of tailings that look like they have been puked into this valley. There's not much else to be seen except the entrance to a mine to the south. There's a path leading east and another going north.");
+        tailings.setDescription(LocationDescriptions.TAILINGS_LONG_DESCRIPTION_EMPTY_LAKE);
 
         final Location intersection = findLocation(this, LocationNames.INTERSECTION);
-        intersection.setDescription("You have reached an intersection in the road. It leads into the forest to the north and west and a southern road goes into a thinner part of the forest.");
+        intersection.setDescription(LocationDescriptions.INTERSECTION_LONG_DESCRIPTION_EMPTY_LAKE);
 
         wheelTurned = true;
 
-        return "The ground begins to rumble and you see a massive wall slowly rise from the water on the far side of the lake, blocking the flow of water from the river into the lake. There's another shudder and the water begins to recede as a huge whirl pool form near the middle of the lake. Soon the water is completely gone, revealing a town that had been submerged only a few moments ago. You can get to the town to the west, down the dam.";
+        return Constants.LAKE_EMPTYING;
     }
 }

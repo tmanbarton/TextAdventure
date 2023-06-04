@@ -95,7 +95,7 @@
 //        items.add(item);
 //        game.setCurrentLocation(new Location("", "", items, new ArrayList<>(), true, ""));
 //        final String result = getItem("item");
-//        assertEquals("OK.", result, "Response from successfully getting the item should by 'OK'.");
+//        assertEquals(ResponseConstants.OK, result, "Response from successfully getting the item should by 'OK'.");
 //        assertFalse(game.getInventory().isEmpty(), "The item should have been added to the inventory.");
 //    }
 //
@@ -140,7 +140,7 @@
 ////        Location currentLocation = new Location("", "", new ArrayList<>(), new ArrayList<>(), true, "");
 ////        player.setCurrentLocation(currentLocation);
 ////        String result = dropItem("item");
-////        assertEquals("OK.", result, "Response from successfully getting the item should by 'OK'.");
+////        assertEquals(ResponseConstants.OK, result, "Response from successfully getting the item should by 'OK'.");
 ////        assertTrue(player.getInventory().isEmpty(), "The item should have been added to the inventory.");
 ////        assertFalse(currentLocation.getItems().isEmpty(), "The item should have been moved from the player's inventory to the location.");
 ////    }
@@ -154,7 +154,7 @@
 ////        Location currentLocation = new Location("", "", new ArrayList<>(), new ArrayList<>(), true, "");
 ////        player.setCurrentLocation(currentLocation);
 ////        String result = dropItem("item");
-////        assertEquals("OK.", result, "Response from successfully getting the item should by 'OK'.");
+////        assertEquals(ResponseConstants.OK, result, "Response from successfully getting the item should by 'OK'.");
 ////        assertFalse(player.getInventory().isEmpty(), "The item should have been added to the inventory.");
 ////        assertTrue(currentLocation.getItems().isEmpty(), "The item should have been moved from the player's inventory to the location.");
 ////    }

@@ -6,18 +6,18 @@ const caret = $('#caret');
 $(function() {
     userInput.on('keydown', function(event) {
         caretPosition = getCaretPosition();
-        if(getCaretPosition() > 47 && event.key === 'ArrowLeft') {
+        if (getCaretPosition() > 47 && event.key === 'ArrowLeft') {
             stopBlinking();
             let width = userInput[0].offsetWidth;
-            if(caretPosition <= width) {
+            if (caretPosition <= width) {
                 caretPosition = (--userInput[0].selectionStart * 9.6016) + 47;
                 moveCaret(caretPosition);
             }
         }
-        else if(caretPosition < userInput.val().length * 9.6016 + 47 && event.key === 'ArrowRight') {
+        else if (caretPosition < userInput.val().length * 9.6016 + 47 && event.key === 'ArrowRight') {
             stopBlinking();
             let width = userInput[0].offsetWidth;
-            if(caretPosition <= width) {
+            if (caretPosition <= width) {
                 caretPosition = ((userInput[0].selectionStart + 1) * 9.6016) + 47;
                 moveCaret(caretPosition);
             }
@@ -28,7 +28,7 @@ $(function() {
     userInput.on('click', function() {
         caretPosition = (userInput[0].selectionStart * 9.6016) + 47;
         let width = userInput[0].offsetWidth;
-        if(getCaretPosition() <= width) {
+        if (getCaretPosition() <= width) {
             moveCaret(caretPosition);
         }
     });
@@ -40,7 +40,7 @@ $(function() {
         input = input.replace(/\s/g, '&nbsp;');
         caretPosition = (userInput[0].selectionStart * 9.6016) + 47;
         let width = userInput[0].offsetWidth;
-        if(caretPosition <= width) {
+        if (caretPosition <= width) {
             moveCaret(caretPosition);
         }
     });
