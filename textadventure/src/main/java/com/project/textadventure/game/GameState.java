@@ -207,19 +207,19 @@ public class GameState {
         westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of(Constants.EAST, Constants.E), topOfStairs));
 
         // Set start location by setting it as visited and creating a new Game object with that location as the current location
-//        driveway.setVisited(true);
-//        return new Game(new ArrayList<>(), driveway, false);
+        driveway.setVisited(true);
+        return new Game(new ArrayList<>(), driveway, false);
 
         //// Change start location for manual debugging. ////
         //// Make sure to comment back out; it will make tests fail ////
-        dam.setVisited(true);
-        Game game = new Game(new ArrayList<>(), dam, false);
-//        game.addItemToInventory(new Item(5, "There is a jar here", "Jar", "jar"));
-//        game.addItemToInventory(new Item(3, "There is a bow here, strung and ready for shooting", "Bow", "bow"));
-//        game.die();
-        game.addItemToInventory(new Item(4, "There is an arrow here", "Arrow", "arrow"));
-        game.addItemToInventory(magnet);
-        return game;
+//        dam.setVisited(true);
+//        Game game = new Game(new ArrayList<>(), dam, false);
+////        game.addItemToInventory(new Item(5, "There is a jar here", "Jar", "jar"));
+////        game.addItemToInventory(new Item(3, "There is a bow here, strung and ready for shooting", "Bow", "bow"));
+////        game.die();
+//        game.addItemToInventory(new Item(4, "There is an arrow here", "Arrow", "arrow"));
+//        game.addItemToInventory(magnet);
+//        return game;
         ///////////////////
     }
 }

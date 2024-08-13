@@ -42,15 +42,15 @@ public class GameController {
         else {
             for (Pair<String, String> command : commands) {
                 if (!game.hasPlayerMoved()) {
-                    result = introduceGame(command.getKey()) + "<br>";
+                    result = introduceGame(command.getKey());
                     break;
                 }
                 Action action = ActionFactory.getActionObject(command.getKey(), command.getValue());
                 if (action == null) {
-                    result = "<br>" + generateRandomUnknownCommandResponse() + "<br>";
+                    result = generateRandomUnknownCommandResponse();
                     break;
                 }
-                result += "<br>" + action.takeAction(command.getKey(), command.getValue()) + "<br>";
+                result += action.takeAction(command.getKey(), command.getValue());
             }
         }
         GameResponse resp = new GameResponse(result, input.getInput());
@@ -100,10 +100,10 @@ public class GameController {
         }
         else if (input.equals("n") || input.equals("no")) {
             ((MineEntrance) game.getCurrentLocation()).setTakingNails(false);
-            return "<br>Good choice.<br>";
+            return "Good choice.";
         }
         else {
-            return "<br> " + ResponseConstants.PLEASE_ANSWER_QUESTION + "<br>";
+            return ResponseConstants.PLEASE_ANSWER_QUESTION;
         }
     }
 
@@ -115,10 +115,10 @@ public class GameController {
         }
         else if (input.equals("n") || input.equals("no")) {
             game.setPlayerMoved(true);
-            return "<br>" + game.getCurrentLocation().getDescription();
+            return game.getCurrentLocation().getDescription();
         }
         else {
-            return "<br>" + ResponseConstants.PLEASE_ANSWER_QUESTION;
+            return ResponseConstants.PLEASE_ANSWER_QUESTION;
         }
     }
 }
