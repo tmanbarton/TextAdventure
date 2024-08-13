@@ -32,20 +32,20 @@ public class GameController {
 
     @PostMapping("/gameRequest")
     public ResponseEntity<ServiceResponse<GameResponse>> executeCommand(@RequestBody Input input) {
-        String inputString = input.getInput().toLowerCase();
-        Game game = GameState.getInstance().getGame();
-        List<Pair<String , String>> commands = parseInput(inputString);
+        final String inputString = input.getInput().toLowerCase();
+        final Game game = GameState.getInstance().getGame();
+        final List<Pair<String , String>> commands = parseInput(inputString);
         String result = "";
         if (game.getCurrentLocation() instanceof MineEntrance && ((MineEntrance) game.getCurrentLocation()).isTakingNails()) {
             result = attemptGetNailsByHand(inputString);
         }
         else {
-            for (Pair<String, String> command : commands) {
+            for (final Pair<String, String> command : commands) {
                 if (!game.hasPlayerMoved()) {
                     result = introduceGame(command.getKey());
                     break;
                 }
-                Action action = ActionFactory.getActionObject(command.getKey(), command.getValue());
+                final Action action = ActionFactory.getActionObject(command.getKey(), command.getValue());
                 if (action == null) {
                     result = generateRandomUnknownCommandResponse();
                     break;
@@ -53,40 +53,40 @@ public class GameController {
                 result += action.takeAction(command.getKey(), command.getValue());
             }
         }
-        GameResponse resp = new GameResponse(result, input.getInput());
-        ServiceResponse<GameResponse> response = new ServiceResponse<>("success", resp);
+        final GameResponse resp = new GameResponse(result, input.getInput());
+        final ServiceResponse<GameResponse> response = new ServiceResponse<>("success", resp);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    private List<Pair<String, String>> parseInput(String input) {
-        String[] commands = input.split("and|then");
-        ArrayList<Pair<String, String>> parsedCommands = new ArrayList<>();
+    private List<Pair<String, String>> parseInput(final String input) {
+        final String[] commands = input.split("and|then");
+        final ArrayList<Pair<String, String>> parsedCommands = new ArrayList<>();
 
         for(String command : commands) {
             // Remove any " the "s from the command
             command = command.replaceAll("\\Wthe\\W", " ");
-            String[] parsedCommand = command.trim().split(" ", 2);
-            String verb = parsedCommand[0];
-            String noun = parsedCommand.length > 1 ? parsedCommand[1] : null;
-            Pair<String, String> commandPair = new ImmutablePair<>(verb, noun);
+            final String[] parsedCommand = command.trim().split(" ", 2);
+            final String verb = parsedCommand[0];
+            final String noun = parsedCommand.length > 1 ? parsedCommand[1] : null;
+            final Pair<String, String> commandPair = new ImmutablePair<>(verb, noun);
             parsedCommands.add(commandPair);
         }
         return parsedCommands;
     }
 
-    private String attemptGetNailsByHand(String input) {
-        Game game = GameState.getInstance().getGame();
-        Location currentLocation = game.getCurrentLocation();
+    private String attemptGetNailsByHand(final String input) {
+        final Game game = GameState.getInstance().getGame();
+        final Location currentLocation = game.getCurrentLocation();
         if (input.equals("yes") || input.equals("y")) {
             ((MineEntrance) game.getCurrentLocation()).setTakingNails(false);
             // Set nails off to true so if player comes back to mine entrance and tries to shoot arrow, the nails don't get added to the location
             ((MineEntrance) game.getCurrentLocation()).setNailsOff(true);
             // 2 ways to get to mine shaft. Find and remove both
-            List<ConnectingLocation> connectingLocations = currentLocation.getConnectingLocations();
+            final List<ConnectingLocation> connectingLocations = currentLocation.getConnectingLocations();
             connectingLocations.removeIf(location -> location.getLocation().getName().equals(LocationNames.MINE_SHAFT));
 
-            for (ConnectingLocation connectingLocation : currentLocation.getConnectingLocations()) {
+            for (final ConnectingLocation connectingLocation : currentLocation.getConnectingLocations()) {
                 if (connectingLocation.getLocation().getName().equals(LocationNames.MINE_SHAFT)) {
                     connectingLocation.getLocation().getConnectingLocations().removeIf(
                             mineShaftLocation -> mineShaftLocation.getLocation().getName().equals(LocationNames.MINE_ENTRANCE)
@@ -107,8 +107,8 @@ public class GameController {
         }
     }
 
-    private String introduceGame(String input) {
-        Game game = GameState.getInstance().getGame();
+    private String introduceGame(final String input) {
+        final Game game = GameState.getInstance().getGame();
         if (input.equals("yes") || input.equals("y")) {
             game.setPlayerMoved(true);
             return Constants.GAME_INTRO + game.getCurrentLocation().getDescription();

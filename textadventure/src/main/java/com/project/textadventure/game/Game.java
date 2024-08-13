@@ -19,6 +19,8 @@ import static com.project.textadventure.constants.Actions.GET;
 import static com.project.textadventure.constants.Actions.I;
 import static com.project.textadventure.constants.Actions.INVEN;
 import static com.project.textadventure.constants.Actions.INVENTORY;
+import static com.project.textadventure.constants.Actions.QUIT;
+import static com.project.textadventure.constants.Actions.RESTART;
 import static com.project.textadventure.constants.Actions.TAKE;
 import static com.project.textadventure.constants.Actions.THROW;
 
@@ -93,6 +95,9 @@ public class Game implements Action, Comparator<Item> {
         } else if (StringUtils.equals(verb, DROP.toString()) ||
                 StringUtils.equals(verb, THROW.toString())) {
             result = dropItem(noun);
+        } else if (StringUtils.equals(verb, QUIT.toString()) ||
+                StringUtils.equals(verb, RESTART.toString())) {
+            GameState.getInstance().restartGame();
         }
         return result;
     }

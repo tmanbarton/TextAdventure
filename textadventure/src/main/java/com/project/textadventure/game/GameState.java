@@ -222,4 +222,8 @@ public class GameState {
 //        return game;
         ///////////////////
     }
+
+    public void restartGame() {
+        // todo
+    }
 }

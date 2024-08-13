@@ -7,6 +7,8 @@ import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.*;
 import lombok.Data;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -131,6 +133,7 @@ public class Location implements Action {
     }
 
     String listLocationItems(final List<Item> items) {
+        items.sort(Comparator.comparingInt(Item::getDisplayOrder));
         final StringBuilder result = new StringBuilder();
         for(final Item item : items) {
             result.append("<br>").append(item.getLocationDescription());
