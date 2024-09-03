@@ -207,7 +207,7 @@ public class Game implements Action, Comparator<Item> {
             return ResponseConstants.NOT_CARRYING;
         }
         final StringBuilder result = new StringBuilder();
-        for(Item item : this.inventory) {
+        for (final Item item : this.inventory) {
             result.append("<br>").append(item.getInventoryDescription()).append(" ");
         }
         return "You're carrying:" + result;
@@ -219,7 +219,7 @@ public class Game implements Action, Comparator<Item> {
      */
     public void die() {
         final List<Item> inventoryCopy = new ArrayList<>(inventory);
-        for(final Item item : inventoryCopy) {
+        for (final Item item : inventoryCopy) {
             removeItemFromInventory(item);
             currentLocation.addItemToLocation(item);
         }
@@ -242,7 +242,7 @@ public class Game implements Action, Comparator<Item> {
 
         final List<Location> locationsVisited = new ArrayList<>();
         // BFS algorithm
-        while(!queue.isEmpty()) {
+        while (!queue.isEmpty()) {
             final Location current = queue.removeFirst();
             if (current.bfsIsVisited) {
                 continue;
@@ -260,7 +260,7 @@ public class Game implements Action, Comparator<Item> {
             if (neighbors == null) {
                 continue;
             }
-            for(final ConnectingLocation neighbor : neighbors) {
+            for (final ConnectingLocation neighbor : neighbors) {
                 if (!neighbor.getLocation().bfsIsVisited) {
                     queue.add(neighbor.getLocation());
                 }
