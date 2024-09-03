@@ -66,7 +66,7 @@ public class Dam extends Location implements Action {
         // Find the edge of the graph (ConnectingLocation object) that connects the dam to the lake town and set the directions to down and west
         for(final ConnectingLocation connectingLocation : this.getConnectingLocations()) {
             if (connectingLocation.getLocation().getName().equals(LocationNames.LAKE_TOWN)) {
-                connectingLocation.setDirections(List.of(Constants.WEST, Constants.W, Constants.DOWN, Constants.D));
+                connectingLocation.setDirections(List.of(Constants.WEST_LONG, Constants.WEST_SHORT, Constants.DOWN_LONG, Constants.DOWN_SHORT));
             }
         }
 

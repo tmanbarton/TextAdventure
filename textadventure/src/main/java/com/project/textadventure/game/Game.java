@@ -97,7 +97,7 @@ public class Game implements Action, Comparator<Item> {
             result = dropItem(noun);
         } else if (StringUtils.equals(verb, QUIT.toString()) ||
                 StringUtils.equals(verb, RESTART.toString())) {
-            GameState.getInstance().restartGame();
+            GameState.getInstance().restartGame(null, new ArrayList<>());
         }
         return result;
     }
@@ -219,7 +219,7 @@ public class Game implements Action, Comparator<Item> {
      */
     public void die() {
         final List<Item> inventoryCopy = new ArrayList<>(inventory);
-        for(Item item : inventoryCopy) {
+        for(final Item item : inventoryCopy) {
             removeItemFromInventory(item);
             currentLocation.addItemToLocation(item);
         }

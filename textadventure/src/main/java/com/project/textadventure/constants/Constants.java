@@ -18,30 +18,30 @@ public class Constants {
     public static final String WHEEL = "wheel";
 
     // Directions
-    public static final String N = "n";
-    public static final String S = "s";
-    public static final String E = "e";
-    public static final String W = "w";
-    public static final String NE = "ne";
-    public static final String NW = "nw";
-    public static final String SE = "se";
-    public static final String SW = "sw";
-    public static final String U = "u";
-    public static final String D = "d";
-    public static final String NORTH = "north";
-    public static final String SOUTH = "south";
-    public static final String EAST = "east";
-    public static final String WEST = "west";
-    public static final String NORTHEAST = "northeast";
-    public static final String NORTHWEST = "northwest";
-    public static final String SOUTHEAST = "southeast";
-    public static final String SOUTHWEST = "southwest";
-    public static final String UP = "up";
-    public static final String DOWN = "down";
+    public static final String NORTH_SHORT = "n";
+    public static final String SOUTH_SHORT = "s";
+    public static final String EAST_SHORT = "e";
+    public static final String WEST_SHORT = "w";
+    public static final String NE_SHORT = "ne";
+    public static final String NW_SHORT = "nw";
+    public static final String SE_SHORT = "se";
+    public static final String SW_SHORT = "sw";
+    public static final String UP_SHORT = "u";
+    public static final String DOWN_SHORT = "d";
+    public static final String NORTH_LONG = "north";
+    public static final String SOUTH_LONG = "south";
+    public static final String EAST_LONG = "east";
+    public static final String WEST_LONG = "west";
+    public static final String NE_LONG = "northeast";
+    public static final String NW_LONG = "northwest";
+    public static final String SE_LONG = "southeast";
+    public static final String SW_LONG = "southwest";
+    public static final String UP_LONG = "up";
+    public static final String DOWN_LONG = "down";
     public static final String IN = "in";
     public static final String ENTER = "enter";
     public static final String OUT = "out";
     public static final String EXIT = "exit";
 
-    public static final List<String> ALL_DIRECTIONS = List.of(N, S, E, W, NE, NW, SE, SW, U, D, NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST, UP, DOWN, IN, ENTER, OUT, EXIT);
+    public static final List<String> ALL_DIRECTIONS = List.of(NORTH_SHORT, SOUTH_SHORT, EAST_SHORT, WEST_SHORT, NE_SHORT, NW_SHORT, SE_SHORT, SW_SHORT, UP_SHORT, DOWN_SHORT, NORTH_LONG, SOUTH_LONG, EAST_LONG, WEST_LONG, NE_LONG, NW_LONG, SE_LONG, SW_LONG, UP_LONG, DOWN_LONG, IN, ENTER, OUT, EXIT);
 }
