@@ -82,22 +82,22 @@ public class Game implements Action, Comparator<Item> {
     @Override
     public String takeAction(String verb, final String noun) {
         String result = "";
+        // To uppercase to be able to compare to enum constants to string
         verb = verb.toUpperCase();
-        if (StringUtils.equals(verb, GET.toString()) ||
-                StringUtils.equals(verb, TAKE.toString())) {
+        if (StringUtils.equals(verb, GET.toString()) || StringUtils.equals(verb, TAKE.toString())) {
             result = getItem(noun);
         } else if (StringUtils.equals(verb, FILL.toString())) {
             result = fill(noun);
-        } else if (StringUtils.equals(verb, INVENTORY.toString()) ||
-                StringUtils.equals(verb, I.toString()) ||
+        } else if (StringUtils.equals(verb, INVENTORY.toString()) || StringUtils.equals(verb, I.toString()) ||
                 StringUtils.equals(verb, INVEN.toString())) {
             result = takeInventory();
-        } else if (StringUtils.equals(verb, DROP.toString()) ||
-                StringUtils.equals(verb, THROW.toString())) {
+        } else if (StringUtils.equals(verb, DROP.toString()) || StringUtils.equals(verb, THROW.toString())) {
             result = dropItem(noun);
-        } else if (StringUtils.equals(verb, QUIT.toString()) ||
-                StringUtils.equals(verb, RESTART.toString())) {
-            GameState.getInstance().restartGame(null, new ArrayList<>());
+        } else if (StringUtils.equals(verb, QUIT.toString()) || StringUtils.equals(verb, RESTART.toString())) {
+            result = "Are you sure you want to " + (StringUtils.equals(verb, QUIT.toString()) ? "quit?" : "restart?");
+            return result;
+            // TODO return result, but also restart the game
+//            GameState.getInstance().restartGame();
         }
         return result;
     }

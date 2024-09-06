@@ -1,6 +1,6 @@
 package com.project.textadventure.game.Locations;
 
-import com.project.textadventure.constants.Constants;
+import com.project.textadventure.constants.GameConstants;
 import com.project.textadventure.constants.LocationDescriptions;
 import com.project.textadventure.constants.LocationNames;
 import com.project.textadventure.controllers.Action;
@@ -9,6 +9,7 @@ import com.project.textadventure.game.Item;
 
 import java.util.List;
 
+import static com.project.textadventure.constants.Actions.TURN;
 import static com.project.textadventure.game.Game.findLocation;
 
 public class Dam extends Location implements Action {
@@ -31,7 +32,7 @@ public class Dam extends Location implements Action {
 
     @Override
     public String takeAction(final String verb, final String noun) {
-        if (verb.equals("turn")) {
+        if (verb.equals(TURN.toString())) {
             return parseTurnCommand(noun);
         }
         else {
@@ -43,7 +44,7 @@ public class Dam extends Location implements Action {
         String response = "";
 
         // only "turn wheel" or "turn" does something at dam
-        if (noun == null || noun.equals(Constants.WHEEL)) {
+        if (noun == null || noun.equals(GameConstants.WHEEL)) {
             if (magnetDropped && !wheelTurned) {
                 response = turnWheel();
             }
@@ -66,7 +67,7 @@ public class Dam extends Location implements Action {
         // Find the edge of the graph (ConnectingLocation object) that connects the dam to the lake town and set the directions to down and west
         for(final ConnectingLocation connectingLocation : this.getConnectingLocations()) {
             if (connectingLocation.getLocation().getName().equals(LocationNames.LAKE_TOWN)) {
-                connectingLocation.setDirections(List.of(Constants.WEST_LONG, Constants.WEST_SHORT, Constants.DOWN_LONG, Constants.DOWN_SHORT));
+                connectingLocation.setDirections(List.of(GameConstants.WEST_LONG, GameConstants.WEST_SHORT, GameConstants.DOWN_LONG, GameConstants.DOWN_SHORT));
             }
         }
 
@@ -84,6 +85,6 @@ public class Dam extends Location implements Action {
 
         wheelTurned = true;
 
-        return Constants.LAKE_EMPTYING;
+        return GameConstants.LAKE_EMPTYING;
     }
 }

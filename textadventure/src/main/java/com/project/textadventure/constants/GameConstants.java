@@ -2,7 +2,7 @@ package com.project.textadventure.constants;
 
 import java.util.List;
 
-public class Constants {
+public class GameConstants {
     public static final String GAME_INTRO = "<p>You're on a mountain with several scattered mining towns. It's said that some of the mines are " +
             "still accessible, but you've also heard stories that the local miners report seeing " +
             "tommyknockers in some of them. I will be your eyes and hands. Use commands in the form " +

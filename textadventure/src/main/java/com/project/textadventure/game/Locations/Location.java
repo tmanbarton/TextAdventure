@@ -1,13 +1,12 @@
 package com.project.textadventure.game.Locations;
 
-import com.project.textadventure.constants.Constants;
+import com.project.textadventure.constants.GameConstants;
 import com.project.textadventure.constants.ItemConstants;
 import com.project.textadventure.constants.LocationNames;
 import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.*;
 import lombok.Data;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -94,7 +93,7 @@ public class Location implements Action {
     }
 
     boolean isDirection(final String input) {
-        return Constants.ALL_DIRECTIONS.contains(input);
+        return GameConstants.ALL_DIRECTIONS.contains(input);
     }
 
     private String move(final String direction) {

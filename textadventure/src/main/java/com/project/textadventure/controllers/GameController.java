@@ -1,6 +1,6 @@
 package com.project.textadventure.controllers;
 
-import com.project.textadventure.constants.Constants;
+import com.project.textadventure.constants.GameConstants;
 import com.project.textadventure.constants.LocationDescriptions;
 import com.project.textadventure.constants.LocationNames;
 import com.project.textadventure.constants.ResponseConstants;
@@ -60,10 +60,11 @@ public class GameController {
     }
 
     private List<Pair<String, String>> parseInput(final String input) {
+        // Split input on "and" and "then" to separate into multiple commands
         final String[] commands = input.split("and|then");
         final ArrayList<Pair<String, String>> parsedCommands = new ArrayList<>();
 
-        for(String command : commands) {
+        for (String command : commands) {
             // Remove any " the "s from the command
             command = command.replaceAll("\\Wthe\\W", " ");
             final String[] parsedCommand = command.trim().split(" ", 2);
@@ -96,7 +97,7 @@ public class GameController {
 
             currentLocation.setDescription(LocationDescriptions.MINE_ENTRANCE_RECENT_CAVE_IN);
             game.die();
-            return Constants.DEATH_BY_MINE_SHAFT;
+            return GameConstants.DEATH_BY_MINE_SHAFT;
         }
         else if (input.equals("n") || input.equals("no")) {
             ((MineEntrance) game.getCurrentLocation()).setTakingNails(false);
@@ -111,7 +112,7 @@ public class GameController {
         final Game game = GameState.getInstance().getGame();
         if (input.equals("yes") || input.equals("y")) {
             game.setPlayerMoved(true);
-            return Constants.GAME_INTRO + game.getCurrentLocation().getDescription();
+            return GameConstants.GAME_INTRO + game.getCurrentLocation().getDescription();
         }
         else if (input.equals("n") || input.equals("no")) {
             game.setPlayerMoved(true);

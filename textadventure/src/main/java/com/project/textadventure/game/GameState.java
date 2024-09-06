@@ -8,16 +8,11 @@ import com.project.textadventure.game.Locations.Location;
 import com.project.textadventure.game.Locations.MineEntrance;
 import com.project.textadventure.game.Locations.Shed;
 import com.project.textadventure.game.Locations.UndergroundLake;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
-import java.util.UUID;
 
-import static com.project.textadventure.constants.Constants.*;
+import static com.project.textadventure.constants.GameConstants.*;
 
 public class GameState {
     private static GameState instance;
@@ -37,12 +32,12 @@ public class GameState {
 
     public Game getGame() {
         if (game == null) {
-            game = initializeGame(null, new ArrayList<>());
+            game = initializeGame(false);
         }
         return game;
     }
 
-    Game initializeGame(@Nullable final Location currentLocation, @NonNull final List<Item> inventoryToDrop) {
+    Game initializeGame(final boolean playerMoved) {
         // Create items for locations
         final Item key = new Item(1, ItemConstants.KEY_LOCATION_DESCRIPTION, ItemConstants.KEY_INVENTORY_DESCRIPTION, ItemConstants.KEY_NAME);
         final Item gold = new Item(6, ItemConstants.GOLD_LOCATION_DESCRIPTION, ItemConstants.GOLD_INVENTORY_DESCRIPTION, ItemConstants.GOLD_NAME);
@@ -50,19 +45,13 @@ public class GameState {
         final Item ruby = new Item(11, ItemConstants.RUBY_LOCATION_DESCRIPTION, ItemConstants.RUBY_INVENTORY_DESCRIPTION, ItemConstants.RUBY_NAME);
 
         // Initialize lists for respective location's items. If the game is already in progress, don't add the item to the location, otherwise add it
-//        final List<Item> ditchItems = this.game != null && this.game.getInventoryItemByName(ItemKEY_NAME) != null && (currentLocation == null || !inventory.contains(key)) ?
-//                new ArrayList<>() : new ArrayList<>(List.of(key));//todo fix logic
-        final List<Item> ditchItems;
-        // Don't add item to location if it's in the inventory (player died with items in inventory)
-        if (this.game != null && inventoryToDrop.contains(key)) {
-            ditchItems = new ArrayList<>();
-        } else {
-            ditchItems = new ArrayList<>(List.of(key));
-        }
+        final List<Item> ditchItems = this.game != null &&
+                this.game.getInventoryItemByName(ItemConstants.KEY_NAME) != null ?
+                new ArrayList<>() : new ArrayList<>(List.of(key));
         final List<Item> mineEntranceItems = this.game != null && this.game.getInventoryItemByName(ItemConstants.GOLD_NAME) != null ?
-                new ArrayList<>() : new ArrayList<>(List.of(gold));
+                new ArrayList<>() :  new ArrayList<>(List.of(gold));
         final List<Item> logCabinItems = this.game != null && this.game.getInventoryItemByName(ItemConstants.MAGNET_NAME) != null ?
-                new ArrayList<>() : new ArrayList<>(List.of(magnet));
+                new ArrayList<>() :  new ArrayList<>(List.of(magnet));
         final List<Item> crumpledMineCartItems = this.game != null && this.game.getInventoryItemByName(ItemConstants.RUBY_NAME) != null ?
                 new ArrayList<>() : new ArrayList<>(List.of(ruby));
 
@@ -220,10 +209,10 @@ public class GameState {
 //        return game;
         /////
 
-        return new Game(new ArrayList<>(), driveway, false);
+        return new Game(new ArrayList<>(), driveway, playerMoved);
     }
 
-    public void restartGame(@Nullable final Location currentLocation, @NonNull final List<Item> inventoryToDrop) {
-        this.game = initializeGame(currentLocation, inventoryToDrop);
+    public void restartGame() {
+        this.game = initializeGame(true);
     }
 }
