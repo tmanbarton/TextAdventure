@@ -4,9 +4,12 @@ import com.project.textadventure.constants.ItemConstants;
 import com.project.textadventure.constants.LocationNames;
 import com.project.textadventure.constants.ResponseConstants;
 import com.project.textadventure.controllers.Action;
-import com.project.textadventure.game.Locations.Dam;
-import com.project.textadventure.game.Locations.Location;
-import com.project.textadventure.game.Locations.MineEntrance;
+import com.project.textadventure.controllers.GameStatus;
+import com.project.textadventure.game.Graph.LocationConnection;
+import com.project.textadventure.game.Graph.Dam;
+import com.project.textadventure.game.Graph.Item;
+import com.project.textadventure.game.Graph.Location;
+import com.project.textadventure.game.Graph.MineEntrance;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -30,20 +33,20 @@ import static com.project.textadventure.constants.Actions.THROW;
 public class Game implements Action, Comparator<Item> {
     private List<Item> inventory;
     private Location currentLocation;
-    private boolean playerMoved;
+    private GameStatus gameStatus;
     final private boolean takingNails = false;
 
 
-    public Game(final List<Item> inventory, final Location currentLocation, final boolean playerMoved) {
+    public Game(final List<Item> inventory, final Location currentLocation, final GameStatus status) {
         this.inventory = inventory;
         this.currentLocation = currentLocation;
-        this.playerMoved = playerMoved;
+        this.gameStatus = status;
     }
 
     public Game() {}
 
-    public boolean hasPlayerMoved() {
-        return playerMoved;
+    public GameStatus getGameStatus() {
+        return gameStatus;
     }
 
     public Item getInventoryItemByName(final String name) {
@@ -95,9 +98,7 @@ public class Game implements Action, Comparator<Item> {
             result = dropItem(noun);
         } else if (StringUtils.equals(verb, QUIT.toString()) || StringUtils.equals(verb, RESTART.toString())) {
             result = "Are you sure you want to " + (StringUtils.equals(verb, QUIT.toString()) ? "quit?" : "restart?");
-            return result;
-            // TODO return result, but also restart the game
-//            GameState.getInstance().restartGame();
+            gameStatus = GameStatus.QUITTING;
         }
         return result;
     }
@@ -117,7 +118,7 @@ public class Game implements Action, Comparator<Item> {
         }
         else if (noun.equals(ItemConstants.NAILS_NAME) && currentLocation instanceof MineEntrance && !((MineEntrance) currentLocation).areNailsOff()) {
             result = "Are you sure you want to get the nails? The structure is very fragile and may fall apart and onto you.";
-            ((MineEntrance) currentLocation).setTakingNails(true);
+            GameState.getInstance().getGame().setGameStatus(GameStatus.GETTING_NAILS);
         }
         else if (!currentLocation.isItemAtLocation(noun)) {
             result = "I don't see that here.";
@@ -218,6 +219,10 @@ public class Game implements Action, Comparator<Item> {
      * by setting current location to dirt road
      */
     public void die() {
+        // Lose a life
+        GameState.setLifeCount(GameState.getInstance().getLifeCount() - 1);
+
+        // Drop everything from inventory at current location
         final List<Item> inventoryCopy = new ArrayList<>(inventory);
         for (final Item item : inventoryCopy) {
             removeItemFromInventory(item);
@@ -255,12 +260,12 @@ public class Game implements Action, Comparator<Item> {
             }
             current.bfsIsVisited = true;
             locationsVisited.add(current);
-            final List<ConnectingLocation> neighbors = current.getConnectingLocations();
+            final List<LocationConnection> neighbors = current.getLocationConnections();
 
             if (neighbors == null) {
                 continue;
             }
-            for (final ConnectingLocation neighbor : neighbors) {
+            for (final LocationConnection neighbor : neighbors) {
                 if (!neighbor.getLocation().bfsIsVisited) {
                     queue.add(neighbor.getLocation());
                 }

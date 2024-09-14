@@ -3,11 +3,14 @@ package com.project.textadventure.game;
 import com.project.textadventure.constants.ItemConstants;
 import com.project.textadventure.constants.LocationDescriptions;
 import com.project.textadventure.constants.LocationNames;
-import com.project.textadventure.game.Locations.Dam;
-import com.project.textadventure.game.Locations.Location;
-import com.project.textadventure.game.Locations.MineEntrance;
-import com.project.textadventure.game.Locations.Shed;
-import com.project.textadventure.game.Locations.UndergroundLake;
+import com.project.textadventure.controllers.GameStatus;
+import com.project.textadventure.game.Graph.LocationConnection;
+import com.project.textadventure.game.Graph.Dam;
+import com.project.textadventure.game.Graph.Item;
+import com.project.textadventure.game.Graph.Location;
+import com.project.textadventure.game.Graph.MineEntrance;
+import com.project.textadventure.game.Graph.Shed;
+import com.project.textadventure.game.Graph.UndergroundLake;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +22,7 @@ public class GameState {
     private Game game;
 
     public static Location startLocation;
+    public static int lifeCount;
 
     private GameState() {
     }
@@ -32,12 +36,20 @@ public class GameState {
 
     public Game getGame() {
         if (game == null) {
-            game = initializeGame(false);
+            game = initializeGame(GameStatus.NEW);
         }
         return game;
     }
 
-    Game initializeGame(final boolean playerMoved) {
+    public int getLifeCount() {
+        return lifeCount;
+    }
+
+    public static void setLifeCount(int lifeCount) {
+        GameState.lifeCount = lifeCount;
+    }
+
+    Game initializeGame(final GameStatus status) {
         // Create items for locations
         final Item key = new Item(1, ItemConstants.KEY_LOCATION_DESCRIPTION, ItemConstants.KEY_INVENTORY_DESCRIPTION, ItemConstants.KEY_NAME);
         final Item gold = new Item(6, ItemConstants.GOLD_LOCATION_DESCRIPTION, ItemConstants.GOLD_INVENTORY_DESCRIPTION, ItemConstants.GOLD_NAME);
@@ -45,15 +57,10 @@ public class GameState {
         final Item ruby = new Item(11, ItemConstants.RUBY_LOCATION_DESCRIPTION, ItemConstants.RUBY_INVENTORY_DESCRIPTION, ItemConstants.RUBY_NAME);
 
         // Initialize lists for respective location's items. If the game is already in progress, don't add the item to the location, otherwise add it
-        final List<Item> ditchItems = this.game != null &&
-                this.game.getInventoryItemByName(ItemConstants.KEY_NAME) != null ?
-                new ArrayList<>() : new ArrayList<>(List.of(key));
-        final List<Item> mineEntranceItems = this.game != null && this.game.getInventoryItemByName(ItemConstants.GOLD_NAME) != null ?
-                new ArrayList<>() :  new ArrayList<>(List.of(gold));
-        final List<Item> logCabinItems = this.game != null && this.game.getInventoryItemByName(ItemConstants.MAGNET_NAME) != null ?
-                new ArrayList<>() :  new ArrayList<>(List.of(magnet));
-        final List<Item> crumpledMineCartItems = this.game != null && this.game.getInventoryItemByName(ItemConstants.RUBY_NAME) != null ?
-                new ArrayList<>() : new ArrayList<>(List.of(ruby));
+        final List<Item> ditchItems = new ArrayList<>(List.of(key));
+        final List<Item> mineEntranceItems =  new ArrayList<>(List.of(gold));
+        final List<Item> logCabinItems =  new ArrayList<>(List.of(magnet));
+        final List<Item> crumpledMineCartItems = new ArrayList<>(List.of(ruby));
 
         // Create all the locations for the game
         final Location antHill =                    new Location(LocationDescriptions.ANT_HILL_LONG_DESCRIPTION, LocationDescriptions.ANT_HILL_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.ANT_HILL);
@@ -100,98 +107,100 @@ public class GameState {
         final UndergroundLake undergroundLakeWest = new UndergroundLake(LocationDescriptions.UNDERGROUND_LAKE_WEST_LONG_DESCRIPTION, LocationDescriptions.UNDERGROUND_LAKE_WEST_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.UNDERGROUND_LAKE_WEST, true);
 
         // Connect all the locations together with directions to create a graph
-        antHill.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT), ditch));
-        archeryRange.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT), ditch));
-        archeryRange.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT), privateProperty));
-        boat.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT), undergroundLakeWest));
-        boat.connectLocation(new ConnectingLocation(List.of(NE_LONG, NE_SHORT), undergroundLakeNE));
-        boat.connectLocation(new ConnectingLocation(List.of(SE_LONG, SE_SHORT), undergroundLakeSE));
-        bottomOfVerticalMineShaft.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT), dankPassage));
+        antHill.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT), ditch));
+        archeryRange.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT), ditch));
+        archeryRange.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), privateProperty));
+        boat.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT), undergroundLakeWest));
+        boat.connectLocation(new LocationConnection(List.of(NE_LONG, NE_SHORT), undergroundLakeNE));
+        boat.connectLocation(new LocationConnection(List.of(SE_LONG, SE_SHORT), undergroundLakeSE));
+        bottomOfVerticalMineShaft.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT), dankPassage));
 //        bottomOfVerticalMineShaft.connectLocation.(new ConnectingLocation(List.of(IN, ENTER), mine cage));
-        brokenRock.connectLocation(new ConnectingLocation(List.of(DOWN_LONG, DOWN_SHORT), dirtyPassage));
-        crumpledMineCart.connectLocation(new ConnectingLocation(List.of(UP_LONG, UP_SHORT), dynamiteHoles));
-        dam.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT, UP_LONG, UP_SHORT), topOfStairs));
-        dam.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT), lake));
-        dam.connectLocation(new ConnectingLocation(new ArrayList<>(), lakeTown));
-        dankPassage.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT), narrowCorridor));
-        dankPassage.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT), bottomOfVerticalMineShaft));
-        dankPassage.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT), mustyBend));
-        dirtRoad.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT), intersection));
-        dirtRoad.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT), driveway));
-        dirtyPassage.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT), narrowCorridor));
-        dirtyPassage.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT), undergroundLakeNE));
-        dirtyPassage.connectLocation(new ConnectingLocation(List.of(UP_LONG, UP_SHORT), brokenRock));
-        ditch.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT), archeryRange));
-        ditch.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT), antHill));
-        ditch.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT), lightningTree));
-        driveway.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT, DOWN_LONG, DOWN_SHORT), privateProperty));
-        driveway.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT), dirtRoad));
-        driveway.connectLocation(new ConnectingLocation(List.of(NW_LONG, NW_SHORT), footPath));
-        dynamiteHoles.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT), mustyBend));
-        dynamiteHoles.connectLocation(new ConnectingLocation(List.of(SW_LONG, SW_SHORT, UP_LONG, UP_SHORT), narrowCorridor));
-        dynamiteHoles.connectLocation(new ConnectingLocation(List.of(DOWN_LONG, DOWN_SHORT), crumpledMineCart));
-        eastEndOfSideStreet.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT), roadInValley));
-        eastEndOfSideStreet.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT), outsideTavern));
-        eastEndOfSideStreet.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT), topOfStairs));
-        fieldsOfGrass.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT), roadInValley));
-        fieldsOfGrass.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT), mountainPass));
-        fieldsOfGrass.connectLocation(new ConnectingLocation(List.of(UP_LONG, UP_SHORT), mountainPass));
-        footPath.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT), driveway));
-        footPath.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT), topOfHill));
-        graniteRoom.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT), undergroundLakeSE));
-        graniteRoom.connectLocation(new ConnectingLocation(List.of(OUT, EXIT), undergroundLakeSE));
-        insideLogCabin.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT, OUT, EXIT), outsideLogCabin));
-        insideLogCabin.connectLocation(new ConnectingLocation(List.of(UP_LONG, UP_SHORT), upstairsLogCabin));
-        intersection.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT, UP_LONG, UP_SHORT), topOfHill));
-        intersection.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT), tailings));
-        intersection.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT), dirtRoad));
-        insideTavern.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT, OUT, EXIT), outsideTavern));
-        lake.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT), dam));
-        lake.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT), tailings));
-        lakeTown.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT, UP_LONG, UP_SHORT), dam));
+        brokenRock.connectLocation(new LocationConnection(List.of(DOWN_LONG, DOWN_SHORT), dirtyPassage));
+        crumpledMineCart.connectLocation(new LocationConnection(List.of(UP_LONG, UP_SHORT), dynamiteHoles));
+        dam.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT, UP_LONG, UP_SHORT), topOfStairs));
+        dam.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), lake));
+        dam.connectLocation(new LocationConnection(new ArrayList<>(), lakeTown));
+        dankPassage.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), narrowCorridor));
+        dankPassage.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), bottomOfVerticalMineShaft));
+        dankPassage.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT), mustyBend));
+        dirtRoad.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), intersection));
+        dirtRoad.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT), driveway));
+        dirtyPassage.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), narrowCorridor));
+        dirtyPassage.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT), undergroundLakeNE));
+        dirtyPassage.connectLocation(new LocationConnection(List.of(UP_LONG, UP_SHORT), brokenRock));
+        ditch.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), archeryRange));
+        ditch.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), antHill));
+        ditch.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT), lightningTree));
+        driveway.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT, DOWN_LONG, DOWN_SHORT), privateProperty));
+        driveway.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), dirtRoad));
+        driveway.connectLocation(new LocationConnection(List.of(NW_LONG, NW_SHORT), footPath));
+        dynamiteHoles.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT), mustyBend));
+        dynamiteHoles.connectLocation(new LocationConnection(List.of(SW_LONG, SW_SHORT, UP_LONG, UP_SHORT), narrowCorridor));
+        dynamiteHoles.connectLocation(new LocationConnection(List.of(DOWN_LONG, DOWN_SHORT), crumpledMineCart));
+        eastEndOfSideStreet.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT), roadInValley));
+        eastEndOfSideStreet.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), outsideTavern));
+        eastEndOfSideStreet.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT), topOfStairs));
+        fieldsOfGrass.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), roadInValley));
+        fieldsOfGrass.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT), mountainPass));
+        fieldsOfGrass.connectLocation(new LocationConnection(List.of(UP_LONG, UP_SHORT), mountainPass));
+        footPath.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), driveway));
+        footPath.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), topOfHill));
+        graniteRoom.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT), undergroundLakeSE));
+        graniteRoom.connectLocation(new LocationConnection(List.of(OUT, EXIT), undergroundLakeSE));
+        insideLogCabin.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT, OUT, EXIT), outsideLogCabin));
+        insideLogCabin.connectLocation(new LocationConnection(List.of(UP_LONG, UP_SHORT), upstairsLogCabin));
+        intersection.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT, UP_LONG, UP_SHORT), topOfHill));
+        intersection.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), tailings));
+        intersection.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT), dirtRoad));
+        insideTavern.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT, OUT, EXIT), outsideTavern));
+        lake.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT), dam));
+        lake.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT), tailings));
+        lakeTown.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT, UP_LONG, UP_SHORT), dam));
 //        lakeTown.connectLocation(new ConnectingLocation(List.of(WEST, W), farther into the town));
-        lightningTree.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT), ditch));
-        mineShaft.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT), undergroundLakeWest));
-        mineShaft.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT, OUT, EXIT), mineEntrance));
-        mineEntrance.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT), tailings));
-        mineEntrance.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT, IN, ENTER), mineShaft));
-        mountainPass.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT, DOWN_LONG, DOWN_SHORT), fieldsOfGrass));
+        lightningTree.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), ditch));
+        mineShaft.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), undergroundLakeWest));
+        mineShaft.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT, OUT, EXIT), mineEntrance));
+        mineEntrance.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT), tailings));
+        mineEntrance.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT, IN, ENTER), mineShaft));
+        mountainPass.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT, DOWN_LONG, DOWN_SHORT), fieldsOfGrass));
 //        mountainPass.connectLocation(new ConnectingLocation(List.of(WEST, W), mine cage));
-        mustyBend.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT), dynamiteHoles));
-        mustyBend.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT), dankPassage));
-        narrowCorridor.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT), dankPassage));
-        narrowCorridor.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT), dirtyPassage));
-        narrowCorridor.connectLocation(new ConnectingLocation(List.of(NE_LONG, NE_SHORT, DOWN_LONG, DOWN_SHORT), dynamiteHoles));
-        outsideLogCabin.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT), westEndOfSideStreet));
-        outsideLogCabin.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT, IN, ENTER), insideLogCabin));
-        outsideTavern.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT), eastEndOfSideStreet));
+        mustyBend.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), dynamiteHoles));
+        mustyBend.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), dankPassage));
+        narrowCorridor.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT), dankPassage));
+        narrowCorridor.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT), dirtyPassage));
+        narrowCorridor.connectLocation(new LocationConnection(List.of(NE_LONG, NE_SHORT, DOWN_LONG, DOWN_SHORT), dynamiteHoles));
+        outsideLogCabin.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), westEndOfSideStreet));
+        outsideLogCabin.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT, IN, ENTER), insideLogCabin));
+        outsideTavern.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT), eastEndOfSideStreet));
 //        outsideTavern.connectLocation(new ConnectingLocation(List.of(SOUTH, S), head towards colorado springs?));
-        outsideTavern.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT, IN, ENTER), insideTavern));
-        picnicTable.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT), shed));
-        picnicTable.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT), privateProperty));
-        privateProperty.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT), archeryRange));
-        privateProperty.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT, UP_LONG, UP_SHORT), driveway));
-        privateProperty.connectLocation(new ConnectingLocation(List.of(NE_LONG, NE_SHORT), picnicTable));
-        roadInValley.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT), fieldsOfGrass));
-        roadInValley.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT), eastEndOfSideStreet));
-        shed.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT), picnicTable));
-        tailings.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT), mineEntrance));
-        tailings.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT), lake));
-        tailings.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT), intersection));
-        topOfHill.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT, DOWN_LONG, DOWN_SHORT), intersection));
-        topOfHill.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT), footPath));
-        topOfStairs.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT, DOWN_LONG, DOWN_SHORT), dam));
-        topOfStairs.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT), eastEndOfSideStreet));
-        topOfStairs.connectLocation(new ConnectingLocation(List.of(WEST_LONG, WEST_SHORT), westEndOfSideStreet));
-        undergroundLakeWest.connectLocation(new ConnectingLocation(List.of(SOUTH_LONG, SOUTH_SHORT), mineShaft));
-        undergroundLakeWest.connectLocation(new ConnectingLocation(List.of(IN, ENTER), boat));
-        undergroundLakeNE.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT), dirtyPassage));
-        undergroundLakeNE.connectLocation(new ConnectingLocation(List.of(IN, ENTER), boat));
-        undergroundLakeSE.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT), graniteRoom));
-        undergroundLakeSE.connectLocation(new ConnectingLocation(List.of(IN, ENTER), boat));
-        upstairsLogCabin.connectLocation(new ConnectingLocation(List.of(DOWN_LONG, DOWN_SHORT), insideLogCabin));
-        westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of(NORTH_LONG, NORTH_SHORT), outsideLogCabin));
-        westEndOfSideStreet.connectLocation(new ConnectingLocation(List.of(EAST_LONG, EAST_SHORT), topOfStairs));
+        outsideTavern.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT, IN, ENTER), insideTavern));
+        picnicTable.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT), shed));
+        picnicTable.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), privateProperty));
+        privateProperty.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT), archeryRange));
+        privateProperty.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT, UP_LONG, UP_SHORT), driveway));
+        privateProperty.connectLocation(new LocationConnection(List.of(NE_LONG, NE_SHORT), picnicTable));
+        roadInValley.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT), fieldsOfGrass));
+        roadInValley.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), eastEndOfSideStreet));
+        shed.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), picnicTable));
+        tailings.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), mineEntrance));
+        tailings.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), lake));
+        tailings.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT), intersection));
+        topOfHill.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT, DOWN_LONG, DOWN_SHORT), intersection));
+        topOfHill.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT), footPath));
+        topOfStairs.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT, DOWN_LONG, DOWN_SHORT), dam));
+        topOfStairs.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), eastEndOfSideStreet));
+        topOfStairs.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT), westEndOfSideStreet));
+        undergroundLakeWest.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), mineShaft));
+        undergroundLakeWest.connectLocation(new LocationConnection(List.of(IN, ENTER), boat));
+        undergroundLakeNE.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), dirtyPassage));
+        undergroundLakeNE.connectLocation(new LocationConnection(List.of(IN, ENTER), boat));
+        undergroundLakeSE.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), graniteRoom));
+        undergroundLakeSE.connectLocation(new LocationConnection(List.of(IN, ENTER), boat));
+        upstairsLogCabin.connectLocation(new LocationConnection(List.of(DOWN_LONG, DOWN_SHORT), insideLogCabin));
+        westEndOfSideStreet.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT), outsideLogCabin));
+        westEndOfSideStreet.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), topOfStairs));
+
+        lifeCount = 3;
 
         // Set start location by setting it as visited and creating a new Game object with that location as the current location
         // Initialize member variable startLocation so it's available to other classes
@@ -209,10 +218,11 @@ public class GameState {
 //        return game;
         /////
 
-        return new Game(new ArrayList<>(), driveway, playerMoved);
+        return new Game(new ArrayList<>(), driveway, status);
     }
 
-    public void restartGame() {
-        this.game = initializeGame(true);
+    public String restartGame() {
+        this.game = initializeGame(GameStatus.IN_PROGRESS);
+        return this.game.getCurrentLocation().getDescription();
     }
 }

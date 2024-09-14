@@ -1,11 +1,9 @@
-package com.project.textadventure.game.Locations;
+package com.project.textadventure.game.Graph;
 
 import com.project.textadventure.constants.ItemConstants;
 import com.project.textadventure.controllers.Action;
-import com.project.textadventure.game.ConnectingLocation;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
-import com.project.textadventure.game.Item;
 
 import java.util.List;
 
@@ -17,7 +15,7 @@ public class Shed extends Location implements Action {
     public Shed(final String description,
                 final String shortDescription,
                 final List<Item> items,
-                final List<ConnectingLocation> connectingLocations,
+                final List<LocationConnection> locationConnections,
                 final boolean visited,
                 final String name,
                 final boolean unlocked,
@@ -25,7 +23,7 @@ public class Shed extends Location implements Action {
         super(description,
                 shortDescription,
                 items,
-                connectingLocations,
+                locationConnections,
                 visited,
                 name);
         this.unlocked = unlocked;

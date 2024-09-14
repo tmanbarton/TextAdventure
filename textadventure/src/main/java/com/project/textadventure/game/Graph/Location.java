@@ -1,4 +1,4 @@
-package com.project.textadventure.game.Locations;
+package com.project.textadventure.game.Graph;
 
 import com.project.textadventure.constants.GameConstants;
 import com.project.textadventure.constants.ItemConstants;
@@ -17,7 +17,7 @@ import static com.project.textadventure.game.Game.generateRandomUnknownCommandRe
 public class Location implements Action {
     private String description;
     private List<Item> items;
-    private List<ConnectingLocation> connectingLocations;
+    private List<LocationConnection> locationConnections;
     private boolean visited;
     public boolean bfsIsVisited;
     private String name;
@@ -28,12 +28,12 @@ public class Location implements Action {
             final String fullDescription,
             final String shortDescription,
             final List<Item> items,
-            final List<ConnectingLocation> connectingLocations,
+            final List<LocationConnection> locationConnections,
             final boolean visited,
             final String name) {
         this.description = fullDescription;
         this.items = items;
-        this.connectingLocations = connectingLocations;
+        this.locationConnections = locationConnections;
         this.visited = visited;
         this.name = name;
         this.shortDescription = shortDescription;
@@ -42,8 +42,8 @@ public class Location implements Action {
 
     public Location() {}
 
-    public void connectLocation(final ConnectingLocation locationToConnect) {
-        this.connectingLocations.add(locationToConnect);
+    public void connectLocation(final LocationConnection locationToConnect) {
+        this.locationConnections.add(locationToConnect);
     }
 
     public Item getLocationItemByName(final String name) {
@@ -99,7 +99,7 @@ public class Location implements Action {
     private String move(final String direction) {
         final Game game = GameState.getInstance().getGame();
         final Location currentLocation = game.getCurrentLocation();
-        final Optional<ConnectingLocation> optionalConnection = currentLocation.getConnectingLocations()
+        final Optional<LocationConnection> optionalConnection = currentLocation.getLocationConnections()
                 .stream()
                 .filter(connectingLocation -> connectingLocation.getDirections().contains(direction))
                 .findFirst();
@@ -107,15 +107,15 @@ public class Location implements Action {
         if (optionalConnection.isEmpty()) {
             return "You can't go that way.";
         }
-        final ConnectingLocation connectingLocation = optionalConnection.get();
+        final LocationConnection locationConnection = optionalConnection.get();
         if (currentLocation instanceof UndergroundLake && ((UndergroundLake) currentLocation).boatAtLocation) {
-            return moveToLocation(connectingLocation);
+            return moveToLocation(locationConnection);
         }
-        return moveToLocation(connectingLocation);
+        return moveToLocation(locationConnection);
     }
 
-    private String moveToLocation(final ConnectingLocation connectingLocation) {
-        final Location connection = connectingLocation.getLocation();
+    private String moveToLocation(final LocationConnection locationConnection) {
+        final Location connection = locationConnection.getLocation();
         final Game game = GameState.getInstance().getGame();
         game.setCurrentLocation(connection);
 

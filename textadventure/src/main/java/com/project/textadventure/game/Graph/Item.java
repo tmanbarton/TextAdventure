@@ -1,4 +1,4 @@
-package com.project.textadventure.game;
+package com.project.textadventure.game.Graph;
 
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;

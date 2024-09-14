@@ -1,15 +1,14 @@
-package com.project.textadventure.game;
+package com.project.textadventure.game.Graph;
 
-import com.project.textadventure.game.Locations.Location;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class ConnectingLocation {
+public class LocationConnection {
     private List<String> directions;
     private final Location location;
-    public ConnectingLocation(final List<String> directions, final Location location) {
+    public LocationConnection(final List<String> directions, final Location location) {
         this.directions = directions;
         this.location = location;
     }

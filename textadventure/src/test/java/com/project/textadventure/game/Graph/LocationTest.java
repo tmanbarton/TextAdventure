@@ -1,7 +1,5 @@
-package com.project.textadventure.game.Locations;
+package com.project.textadventure.game.Graph;
 
-import com.project.textadventure.game.ConnectingLocation;
-import com.project.textadventure.game.Item;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -50,10 +48,10 @@ public class LocationTest {
     void testConnectLocations() {
         Location location1 = new Location("full desc1", "short desc1", new ArrayList<>(), new ArrayList<>(), false, "name1");
         Location location2 = new Location("full desc2", "short desc2", new ArrayList<>(), new ArrayList<>(), false, "name2");
-        ConnectingLocation expected = new ConnectingLocation(List.of("east"), location2);
+        LocationConnection expected = new LocationConnection(List.of("east"), location2);
 
         location1.connectLocation(expected);
-        ConnectingLocation actual = location1.getConnectingLocations().get(0);
+        LocationConnection actual = location1.getLocationConnections().get(0);
 
         assertEquals(expected, actual, "location1's connectingLocations ArrayList should contain the location that expected ConnectingLocation object.");
     }

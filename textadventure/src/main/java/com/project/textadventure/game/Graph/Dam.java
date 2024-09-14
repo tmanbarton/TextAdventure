@@ -1,11 +1,9 @@
-package com.project.textadventure.game.Locations;
+package com.project.textadventure.game.Graph;
 
 import com.project.textadventure.constants.GameConstants;
 import com.project.textadventure.constants.LocationDescriptions;
 import com.project.textadventure.constants.LocationNames;
 import com.project.textadventure.controllers.Action;
-import com.project.textadventure.game.ConnectingLocation;
-import com.project.textadventure.game.Item;
 
 import java.util.List;
 
@@ -16,8 +14,8 @@ public class Dam extends Location implements Action {
     private boolean wheelTurned;
     private boolean magnetDropped;
 
-    public Dam(final String fullDescription, final String shortDescription, final List<Item> items, final List<ConnectingLocation> connectingLocations, final boolean visited, final String name, final boolean wheelTurned, final boolean magnetDropped) {
-        super(fullDescription, shortDescription, items, connectingLocations, visited, name);
+    public Dam(final String fullDescription, final String shortDescription, final List<Item> items, final List<LocationConnection> locationConnections, final boolean visited, final String name, final boolean wheelTurned, final boolean magnetDropped) {
+        super(fullDescription, shortDescription, items, locationConnections, visited, name);
         this.wheelTurned = wheelTurned;
         this.magnetDropped = magnetDropped;
     }
@@ -65,9 +63,9 @@ public class Dam extends Location implements Action {
      */
     public String turnWheel() {
         // Find the edge of the graph (ConnectingLocation object) that connects the dam to the lake town and set the directions to down and west
-        for(final ConnectingLocation connectingLocation : this.getConnectingLocations()) {
-            if (connectingLocation.getLocation().getName().equals(LocationNames.LAKE_TOWN)) {
-                connectingLocation.setDirections(List.of(GameConstants.WEST_LONG, GameConstants.WEST_SHORT, GameConstants.DOWN_LONG, GameConstants.DOWN_SHORT));
+        for(final LocationConnection locationConnection : this.getLocationConnections()) {
+            if (locationConnection.getLocation().getName().equals(LocationNames.LAKE_TOWN)) {
+                locationConnection.setDirections(List.of(GameConstants.WEST_LONG, GameConstants.WEST_SHORT, GameConstants.DOWN_LONG, GameConstants.DOWN_SHORT));
             }
         }
 

@@ -1,11 +1,9 @@
-package com.project.textadventure.game.Locations;
+package com.project.textadventure.game.Graph;
 
 import com.project.textadventure.constants.ItemConstants;
 import com.project.textadventure.controllers.Action;
-import com.project.textadventure.game.ConnectingLocation;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
-import com.project.textadventure.game.Item;
 
 import java.util.List;
 
@@ -15,8 +13,8 @@ public class MineEntrance extends Location implements Action {
     private boolean nailsOff;
     private boolean takingNails;
 
-    public MineEntrance(final String description, final String shortDescription, final List<Item> items, final List<ConnectingLocation> connectingLocations, final boolean visited, final String name, final boolean nailsOff) {
-        super(description, shortDescription, items, connectingLocations, visited, name);
+    public MineEntrance(final String description, final String shortDescription, final List<Item> items, final List<LocationConnection> locationConnections, final boolean visited, final String name, final boolean nailsOff) {
+        super(description, shortDescription, items, locationConnections, visited, name);
         this.nailsOff = nailsOff;
         this.takingNails = false;
     }
@@ -84,12 +82,12 @@ public class MineEntrance extends Location implements Action {
         nailsOff = true;
 
         // 2 ways to get to mine shaft. Find and remove both
-        final List<ConnectingLocation> connectingLocations = currentLocation.getConnectingLocations();
-        connectingLocations.removeIf(location -> location.getLocation().getName().equals("mine shaft"));
+        final List<LocationConnection> locationConnections = currentLocation.getLocationConnections();
+        locationConnections.removeIf(location -> location.getLocation().getName().equals("mine shaft"));
 
-        for (final ConnectingLocation connectingLocation : currentLocation.getConnectingLocations()) {
-            if (connectingLocation.getLocation().getName().equals("mine shaft")) {
-                connectingLocation.getLocation().getConnectingLocations().removeIf(
+        for (final LocationConnection locationConnection : currentLocation.getLocationConnections()) {
+            if (locationConnection.getLocation().getName().equals("mine shaft")) {
+                locationConnection.getLocation().getLocationConnections().removeIf(
                         mineShaftLocation -> mineShaftLocation.getLocation().getName().equals("mine entrance")
                 );
             }
