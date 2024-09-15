@@ -16,17 +16,21 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
-import static com.project.textadventure.constants.Actions.DROP;
-import static com.project.textadventure.constants.Actions.FILL;
-import static com.project.textadventure.constants.Actions.GET;
-import static com.project.textadventure.constants.Actions.I;
-import static com.project.textadventure.constants.Actions.INVEN;
-import static com.project.textadventure.constants.Actions.INVENTORY;
-import static com.project.textadventure.constants.Actions.QUIT;
-import static com.project.textadventure.constants.Actions.RESTART;
-import static com.project.textadventure.constants.Actions.TAKE;
-import static com.project.textadventure.constants.Actions.THROW;
+import static com.project.textadventure.constants.GameConstants.DROP;
+import static com.project.textadventure.constants.GameConstants.FILL;
+import static com.project.textadventure.constants.GameConstants.GET;
+import static com.project.textadventure.constants.GameConstants.HELP;
+import static com.project.textadventure.constants.GameConstants.I;
+import static com.project.textadventure.constants.GameConstants.INFO;
+import static com.project.textadventure.constants.GameConstants.INVEN;
+import static com.project.textadventure.constants.GameConstants.INVENTORY;
+import static com.project.textadventure.constants.GameConstants.QUIT;
+import static com.project.textadventure.constants.GameConstants.RESTART;
+import static com.project.textadventure.constants.GameConstants.SCORE;
+import static com.project.textadventure.constants.GameConstants.TAKE;
+import static com.project.textadventure.constants.GameConstants.THROW;
 import static com.project.textadventure.constants.GameConstants.DEATH_BY_MINE_SHAFT;
+import static com.project.textadventure.constants.ResponseConstants.INFO_RESPONSE;
 
 
 @Getter
@@ -62,12 +66,20 @@ public class Game implements Action, Comparator<Item> {
     }
 
     public void addItemToInventory(final Item item) {
+        // Add points to score if the item has points associated with it
+        if (item.getPoints() > 0) {
+            GameState.getInstance().incrementScore(item.getPoints());
+        }
         inventory.add(item);
         inventory.sort(new Game());
     }
 
     public void removeItemFromInventory(final Item item) {
         inventory.remove(item);
+        // Remove points from score if the item has points associated with it
+        if (item.getPoints() > 0) {
+            GameState.getInstance().decrementScore(item.getPoints());
+        }
     }
 
     public static String generateRandomUnknownCommandResponse() {
@@ -80,57 +92,67 @@ public class Game implements Action, Comparator<Item> {
         };
     }
 
-    // "quit", "score", "info", "restart"
     @Override
     public String takeAction(String verb, final String noun) {
         String result = "";
         // To uppercase to be able to compare to enum constants to string
-        verb = verb.toUpperCase();
-        if (StringUtils.equals(verb, GET.toString()) || StringUtils.equals(verb, TAKE.toString())) {
+        verb = verb.toLowerCase();
+        if (StringUtils.equals(verb, GET) || StringUtils.equals(verb, TAKE)) {
             result = getItem(noun);
-        } else if (StringUtils.equals(verb, FILL.toString())) {
+        } else if (StringUtils.equals(verb, FILL)) {
             result = fill(noun);
-        } else if (StringUtils.equals(verb, INVENTORY.toString()) || StringUtils.equals(verb, I.toString()) ||
-                StringUtils.equals(verb, INVEN.toString())) {
+        } else if (StringUtils.equals(verb, INVENTORY) || StringUtils.equals(verb, I) ||
+                StringUtils.equals(verb, INVEN)) {
             result = takeInventory();
-        } else if (StringUtils.equals(verb, DROP.toString()) || StringUtils.equals(verb, THROW.toString())) {
+        } else if (StringUtils.equals(verb, DROP) || StringUtils.equals(verb, THROW)) {
             result = dropItem(noun);
-        } else if (StringUtils.equals(verb, QUIT.toString()) || StringUtils.equals(verb, RESTART.toString())) {
-            result = "Are you sure you want to " + (StringUtils.equals(verb, QUIT.toString()) ? "quit?" : "restart?");
+        } else if (StringUtils.equals(verb, QUIT) || StringUtils.equals(verb, RESTART)) {
+            result = "Are you sure you want to " + (StringUtils.equals(verb, QUIT) ? "quit?" : "restart?");
             gameStatus = GameStatus.QUITTING;
+        } else if (StringUtils.equals(verb, SCORE)) {
+            return "Your score: " + GameState.getInstance().getScore();
+        } else if (StringUtils.equals(verb, INFO)) {
+            return INFO_RESPONSE;
+        } else if (StringUtils.equals(verb, HELP)) {
+            return ResponseConstants.HELP_RESPONSE;
         }
         return result;
     }
 
-    private String getItem(final String noun) {
-        if (noun == null) {
+    /**
+     * Add item to inventory and/or do any special handling for specific items at specific locations
+     * @param itermName item to get
+     * @return response to user
+     */
+    private String getItem(final String itermName) {
+        if (itermName == null) {
             return ResponseConstants.WHAT_DO_YOU_WANT_TO_GET;
         }
         String result = "";
-        final Item item = currentLocation.getLocationItemByName(noun);
+        final Item item = currentLocation.getLocationItemByName(itermName);
         final Item jar = getInventoryItemByName(ItemConstants.JAR_NAME);
-        if (getInventoryItemByName(noun) != null) {
+
+        if (item == null) {
+            result = "I don't see that here.";
+        } else if (getInventoryItemByName(itermName) != null) {
             result = ResponseConstants.ALREADY_CARRYING;
 
-        } else if (noun.equals(ItemConstants.MAGNET_NAME) && currentLocation instanceof Dam && ((Dam) currentLocation).isMagnetDropped()) {
+        } else if (itermName.equals(ItemConstants.MAGNET_NAME) && currentLocation instanceof Dam && ((Dam) currentLocation).isMagnetDropped()) {
             result = "The magnet is firmly attached to the wheel";
 
-        } else if (noun.equals(ItemConstants.NAILS_NAME) && currentLocation instanceof MineEntrance && !((MineEntrance) currentLocation).areNailsOff()) {
+        } else if (itermName.equals(ItemConstants.NAILS_NAME) && currentLocation instanceof MineEntrance && !((MineEntrance) currentLocation).areNailsOff()) {
             if (((MineEntrance) currentLocation).isCollapsed()) {
                 // The user has previously taken the nails by hand instead of shot them with the arrow as intended, and they are now inaccessible
-                result = "The nails are buried under rubble from the collapsed mine. You can't get to them.";
+                result = "The nails are buried under rubble from the collapsed mine; you can't get to them.";
             } else {
                 // If it hasn't collapsed, they haven't taken the nails at all, prompt/warn to make sure they actually want to take them
                 result = "Are you sure you want to get the nails? The structure is very fragile and may fall apart and onto you.";
                 GameState.getInstance().getGame().setGameStatus(GameStatus.GETTING_NAILS);
             }
-        } else if (!currentLocation.isItemAtLocation(noun)) {
-            result = "I don't see that here.";
-
-        } else if (noun.equals(ItemConstants.GOLD_NAME) && !isItemInInventory(ItemConstants.JAR_NAME)) {
+        } else if (itermName.equals(ItemConstants.GOLD_NAME) && !isItemInInventory(ItemConstants.JAR_NAME)) {
             result = "You need something to hold the gold flakes.";
 
-        } else if (noun.equals(ItemConstants.GOLD_NAME) && isItemInInventory(ItemConstants.JAR_NAME)) {
+        } else if (itermName.equals(ItemConstants.GOLD_NAME) && isItemInInventory(ItemConstants.JAR_NAME)) {
             jar.setInventoryDescription("Jar full of gold flakes");
             addItemToInventory(item);
             currentLocation.removeItemFromLocation(item);
@@ -138,36 +160,14 @@ public class Game implements Action, Comparator<Item> {
 
         } else {
             if (currentLocation.getName().equals(LocationNames.CRUMPLED_MINE_CART)) {
+                // If the user has taken the ruby from the mine cart location, update the description to not include the ruby.
                 currentLocation.setDescription("You've reached a dead end. A crumpled mine cart, no longer able to run on the rails, is laying on its side.");
-            } else if (currentLocation.getName().equals(LocationNames.GRANITE_ROOM)) {
-                currentLocation.setDescription("You're in a room of granite, black as night and in the middle of this room is a polished pedestal of the same black granite. Other than that the room is featureless.");
             }
             addItemToInventory(item);
             currentLocation.removeItemFromLocation(item);
             result = ResponseConstants.OK;
         }
         return result;
-    }
-
-    private String fill(final String noun) {
-        if (!(noun == null || noun.equals(ItemConstants.JAR_NAME))) {
-            return "That's not something you can fill.";
-        }
-        final Item jar = getInventoryItemByName(ItemConstants.JAR_NAME);
-        final Item gold = currentLocation.getLocationItemByName(ItemConstants.GOLD_NAME);
-        if (jar == null) {
-            return "You don't have anything to fill.";
-        }
-        if (gold == null) {
-            return "There's nothing here to fill your jar with.";
-        }
-        if (isItemInInventory(ItemConstants.GOLD_NAME)) {
-            return "The jar is already full of gold flakes.";
-        }
-        jar.setInventoryDescription("Jar full of gold flakes");
-        addItemToInventory(gold);
-        currentLocation.removeItemFromLocation(gold);
-        return  "The jar is now full of gold flakes.";
     }
 
     private String dropItem(final String noun) {
@@ -206,6 +206,34 @@ public class Game implements Action, Comparator<Item> {
         return ResponseConstants.OK;
     }
 
+    /**
+     * Fill the jar with gold flakes. As of right now, the only item that can be filled is the jar with gold flakes.
+     * When the jar is filled, the gold flakes are removed from the current location and added to the player's
+     * inventory, and the jar's description is updated.
+     * @param itemToFill item to fill
+     * @return response to user
+     */
+    private String fill(final String itemToFill) {
+        if (!(itemToFill == null || itemToFill.equals(ItemConstants.JAR_NAME))) {
+            return "That's not something you can fill.";
+        }
+        final Item jar = getInventoryItemByName(ItemConstants.JAR_NAME);
+        final Item gold = currentLocation.getLocationItemByName(ItemConstants.GOLD_NAME);
+        if (jar == null) {
+            return "You don't have anything to fill.";
+        }
+        if (gold == null) {
+            return "There's nothing here to fill your jar with.";
+        }
+        if (isItemInInventory(ItemConstants.GOLD_NAME)) {
+            return "The jar is already full of gold flakes.";
+        }
+        jar.setInventoryDescription("Jar full of gold flakes");
+        addItemToInventory(gold);
+        currentLocation.removeItemFromLocation(gold);
+        return  "The jar is now full of gold flakes.";
+    }
+
     private String takeInventory() {
         if (this.inventory.isEmpty()) {
             return ResponseConstants.NOT_CARRYING;
@@ -223,7 +251,7 @@ public class Game implements Action, Comparator<Item> {
      */
     public String die() {
         // Lose a life
-        GameState.decrementLifeCount();
+        GameState.getInstance().decrementLifeCount();
 
         if (GameState.getInstance().getLifeCount() == 0) {
             gameStatus = GameStatus.LOSE;

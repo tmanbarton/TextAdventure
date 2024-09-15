@@ -43,5 +43,25 @@ public class GameConstants {
     public static final String OUT = "out";
     public static final String EXIT = "exit";
 
+    public static final String GET = "get";
+    public static final String TAKE = "take";
+    public static final String DROP = "drop";
+    public static final String THROW = "throw";
+    public static final String FILL = "fill";
+    public static final String INVENTORY = "inventory";
+    public static final String INVEN = "inven";
+    public static final String I = "i";
+    public static final String QUIT = "quit";
+    public static final String RESTART = "restart";
+    public static final String SCORE = "score";
+    public static final String INFO = "info";
+    public static final String HELP = "help";
+    public static final String LOOK = "look";
+    public static final String L = "l";
+    public static final String OPEN = "open";
+    public static final String UNLOCK = "unlock";
+    public static final String SHOOT = "shoot";
+    public static final String TURN = "turn";
+
     public static final List<String> ALL_DIRECTIONS = List.of(NORTH_SHORT, SOUTH_SHORT, EAST_SHORT, WEST_SHORT, NE_SHORT, NW_SHORT, SE_SHORT, SW_SHORT, UP_SHORT, DOWN_SHORT, NORTH_LONG, SOUTH_LONG, EAST_LONG, WEST_LONG, NE_LONG, NW_LONG, SE_LONG, SW_LONG, UP_LONG, DOWN_LONG, IN, ENTER, OUT, EXIT);
 }

@@ -7,7 +7,8 @@ import com.project.textadventure.controllers.Action;
 
 import java.util.List;
 
-import static com.project.textadventure.constants.Actions.TURN;
+import static com.project.textadventure.constants.GameConstants.TURN;
+
 import static com.project.textadventure.game.Game.findLocation;
 
 public class Dam extends Location implements Action {

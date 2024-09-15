@@ -11,12 +11,14 @@ public class Item {
     private String inventoryDescription;
     private final String name;
     private final int displayOrder;
+    private final double points;
 
-    public Item(final int displayOrder, final String locationDescription, final String inventoryDescription, final String name) {
+    public Item(final int displayOrder, final String locationDescription, final String inventoryDescription, final String name, final double points) {
         this.displayOrder = displayOrder;
         this.locationDescription = locationDescription;
         this.inventoryDescription = inventoryDescription;
         this.name = name;
+        this.points = points;
     }
 
     public void setInventoryDescription(final String description) {

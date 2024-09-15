@@ -23,7 +23,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.project.textadventure.constants.GameConstants.DEATH_BY_MINE_SHAFT;
 import static com.project.textadventure.constants.GameConstants.GAME_INTRO;
 import static com.project.textadventure.constants.ResponseConstants.OK;
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
@@ -39,9 +38,6 @@ public class GameController {
         // Get list of commands from input in the form Pair<verb, noun>
         final List<Pair<String , String>> commands = parseInput(inputString);
         StringBuilder result = new StringBuilder();
-//        if (game.getCurrentLocation() instanceof MineEntrance && ((MineEntrance) game.getCurrentLocation()).isTakingNails()) {
-//            result = new StringBuilder(attemptGetNailsByHand(inputString));
-//        }
 //        else {
             for (final Pair<String, String> command : commands) {
                 // If the game is not in progress, it's some other state that requires the user to answer yes/no
@@ -86,38 +82,6 @@ public class GameController {
         return parsedCommands;
     }
 
-//    private String attemptGetNailsByHand(final String input) {
-//        final Game game = GameState.getInstance().getGame();
-//        final Location currentLocation = game.getCurrentLocation();
-//        if (input.equals("yes") || input.equals("y")) {
-//            ((MineEntrance) game.getCurrentLocation()).setTakingNails(false);
-//            // Set nails off to true so if player comes back to mine entrance and tries to shoot arrow, the nails don't get added to the location
-//            ((MineEntrance) game.getCurrentLocation()).setNailsOff(true);
-//            // 2 ways to get to mine shaft. Find and remove both
-//            final List<ConnectingLocation> connectingLocations = currentLocation.getConnectingLocations();
-//            connectingLocations.removeIf(location -> location.getLocation().getName().equals(LocationNames.MINE_SHAFT));
-//
-//            for (final ConnectingLocation connectingLocation : currentLocation.getConnectingLocations()) {
-//                if (connectingLocation.getLocation().getName().equals(LocationNames.MINE_SHAFT)) {
-//                    connectingLocation.getLocation().getConnectingLocations().removeIf(
-//                            mineShaftLocation -> mineShaftLocation.getLocation().getName().equals(LocationNames.MINE_ENTRANCE)
-//                    );
-//                }
-//            }
-//
-//            currentLocation.setDescription(LocationDescriptions.MINE_ENTRANCE_RECENT_CAVE_IN);
-//            game.die();
-//            return DEATH_BY_MINE_SHAFT;
-//        }
-//        else if (input.equals("n") || input.equals("no")) {
-//            ((MineEntrance) game.getCurrentLocation()).setTakingNails(false);
-//            return "Good choice.";
-//        }
-//        else {
-//            return ResponseConstants.PLEASE_ANSWER_QUESTION;
-//        }
-//    }
-
     /**
      * Handles the player's response to the initial confirmation prompt at the start of the game (Would you like help?)
      * @param input User's input
@@ -135,7 +99,7 @@ public class GameController {
                 case NEW:
                     // If this is a new game, we start by asking if the user wants help. If they say yes, we start the game with
                     // returning the help info and the location description and set the game status to in progress
-                    return GAME_INTRO + "\n" + game.getCurrentLocation().getDescription();
+                    return GAME_INTRO + "\n\n" + game.getCurrentLocation().getDescription();
                 case QUITTING:
                     // If the user is quitting and confirm they want to quit, restart the game state
                     GameState.getInstance().restartGame();

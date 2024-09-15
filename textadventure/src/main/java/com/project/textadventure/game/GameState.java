@@ -21,8 +21,8 @@ public class GameState {
     private static GameState instance;
     private Game game;
 
-    public static Location startLocation;
-    public static int lifeCount;
+    private static int lifeCount;
+    private static int score;
 
     private GameState() {
     }
@@ -45,16 +45,29 @@ public class GameState {
         return lifeCount;
     }
 
-    public static void decrementLifeCount() {
+    public int getScore() {
+        return score;
+    }
+
+    public void incrementScore(final double points) {
+        GameState.score += points;
+    }
+
+    public void decrementScore(final double points) {
+        GameState.score -= points;
+    }
+
+    public void decrementLifeCount() {
         GameState.lifeCount--;
     }
 
     Game initializeGame(final GameStatus status) {
         // Create items for locations
-        final Item key = new Item(1, ItemConstants.KEY_LOCATION_DESCRIPTION, ItemConstants.KEY_INVENTORY_DESCRIPTION, ItemConstants.KEY_NAME);
-        final Item gold = new Item(6, ItemConstants.GOLD_LOCATION_DESCRIPTION, ItemConstants.GOLD_INVENTORY_DESCRIPTION, ItemConstants.GOLD_NAME);
-        final Item magnet = new Item(10, ItemConstants.MAGNET_LOCATION_DESCRIPTION, ItemConstants.MAGNET_INVENTORY_DESCRIPTION, ItemConstants.MAGNET_NAME);
-        final Item ruby = new Item(11, ItemConstants.RUBY_LOCATION_DESCRIPTION, ItemConstants.RUBY_INVENTORY_DESCRIPTION, ItemConstants.RUBY_NAME);
+        final Item key = new Item(1, ItemConstants.KEY_LOCATION_DESCRIPTION, ItemConstants.KEY_INVENTORY_DESCRIPTION, ItemConstants.KEY_NAME, 0);
+        final Item gold = new Item(6, ItemConstants.GOLD_LOCATION_DESCRIPTION, ItemConstants.GOLD_INVENTORY_DESCRIPTION, ItemConstants.GOLD_NAME, 20);
+        final Item magnet = new Item(10, ItemConstants.MAGNET_LOCATION_DESCRIPTION, ItemConstants.MAGNET_INVENTORY_DESCRIPTION, ItemConstants.MAGNET_NAME, 0);
+        final Item ruby = new Item(11, ItemConstants.RUBY_LOCATION_DESCRIPTION, ItemConstants.RUBY_INVENTORY_DESCRIPTION, ItemConstants.RUBY_NAME, 30);
+        final Item pie = new Item(12, ItemConstants.PIE_LOCATION_DESCRIPTION, ItemConstants.PIE_INVENTORY_DESCRIPTION, ItemConstants.PIE_NAME, 0);
 
         // Initialize lists for respective location's items. If the game is already in progress, don't add the item to the location, otherwise add it
         final List<Item> ditchItems = new ArrayList<>(List.of(key));
@@ -201,24 +214,24 @@ public class GameState {
         westEndOfSideStreet.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), topOfStairs));
 
         lifeCount = 3;
+        score = 0;
 
         // Set start location by setting it as visited and creating a new Game object with that location as the current location
         // Initialize member variable startLocation so it's available to other classes
         ///// Tip: Change start location for manual debugging. /////
-        startLocation = driveway;
-        startLocation.setVisited(true);
+        driveway.setVisited(true);
 
-        ///// Also helpful for manual debugging to change start location and add items to it /////
-//        Game game = new Game(new ArrayList<>(), ditch, false);
-//        game.addItemToInventory(new Item(5, "There is a jar here", "Jar", "jar"));
-//        game.addItemToInventory(new Item(3, "There is a bow here, strung and ready for shooting", "Bow", "bow"));
+        ///// Helpful for manual debugging to change start location and add items to it /////
+        Game game = new Game(new ArrayList<>(), mineEntrance, status);
+        game.addItemToInventory(new Item(5, ItemConstants.JAR_LOCATION_DESCRIPTION, ItemConstants.JAR_INVENTORY_DESCRIPTION, ItemConstants.JAR_NAME, 0));
+//        game.addItemToInventory(new Item(3, "There is a bow here, strung and ready for shooting", "Bow", "bow", 0));
 //        game.die();
-//        game.addItemToInventory(new Item(4, "There is an arrow here", "Arrow", "arrow"));
+//        game.addItemToInventory(new Item(4, "There is an arrow here", "Arrow", "arrow", 0));
 //        game.addItemToInventory(magnet);
-//        return game;
+        return game;
         /////
 
-        return new Game(new ArrayList<>(), driveway, status);
+//        return new Game(new ArrayList<>(), driveway, status);
     }
 
     public String restartGame() {
