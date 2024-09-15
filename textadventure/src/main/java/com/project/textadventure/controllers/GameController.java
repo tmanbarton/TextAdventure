@@ -135,16 +135,15 @@ public class GameController {
                 case NEW:
                     // If this is a new game, we start by asking if the user wants help. If they say yes, we start the game with
                     // returning the help info and the location description and set the game status to in progress
-                    return GAME_INTRO + game.getCurrentLocation().getDescription();
+                    return GAME_INTRO + "\n" + game.getCurrentLocation().getDescription();
                 case QUITTING:
                     // If the user is quitting and confirm they want to quit, restart the game state
                     GameState.getInstance().restartGame();
                     return OK + " " + GameState.getInstance().getGame().getCurrentLocation().getDescription();
                 case GETTING_NAILS:
                     final Location currentLocation = game.getCurrentLocation();
-                    ((MineEntrance) game.getCurrentLocation()).setTakingNails(false);
-                    // Set nails off to true so if player comes back to mine entrance and tries to shoot arrow, the nails don't get added to the location
-                    ((MineEntrance) game.getCurrentLocation()).setNailsOff(true);
+                    // Set isCollapsed to true for future logic to know what can and can't be done at this location
+                    ((MineEntrance) currentLocation).setCollapsed(true);
 
                     final List<LocationConnection> locationConnections = currentLocation.getLocationConnections();
                     locationConnections.removeIf(location -> location.getLocation().getName().equals(LocationNames.MINE_SHAFT));
@@ -158,7 +157,7 @@ public class GameController {
                     }
 
                     currentLocation.setDescription(LocationDescriptions.MINE_ENTRANCE_RECENT_CAVE_IN);
-                    return DEATH_BY_MINE_SHAFT;
+                    return game.die();
                 default:
                     // Should never get here.
                     return "Invalid game status. Something went wrong.";
@@ -177,6 +176,7 @@ public class GameController {
                 default -> "Invalid game status. Something went wrong.";
             };
         } else {
+            // User didn't answer the question, so re-prompt until they answer
             return ResponseConstants.PLEASE_ANSWER_QUESTION;
         }
     }

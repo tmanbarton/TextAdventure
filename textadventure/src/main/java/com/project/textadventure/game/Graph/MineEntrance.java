@@ -7,24 +7,26 @@ import com.project.textadventure.game.GameState;
 
 import java.util.List;
 
+import static com.project.textadventure.constants.LocationDescriptions.MINE_ENTRANCE_RECENT_CAVE_IN;
+import static com.project.textadventure.constants.LocationNames.MINE_ENTRANCE;
+import static com.project.textadventure.constants.LocationNames.MINE_SHAFT;
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
 public class MineEntrance extends Location implements Action {
     private boolean nailsOff;
-    private boolean takingNails;
+    private boolean isCollapsed;
 
     public MineEntrance(final String description, final String shortDescription, final List<Item> items, final List<LocationConnection> locationConnections, final boolean visited, final String name, final boolean nailsOff) {
         super(description, shortDescription, items, locationConnections, visited, name);
         this.nailsOff = nailsOff;
-        this.takingNails = false;
     }
 
-    public boolean isTakingNails() {
-        return takingNails;
+    public boolean isCollapsed() {
+        return isCollapsed;
     }
 
-    public void setTakingNails(final boolean takingNails) {
-        this.takingNails = takingNails;
+    public void setCollapsed(boolean collapsed) {
+        isCollapsed = collapsed;
     }
 
     public boolean areNailsOff() {
@@ -36,7 +38,7 @@ public class MineEntrance extends Location implements Action {
 
     @Override
     public String takeAction(final String verb, final String noun) {
-        if (verb.equals("shoot") && !this.nailsOff) {
+        if (verb.equals("shoot") && !this.nailsOff && !this.isCollapsed) {
             return parseShootCommand(noun);
         }
         else {
@@ -83,18 +85,17 @@ public class MineEntrance extends Location implements Action {
 
         // 2 ways to get to mine shaft. Find and remove both
         final List<LocationConnection> locationConnections = currentLocation.getLocationConnections();
-        locationConnections.removeIf(location -> location.getLocation().getName().equals("mine shaft"));
+        locationConnections.removeIf(location -> location.getLocation().getName().equals(MINE_SHAFT));
 
         for (final LocationConnection locationConnection : currentLocation.getLocationConnections()) {
-            if (locationConnection.getLocation().getName().equals("mine shaft")) {
+            if (locationConnection.getLocation().getName().equals(MINE_SHAFT)) {
                 locationConnection.getLocation().getLocationConnections().removeIf(
-                        mineShaftLocation -> mineShaftLocation.getLocation().getName().equals("mine entrance")
+                        mineShaftLocation -> mineShaftLocation.getLocation().getName().equals(MINE_ENTRANCE)
                 );
             }
         }
 
-        currentLocation.setDescription("You're at the entrance of an abandoned gold mine, a recent cave-in preventing " +
-                "entry. Piles of tailings scatter the area, leaving only one path leading away from the entrance, heading north.");
+        currentLocation.setDescription(MINE_ENTRANCE_RECENT_CAVE_IN);
         response = "You shoot the arrow and it glances off the nails with a small ringing sound. The nails and your " +
                 "arrow land a few feet away then there's a loud crack of the support and the entrance caves in with an " +
                 "even louder crash and cloud of dust. Good thing you didn't try to take them by hand.";

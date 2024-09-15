@@ -26,6 +26,7 @@ import static com.project.textadventure.constants.Actions.QUIT;
 import static com.project.textadventure.constants.Actions.RESTART;
 import static com.project.textadventure.constants.Actions.TAKE;
 import static com.project.textadventure.constants.Actions.THROW;
+import static com.project.textadventure.constants.GameConstants.DEATH_BY_MINE_SHAFT;
 
 
 @Getter
@@ -34,8 +35,6 @@ public class Game implements Action, Comparator<Item> {
     private List<Item> inventory;
     private Location currentLocation;
     private GameStatus gameStatus;
-    final private boolean takingNails = false;
-
 
     public Game(final List<Item> inventory, final Location currentLocation, final GameStatus status) {
         this.inventory = inventory;
@@ -107,36 +106,40 @@ public class Game implements Action, Comparator<Item> {
         if (noun == null) {
             return ResponseConstants.WHAT_DO_YOU_WANT_TO_GET;
         }
-        String result;
+        String result = "";
         final Item item = currentLocation.getLocationItemByName(noun);
         final Item jar = getInventoryItemByName(ItemConstants.JAR_NAME);
         if (getInventoryItemByName(noun) != null) {
             result = ResponseConstants.ALREADY_CARRYING;
-        }
-        else if (noun.equals(ItemConstants.MAGNET_NAME) && currentLocation instanceof Dam && ((Dam) currentLocation).isMagnetDropped()) {
+
+        } else if (noun.equals(ItemConstants.MAGNET_NAME) && currentLocation instanceof Dam && ((Dam) currentLocation).isMagnetDropped()) {
             result = "The magnet is firmly attached to the wheel";
-        }
-        else if (noun.equals(ItemConstants.NAILS_NAME) && currentLocation instanceof MineEntrance && !((MineEntrance) currentLocation).areNailsOff()) {
-            result = "Are you sure you want to get the nails? The structure is very fragile and may fall apart and onto you.";
-            GameState.getInstance().getGame().setGameStatus(GameStatus.GETTING_NAILS);
-        }
-        else if (!currentLocation.isItemAtLocation(noun)) {
+
+        } else if (noun.equals(ItemConstants.NAILS_NAME) && currentLocation instanceof MineEntrance && !((MineEntrance) currentLocation).areNailsOff()) {
+            if (((MineEntrance) currentLocation).isCollapsed()) {
+                // The user has previously taken the nails by hand instead of shot them with the arrow as intended, and they are now inaccessible
+                result = "The nails are buried under rubble from the collapsed mine. You can't get to them.";
+            } else {
+                // If it hasn't collapsed, they haven't taken the nails at all, prompt/warn to make sure they actually want to take them
+                result = "Are you sure you want to get the nails? The structure is very fragile and may fall apart and onto you.";
+                GameState.getInstance().getGame().setGameStatus(GameStatus.GETTING_NAILS);
+            }
+        } else if (!currentLocation.isItemAtLocation(noun)) {
             result = "I don't see that here.";
-        }
-        else if (noun.equals(ItemConstants.GOLD_NAME) && !isItemInInventory(ItemConstants.JAR_NAME)) {
+
+        } else if (noun.equals(ItemConstants.GOLD_NAME) && !isItemInInventory(ItemConstants.JAR_NAME)) {
             result = "You need something to hold the gold flakes.";
-        }
-        else if (noun.equals(ItemConstants.GOLD_NAME) && isItemInInventory(ItemConstants.JAR_NAME)) {
+
+        } else if (noun.equals(ItemConstants.GOLD_NAME) && isItemInInventory(ItemConstants.JAR_NAME)) {
             jar.setInventoryDescription("Jar full of gold flakes");
             addItemToInventory(item);
             currentLocation.removeItemFromLocation(item);
             result = "The jar is now full of gold flakes.";
-        }
-        else {
+
+        } else {
             if (currentLocation.getName().equals(LocationNames.CRUMPLED_MINE_CART)) {
                 currentLocation.setDescription("You've reached a dead end. A crumpled mine cart, no longer able to run on the rails, is laying on its side.");
-            }
-            else if (currentLocation.getName().equals(LocationNames.GRANITE_ROOM)) {
+            } else if (currentLocation.getName().equals(LocationNames.GRANITE_ROOM)) {
                 currentLocation.setDescription("You're in a room of granite, black as night and in the middle of this room is a polished pedestal of the same black granite. Other than that the room is featureless.");
             }
             addItemToInventory(item);
@@ -209,7 +212,7 @@ public class Game implements Action, Comparator<Item> {
         }
         final StringBuilder result = new StringBuilder();
         for (final Item item : this.inventory) {
-            result.append("<br>").append(item.getInventoryDescription()).append(" ");
+            result.append("\n").append(item.getInventoryDescription()).append(" ");
         }
         return "You're carrying:" + result;
     }
@@ -218,9 +221,14 @@ public class Game implements Action, Comparator<Item> {
      * Drop everything from inventory at current location and move player to start location of the game
      * by setting current location to dirt road
      */
-    public void die() {
+    public String die() {
         // Lose a life
-        GameState.setLifeCount(GameState.getInstance().getLifeCount() - 1);
+        GameState.decrementLifeCount();
+
+        if (GameState.getInstance().getLifeCount() == 0) {
+            gameStatus = GameStatus.LOSE;
+            return "You lose.";
+        }
 
         // Drop everything from inventory at current location
         final List<Item> inventoryCopy = new ArrayList<>(inventory);
@@ -228,8 +236,16 @@ public class Game implements Action, Comparator<Item> {
             removeItemFromInventory(item);
             currentLocation.addItemToLocation(item);
         }
+
+        // Based on location, the message the user sees when they die is different.
+        String dieMessage = "";
+        if (currentLocation instanceof MineEntrance) {
+            dieMessage = DEATH_BY_MINE_SHAFT;
+        }
         // Set current location to driveway by doing a breadth first search starting from current location
         currentLocation = findLocation(currentLocation, LocationNames.DRIVEWAY);
+
+        return dieMessage;
     }
 
     /**

@@ -45,8 +45,8 @@ public class GameState {
         return lifeCount;
     }
 
-    public static void setLifeCount(int lifeCount) {
-        GameState.lifeCount = lifeCount;
+    public static void decrementLifeCount() {
+        GameState.lifeCount--;
     }
 
     Game initializeGame(final GameStatus status) {

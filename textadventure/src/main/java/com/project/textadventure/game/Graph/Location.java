@@ -135,9 +135,9 @@ public class Location implements Action {
         items.sort(Comparator.comparingInt(Item::getDisplayOrder));
         final StringBuilder result = new StringBuilder();
         for(final Item item : items) {
-            result.append("<br>").append(item.getLocationDescription());
+            result.append("\n").append(item.getLocationDescription());
         }
-        return result.isEmpty() ? "" : "<br>" + result;
+        return result.isEmpty() ? "" : "\n" + result;
     }
 
     private String unlock() {
