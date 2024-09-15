@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
 import static com.project.textadventure.constants.GameConstants.DROP;
+import static com.project.textadventure.constants.GameConstants.EAT;
 import static com.project.textadventure.constants.GameConstants.FILL;
 import static com.project.textadventure.constants.GameConstants.GET;
 import static com.project.textadventure.constants.GameConstants.HELP;
@@ -30,6 +31,7 @@ import static com.project.textadventure.constants.GameConstants.SCORE;
 import static com.project.textadventure.constants.GameConstants.TAKE;
 import static com.project.textadventure.constants.GameConstants.THROW;
 import static com.project.textadventure.constants.GameConstants.DEATH_BY_MINE_SHAFT;
+import static com.project.textadventure.constants.ItemConstants.PIE_NAME;
 import static com.project.textadventure.constants.ResponseConstants.INFO_RESPONSE;
 
 
@@ -95,17 +97,19 @@ public class Game implements Action, Comparator<Item> {
     @Override
     public String takeAction(String verb, final String noun) {
         String result = "";
-        // To uppercase to be able to compare to enum constants to string
+        // To lowercase to be able to compare to enum constants to string
         verb = verb.toLowerCase();
         if (StringUtils.equals(verb, GET) || StringUtils.equals(verb, TAKE)) {
-            result = getItem(noun);
+            result = handleGetCommand(noun);
         } else if (StringUtils.equals(verb, FILL)) {
-            result = fill(noun);
+            result = handleFillCommand(noun);
         } else if (StringUtils.equals(verb, INVENTORY) || StringUtils.equals(verb, I) ||
                 StringUtils.equals(verb, INVEN)) {
             result = takeInventory();
         } else if (StringUtils.equals(verb, DROP) || StringUtils.equals(verb, THROW)) {
-            result = dropItem(noun);
+            result = handleDropCommand(noun);
+        } else if (StringUtils.equals(verb, EAT)) {
+            result = handleEatCommand(noun);
         } else if (StringUtils.equals(verb, QUIT) || StringUtils.equals(verb, RESTART)) {
             result = "Are you sure you want to " + (StringUtils.equals(verb, QUIT) ? "quit?" : "restart?");
             gameStatus = GameStatus.QUITTING;
@@ -124,7 +128,7 @@ public class Game implements Action, Comparator<Item> {
      * @param itermName item to get
      * @return response to user
      */
-    private String getItem(final String itermName) {
+    private String handleGetCommand(final String itermName) {
         if (itermName == null) {
             return ResponseConstants.WHAT_DO_YOU_WANT_TO_GET;
         }
@@ -170,7 +174,7 @@ public class Game implements Action, Comparator<Item> {
         return result;
     }
 
-    private String dropItem(final String noun) {
+    private String handleDropCommand(final String noun) {
         if (noun == null) {
             return "What to want to drop?";
         }
@@ -213,7 +217,7 @@ public class Game implements Action, Comparator<Item> {
      * @param itemToFill item to fill
      * @return response to user
      */
-    private String fill(final String itemToFill) {
+    private String handleFillCommand(final String itemToFill) {
         if (!(itemToFill == null || itemToFill.equals(ItemConstants.JAR_NAME))) {
             return "That's not something you can fill.";
         }
@@ -243,6 +247,16 @@ public class Game implements Action, Comparator<Item> {
             result.append("\n").append(item.getInventoryDescription()).append(" ");
         }
         return "You're carrying:" + result;
+    }
+
+    private String handleEatCommand(final String noun) {
+        if (StringUtils.equals(noun, PIE_NAME)) {
+            GameState.getInstance().incrementScore(3.14);
+            removeItemFromInventory(getInventoryItemByName(PIE_NAME));
+            return "You eat the pie. It's delicious. You earned 3.14 points.";
+        } else {
+            return "That's not something you can eat.";
+        }
     }
 
     /**

@@ -22,7 +22,7 @@ public class GameState {
     private Game game;
 
     private static int lifeCount;
-    private static int score;
+    private static double score;
 
     private GameState() {
     }
@@ -45,7 +45,7 @@ public class GameState {
         return lifeCount;
     }
 
-    public int getScore() {
+    public double getScore() {
         return score;
     }
 
@@ -223,7 +223,7 @@ public class GameState {
 
         ///// Helpful for manual debugging to change start location and add items to it /////
         Game game = new Game(new ArrayList<>(), mineEntrance, status);
-        game.addItemToInventory(new Item(5, ItemConstants.JAR_LOCATION_DESCRIPTION, ItemConstants.JAR_INVENTORY_DESCRIPTION, ItemConstants.JAR_NAME, 0));
+        game.addItemToInventory(pie);
 //        game.addItemToInventory(new Item(3, "There is a bow here, strung and ready for shooting", "Bow", "bow", 0));
 //        game.die();
 //        game.addItemToInventory(new Item(4, "There is an arrow here", "Arrow", "arrow", 0));

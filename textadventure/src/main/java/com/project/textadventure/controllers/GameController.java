@@ -36,23 +36,21 @@ public class GameController {
         final String inputString = input.getInput().toLowerCase();
         final Game game = GameState.getInstance().getGame();
         // Get list of commands from input in the form Pair<verb, noun>
-        final List<Pair<String , String>> commands = parseInput(inputString);
+        final List<Pair<String, String>> commands = parseInput(inputString);
         StringBuilder result = new StringBuilder();
-//        else {
-            for (final Pair<String, String> command : commands) {
-                // If the game is not in progress, it's some other state that requires the user to answer yes/no
-                if (game.getGameStatus() != GameStatus.IN_PROGRESS) {
-                    result = new StringBuilder(handleYesNoConfirmation(command.getKey()));
-                    break;
-                }
-                final Action action = ActionFactory.getActionObject(command.getKey(), command.getValue());
-                if (action == null) {
-                    result = new StringBuilder(generateRandomUnknownCommandResponse());
-                    break;
-                }
-                result.append(action.takeAction(command.getKey(), command.getValue()));
+        for (final Pair<String, String> command : commands) {
+            // If the game is not in progress, it's some other state that requires the user to answer yes/no
+            if (game.getGameStatus() != GameStatus.IN_PROGRESS) {
+                result = new StringBuilder(handleYesNoConfirmation(command.getKey()));
+                break;
             }
-//        }
+            final Action action = ActionFactory.getActionObject(command.getKey(), command.getValue());
+            if (action == null) {
+                result = new StringBuilder(generateRandomUnknownCommandResponse());
+                break;
+            }
+            result.append(action.takeAction(command.getKey(), command.getValue()));
+        }
         final GameResponse resp = new GameResponse(result.toString(), input.getInput());
         final ServiceResponse<GameResponse> response = new ServiceResponse<>("success", resp);
 
