@@ -79,7 +79,7 @@ public class GameState {
         final Location antHill =                    new Location(LocationDescriptions.ANT_HILL_LONG_DESCRIPTION, LocationDescriptions.ANT_HILL_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.ANT_HILL);
         final Location archeryRange =               new Location(LocationDescriptions.ARCHERY_RANGE_LONG_DESCRIPTION, LocationDescriptions.ARCHERY_RANGE_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.ARCHERY_RANGE);
         final Location boat =                       new Location(LocationDescriptions.BOAT_LONG_DESCRIPTION, LocationDescriptions.BOAT_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.BOAT);
-        final Location bottomOfVerticalMineShaft =  new Location(LocationDescriptions.BOTTOM_OF_VERTICAL_MINE_SHAFT_LONG_DESCRIPTION, LocationDescriptions.BOTTOM_OF_VERTICAL_MINE_SHAFT_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.BOTTOM_OF_VERTICAL_MINE_SHAFT);
+        final Location bottomOfVerticalMineShaft =  new Location(LocationDescriptions.BOTTOM_MINE_SHAFT_WITH_CAGE_LONG_DESCRIPTION, LocationDescriptions.BOTTOM_OF_VERTICAL_MINE_SHAFT_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.BOTTOM_OF_VERTICAL_MINE_SHAFT);
         final Location brokenRock =                 new Location(LocationDescriptions.BROKEN_ROCK_LONG_DESCRIPTION, LocationDescriptions.BROKEN_ROCK_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.BROKEN_ROCK);
         final Location crumpledMineCart =           new Location(LocationDescriptions.CRUMPLED_MINE_CART_LONG_DESCRIPTION, LocationDescriptions.CRUMPLED_MINE_CART_SHORT_DESCRIPTION, crumpledMineCartItems, new ArrayList<>(), false, LocationNames.CRUMPLED_MINE_CART);
         final Location dankPassage =                new Location(LocationDescriptions.DANK_PASSAGE_LONG_DESCRIPTION, LocationDescriptions.DANK_PASSAGE_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.DANK_PASSAGE);
@@ -98,8 +98,9 @@ public class GameState {
         final Location lake =                       new Location(LocationDescriptions.LAKE_LONG_DESCRIPTION, LocationDescriptions.LAKE_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.LAKE);
         final Location lakeTown =                   new Location(LocationDescriptions.LAKE_TOWN_LONG_DESCRIPTION, LocationDescriptions.LAKE_TOWN_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.LAKE_TOWN);
         final Location lightningTree =              new Location(LocationDescriptions.LIGHTNING_TREE_LONG_DESCRIPTION, LocationDescriptions.LIGHTNING_TREE_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.LIGHTNING_TREE);
+        final Location mineCage =                   new Location(LocationDescriptions.MINE_CAGE_LONG_DESCRIPTION, LocationDescriptions.MINE_CAGE_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.MINE_CAGE);
         final Location mineShaft =                  new Location(LocationDescriptions.MINE_SHAFT_LONG_DESCRIPTION, LocationDescriptions.MINE_SHAFT_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.MINE_SHAFT);
-        final Location mountainPass =               new Location(LocationDescriptions.MOUNTAIN_PASS_LONG_DESCRIPTION, LocationDescriptions.MOUNTAIN_PASS_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.MOUNTAIN_PASS);
+        final Location mountainPass =               new Location(LocationDescriptions.MOUNTAIN_PASS_WITH_CAGE_LONG_DESCRIPTION, LocationDescriptions.MOUNTAIN_PASS_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.MOUNTAIN_PASS);
         final Location mustyBend =                  new Location(LocationDescriptions.MUSTY_BEND_LONG_DESCRIPTION, LocationDescriptions.MUSTY_BEND_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.MUSTY_BEND);
         final Location narrowCorridor =             new Location(LocationDescriptions.NARROW_CORRIDOR_LONG_DESCRIPTION, LocationDescriptions.NARROW_CORRIDOR_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.NARROW_CORRIDOR);
         final Location outsideLogCabin =            new Location(LocationDescriptions.OUTSIDE_LOG_CABIN_LONG_DESCRIPTION, LocationDescriptions.OUTSIDE_LOG_CABIN_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.OUTSIDE_LOG_CABIN);
@@ -171,12 +172,13 @@ public class GameState {
         lakeTown.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT, UP_LONG, UP_SHORT), dam));
 //        lakeTown.connectLocation(new ConnectingLocation(List.of(WEST, W), farther into the town));
         lightningTree.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), ditch));
+        mineCage.connectLocation(new LocationConnection(List.of(OUT, EXIT, EAST_LONG, EAST_SHORT), mountainPass));
         mineShaft.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), undergroundLakeWest));
         mineShaft.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT, OUT, EXIT), mineEntrance));
         mineEntrance.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT), tailings));
         mineEntrance.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT, IN, ENTER), mineShaft));
         mountainPass.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT, DOWN_LONG, DOWN_SHORT), fieldsOfGrass));
-//        mountainPass.connectLocation(new ConnectingLocation(List.of(WEST, W), mine cage));
+        mountainPass.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT, IN, ENTER), mineCage));
         mustyBend.connectLocation(new LocationConnection(List.of(SOUTH_LONG, SOUTH_SHORT), dynamiteHoles));
         mustyBend.connectLocation(new LocationConnection(List.of(EAST_LONG, EAST_SHORT), dankPassage));
         narrowCorridor.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT), dankPassage));
@@ -222,12 +224,10 @@ public class GameState {
         driveway.setVisited(true);
 
         ///// Helpful for manual debugging to change start location and add items to it /////
-        Game game = new Game(new ArrayList<>(), mineEntrance, status);
-        game.addItemToInventory(pie);
+        Game game = new Game(new ArrayList<>(), mountainPass, status);
+//        game.addItemToInventory(pie);
 //        game.addItemToInventory(new Item(3, "There is a bow here, strung and ready for shooting", "Bow", "bow", 0));
 //        game.die();
-//        game.addItemToInventory(new Item(4, "There is an arrow here", "Arrow", "arrow", 0));
-//        game.addItemToInventory(magnet);
         return game;
         /////
 

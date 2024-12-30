@@ -31,7 +31,7 @@ public class Dam extends Location implements Action {
 
     @Override
     public String takeAction(final String verb, final String noun) {
-        if (verb.equals(TURN.toString())) {
+        if (verb.equals(TURN)) {
             return parseTurnCommand(noun);
         }
         else {

@@ -64,6 +64,7 @@ public class GameConstants {
     public static final String SHOOT = "shoot";
     public static final String TURN = "turn";
     public static final String EAT = "eat";
+    public static final String PUSH = "push";
 
     public static final List<String> ALL_DIRECTIONS = List.of(NORTH_SHORT, SOUTH_SHORT, EAST_SHORT, WEST_SHORT, NE_SHORT, NW_SHORT, SE_SHORT, SW_SHORT, UP_SHORT, DOWN_SHORT, NORTH_LONG, SOUTH_LONG, EAST_LONG, WEST_LONG, NE_LONG, NW_LONG, SE_LONG, SW_LONG, UP_LONG, DOWN_LONG, IN, ENTER, OUT, EXIT);
 }

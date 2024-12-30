@@ -116,8 +116,7 @@ public class Location implements Action {
 
     private String moveToLocation(final LocationConnection locationConnection) {
         final Location connection = locationConnection.getLocation();
-        final Game game = GameState.getInstance().getGame();
-        game.setCurrentLocation(connection);
+        GameState.getInstance().getGame().setCurrentLocation(connection);
 
         if (connection.isVisited()) {
             return connection.getShortDescription() + listLocationItems(connection.getItems());

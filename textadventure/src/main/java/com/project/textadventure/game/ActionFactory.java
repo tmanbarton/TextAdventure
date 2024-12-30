@@ -20,7 +20,7 @@ public class ActionFactory {
         }
 
         return switch(action) {
-            case GET, TAKE, FILL, DROP, THROW, QUIT, RESTART, SCORE, INFO, HELP, I, INVEN, INVENTORY, EAT -> game;
+            case GET, TAKE, FILL, DROP, THROW, QUIT, RESTART, SCORE, INFO, HELP, I, INVEN, INVENTORY, EAT, PUSH -> game;
             case NORTH_SHORT, SOUTH_SHORT, EAST_SHORT, WEST_SHORT, NE_SHORT, NW_SHORT, SE_SHORT, SW_SHORT, UP_SHORT, DOWN_SHORT,
                     NORTH_LONG, SOUTH_LONG, EAST_LONG, WEST_LONG, NE_LONG, NW_LONG, SE_LONG, SW_LONG,
                     UP_LONG, DOWN_LONG, IN, ENTER, OUT, EXIT, LOOK, L, OPEN, UNLOCK, SHOOT, TURN -> game.getCurrentLocation();

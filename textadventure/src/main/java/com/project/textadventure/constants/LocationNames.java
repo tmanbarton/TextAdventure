@@ -24,6 +24,7 @@ public class LocationNames {
     public static final String LAKE = "lake";
     public static final String LAKE_TOWN = "lake town";
     public static final String LIGHTNING_TREE = "lightning tree";
+    public static final String MINE_CAGE = "mine cage";
     public static final String MINE_ENTRANCE = "mine entrance";
     public static final String MINE_SHAFT = "mine shaft";
     public static final String MOUNTAIN_PASS = "mountain pass";
