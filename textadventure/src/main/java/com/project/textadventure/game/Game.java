@@ -275,97 +275,85 @@ public class Game implements Action, Comparator<Item> {
     }
 
     /**
-     * Determine if mine cage is at the top or bottom of the mine shaft. If it's at the top, remove Mountain Pass from its connecting location
+     * Determine if the mine cage is at the top or bottom of the mine shaft. If it's at the top, remove Mountain Pass from its connecting location
      * and add Bottom of Vertical Mine Shaft. If it's at the bottom, remove Bottom of Vertical Mine Shaft from its connecting location and add Mountain Pass.
+     *
      * @return response to send to the terminal
      */
     private String addRemoveConnectionFromMineCage() {
         String result = "The cage rattles as it starts to move and thuds to a stop with a squeaking of chains and pulleys.";
-        final Location bottomOfVerticalMineShaft = findLocation(currentLocation, BOTTOM_OF_VERTICAL_MINE_SHAFT);
-        final Location mountainPass = findLocation(currentLocation, MOUNTAIN_PASS);
-        final Location mineCage = findLocation(currentLocation, MINE_CAGE);
+        final Location bottomOfVerticalMineShaft = findLocationByName(currentLocation, BOTTOM_OF_VERTICAL_MINE_SHAFT);
+        final Location mountainPass = findLocationByName(currentLocation, MOUNTAIN_PASS);
+        final Location mineCage = findLocationByName(currentLocation, MINE_CAGE);
         // todo separate logic into separate methods
         final List<LocationConnection> currentLocationConnections = currentLocation.getLocationConnections();
         if (StringUtils.equals(currentLocation.getName(), MOUNTAIN_PASS)) {
-            final boolean isMineCageConnected = isLocationDirectlyConnected(MINE_CAGE);
-            if (isMineCageConnected) {
-                // Current location is mountain pass location and has the mine cage as a connected location
-                // Remove mountain pass from mine cage and vice versa, and add bottom of vertical mine shaft to cage and vice versa
-                currentLocationConnections.removeIf(locationConnection -> locationConnection.getLocation().getName().equals(MINE_CAGE));
-                bottomOfVerticalMineShaft.getLocationConnections().add(new LocationConnection(List.of(WEST_LONG, WEST_SHORT, IN, ENTER), mineCage));
-                mineCage.setLocationConnections(List.of(new LocationConnection(List.of(EAST_LONG, EAST_SHORT, OUT, EXIT), bottomOfVerticalMineShaft)));
-
-                // Update the descriptions of the locations to reflect whether the mine cage is there or not
-                currentLocation.setDescription(MOUNTAIN_PASS_NO_CAGE_LONG_DESCRIPTION);
-                bottomOfVerticalMineShaft.setDescription(BOTTOM_MINE_SHAFT_WITH_CAGE_LONG_DESCRIPTION);
-
-                result = "The mine cage descends into the depths of the mountain with many rattling, creaks, and squeaks. After a few moments you hear the far-off echo of a boom as it thuds against the bottom.";
-            } else {
-                // Current location is mountain pass location and the mine cage is at the bottom of the shaft (bottomOfVerticalMineShaft location)
-                // Remove bottom of mine shaft from mine cage and vice versa, and add mountain pass to cage and vice versa
-                bottomOfVerticalMineShaft.getLocationConnections().removeIf(locationConnection -> locationConnection.getLocation().getName().equals(MINE_CAGE));
-                currentLocationConnections.add(new LocationConnection(List.of(WEST_LONG, WEST_SHORT, IN, ENTER), mineCage));
-                mineCage.setLocationConnections(List.of(new LocationConnection(List.of(EAST_LONG, EAST_SHORT, OUT, EXIT), currentLocation)));
-
-                // Update the descriptions of the locations to reflect whether the mine cage is there or not
-                bottomOfVerticalMineShaft.setDescription(BOTTOM_MINE_SHAFT_NO_CAGE_LONG_DESCRIPTION);
-                currentLocation.setDescription(MOUNTAIN_PASS_WITH_CAGE_LONG_DESCRIPTION);
-
-                result = "From deep within the mine you can hear echoes of the equipment groaning under strain after unknown years of disuse. Soon you see it emerge from the mine shaft and come to a stop with much creaking and squeaking.";
-            }
+            moveMineCageFromAConnectingLocation(bottomOfVerticalMineShaft);
         } else if (StringUtils.equals(currentLocation.getName(), BOTTOM_OF_VERTICAL_MINE_SHAFT)) {
-            final boolean isMineCageConnected = isLocationDirectlyConnected(MINE_CAGE);
-            if (isMineCageConnected) {
-                // Current location is bottom of vertical mine shaft location and has the mine cage as a connected location
-                // Remove bottom of mine shaft from mine cage and vice versa, and add mountain pass to mine cage and vice versa
-                currentLocationConnections.removeIf(locationConnection -> locationConnection.getLocation().getName().equals(MINE_CAGE));
-                mineCage.setLocationConnections(List.of(new LocationConnection(List.of(EAST_LONG, EAST_SHORT, OUT, EXIT), mountainPass)));
-                mountainPass.getLocationConnections().add(new LocationConnection(List.of(WEST_LONG, WEST_SHORT, IN, ENTER), mineCage));
-
-                // Update the descriptions of the locations to reflect whether the mine cage is there or not
-                mountainPass.setDescription(MOUNTAIN_PASS_WITH_CAGE_LONG_DESCRIPTION);
-                currentLocation.setDescription(BOTTOM_MINE_SHAFT_NO_CAGE_LONG_DESCRIPTION);
-
-                result = "The mine cage ascends into the rock much rattling, creaking, and squeaking. After a few moments the echoing noises stop as it reaches the top.";
-            } else {
-                // Current location is bottom of mine shaft location and the mine cage is at the top of the shaft (mountainPass location)
-                // Remove mountain pass from mine cage and vice versa, and add bottom of mine shaft to cage and vice versa
-                mountainPass.getLocationConnections().removeIf(locationConnection -> locationConnection.getLocation().getName().equals(MINE_CAGE));
-                currentLocationConnections.add(new LocationConnection(List.of(EAST_LONG, EAST_SHORT, IN, ENTER), mineCage));
-                mineCage.setLocationConnections(List.of(new LocationConnection(List.of(WEST_LONG, WEST_SHORT, OUT, EXIT), currentLocation)));
-
-                mountainPass.setDescription(MOUNTAIN_PASS_NO_CAGE_LONG_DESCRIPTION);
-                bottomOfVerticalMineShaft.setDescription(BOTTOM_MINE_SHAFT_WITH_CAGE_LONG_DESCRIPTION);
-
-                result = "The mine cage descends into the depths of the mountain with many rattling, creaks, and squeaks. Soon you hear the rattling and screeching of the cage as it rumbles into view.";
-            }
+            moveMineCageFromAConnectingLocation(mountainPass);
         } else if (StringUtils.equals(currentLocation.getName(), MINE_CAGE)) {
             // Current location is mine cage location.
             // Change connections based on whether it's connected to mountain pass or bottom of vertical mine shaft
             final boolean isConnectedToMountainPass = isLocationDirectlyConnected(MOUNTAIN_PASS);
             final boolean isConnectedToBottomMineShaft = isLocationDirectlyConnected(BOTTOM_OF_VERTICAL_MINE_SHAFT);
             if (isConnectedToMountainPass) {
-                // Mine cage is currently at the top of the mine shaft, connected to the mountain pass location.
-                // Remove mountain pass from mine cage, add bottom of mine shaft to mine cage, and set cage connections to bottom of mine shaft
-                mountainPass.getLocationConnections().removeIf(locationConnection -> locationConnection.getLocation().getName().equals(MINE_CAGE));
-                currentLocation.setLocationConnections(List.of(new LocationConnection(List.of(WEST_LONG, WEST_SHORT, OUT, EXIT), bottomOfVerticalMineShaft)));
-                bottomOfVerticalMineShaft.getLocationConnections().add(new LocationConnection(List.of(EAST_LONG, EAST_SHORT, IN, ENTER), currentLocation));
-
-                mountainPass.setDescription(MOUNTAIN_PASS_NO_CAGE_LONG_DESCRIPTION);
-                bottomOfVerticalMineShaft.setDescription(BOTTOM_MINE_SHAFT_WITH_CAGE_LONG_DESCRIPTION);
+                moveMineCageFromWithinMineCage(bottomOfVerticalMineShaft, mountainPass);
 
             } else if (isConnectedToBottomMineShaft) {
-                // Mine cage is currently at the bottom of the mine shaft, connected to the bottom of vertical mine shaft location.
-                // Remove bottom of mine shaft from mine cage, add mountain pass to mine cage, and set cage connections to mountain pass
-                bottomOfVerticalMineShaft.getLocationConnections().removeIf(locationConnection -> locationConnection.getLocation().getName().equals(MINE_CAGE));
-                currentLocation.setLocationConnections(List.of(new LocationConnection(List.of(EAST_LONG, EAST_SHORT, OUT, EXIT), mountainPass)));
-                mountainPass.getLocationConnections().add(new LocationConnection(List.of(WEST_LONG, WEST_SHORT, IN, ENTER), currentLocation));
-
-                mountainPass.setDescription(MOUNTAIN_PASS_WITH_CAGE_LONG_DESCRIPTION);
-                bottomOfVerticalMineShaft.setDescription(BOTTOM_MINE_SHAFT_NO_CAGE_LONG_DESCRIPTION);
+                moveMineCageFromWithinMineCage(mountainPass, bottomOfVerticalMineShaft);
             }
         }
         return result;
+    }
+
+    /**
+     *
+     * @param targetLocation Either the mountain pass or the bottom of the vertical mine shaft which will be the opposite of
+     *                       the current location; e.g. if the current location is the mountain pass, the target location
+     *                       will be the bottom of the vertical mine shaft.
+     * @return response to send to the terminal which is the result of moving the mine cage
+     */
+    String moveMineCageFromAConnectingLocation(final Location targetLocation) {
+        final Location mineCage = findLocationByName(currentLocation, MINE_CAGE);
+        final List<LocationConnection> currentLocationConnections = currentLocation.getLocationConnections();
+
+        final boolean isMineCageConnected = isLocationDirectlyConnected(MINE_CAGE);
+        if (isMineCageConnected) {
+            // Current location is bottom of vertical mine shaft location and has the mine cage as a connected location
+            // Remove bottom of mine shaft from mine cage and vice versa, and add mountain pass to mine cage and vice versa
+            currentLocationConnections.removeIf(locationConnection -> locationConnection.getLocation().getName().equals(MINE_CAGE));
+            mineCage.setLocationConnections(List.of(new LocationConnection(currentLocation.getName().equals(MOUNTAIN_PASS) ? List.of(WEST_LONG, WEST_SHORT, OUT, EXIT) : List.of(EAST_LONG, EAST_SHORT, OUT, EXIT), targetLocation)));
+            targetLocation.getLocationConnections().add(new LocationConnection(currentLocation.getName().equals(MOUNTAIN_PASS) ? List.of(EAST_LONG, EAST_SHORT, IN, ENTER) : List.of(WEST_LONG, WEST_SHORT, IN, ENTER), mineCage));
+
+            // Update the descriptions of the locations to reflect whether the mine cage is there or not
+            currentLocation.setDescription(currentLocation.getName().equals(MOUNTAIN_PASS) ? MOUNTAIN_PASS_NO_CAGE_LONG_DESCRIPTION : BOTTOM_MINE_SHAFT_NO_CAGE_LONG_DESCRIPTION);
+            targetLocation.setDescription(currentLocation.getName().equals(MOUNTAIN_PASS) ? BOTTOM_MINE_SHAFT_WITH_CAGE_LONG_DESCRIPTION : MOUNTAIN_PASS_WITH_CAGE_LONG_DESCRIPTION);
+
+            return "The mine cage ascends into the rock much rattling, creaking, and squeaking. After a few moments the echoing noises stop as it reaches the top.";
+        } else {
+            // Current location is bottom of mine shaft location and the mine cage is at the top of the shaft (mountainPass location)
+            // Remove mountain pass from mine cage and vice versa, and add bottom of mine shaft to cage and vice versa
+            targetLocation.getLocationConnections().removeIf(locationConnection -> locationConnection.getLocation().getName().equals(MINE_CAGE));
+            currentLocationConnections.add(new LocationConnection(currentLocation.getName().equals(MOUNTAIN_PASS) ? List.of(WEST_LONG, WEST_SHORT, IN, ENTER) : List.of(EAST_LONG, EAST_SHORT, IN, ENTER), mineCage));
+            mineCage.setLocationConnections(List.of(new LocationConnection(currentLocation.getName().equals(MOUNTAIN_PASS) ? List.of(EAST_LONG, EAST_SHORT, OUT, EXIT) : List.of(WEST_LONG, WEST_SHORT, OUT, EXIT), currentLocation)));
+
+            // Update the descriptions of the locations to reflect whether the mine cage is there or not
+            currentLocation.setDescription(currentLocation.getName().equals(MOUNTAIN_PASS) ? MOUNTAIN_PASS_WITH_CAGE_LONG_DESCRIPTION : BOTTOM_MINE_SHAFT_WITH_CAGE_LONG_DESCRIPTION);
+            targetLocation.setDescription(currentLocation.getName().equals(MOUNTAIN_PASS) ? BOTTOM_MINE_SHAFT_NO_CAGE_LONG_DESCRIPTION : MOUNTAIN_PASS_NO_CAGE_LONG_DESCRIPTION);
+
+            return "The mine cage descends into the depths of the mountain with many rattling, creaks, and squeaks. Soon you hear the rattling and screeching of the cage as it rumbles into view.";
+        }
+    }
+
+    void moveMineCageFromWithinMineCage(final Location targetLocation, final Location currentLocationNextToMineShaft) {
+        // Mine cage is currently at the bottom of the mine shaft, connected to the bottom of vertical mine shaft location.
+        // Remove bottom of mine shaft from mine cage, add mountain pass to mine cage, and set cage connections to mountain pass
+        currentLocationNextToMineShaft.getLocationConnections().removeIf(locationConnection -> locationConnection.getLocation().getName().equals(MINE_CAGE));
+        currentLocation.setLocationConnections(List.of(new LocationConnection(currentLocationNextToMineShaft.getName().equals(MOUNTAIN_PASS) ? List.of(WEST_LONG, WEST_SHORT, OUT, EXIT) : List.of(EAST_LONG, EAST_SHORT, OUT, EXIT), targetLocation)));
+        targetLocation.getLocationConnections().add(new LocationConnection(currentLocation.getName().equals(MOUNTAIN_PASS) ? List.of(WEST_LONG, WEST_SHORT, IN, ENTER) : List.of(EAST_LONG, EAST_SHORT, IN, ENTER), currentLocation));
+
+        targetLocation.setDescription(currentLocationNextToMineShaft.getName().equals(MOUNTAIN_PASS) ? BOTTOM_MINE_SHAFT_WITH_CAGE_LONG_DESCRIPTION : MOUNTAIN_PASS_WITH_CAGE_LONG_DESCRIPTION);
+        currentLocationNextToMineShaft.setDescription(currentLocationNextToMineShaft.getName().equals(MOUNTAIN_PASS) ? MOUNTAIN_PASS_NO_CAGE_LONG_DESCRIPTION : BOTTOM_MINE_SHAFT_NO_CAGE_LONG_DESCRIPTION);
     }
 
     /**
@@ -408,7 +396,7 @@ public class Game implements Action, Comparator<Item> {
             dieMessage = DEATH_BY_MINE_SHAFT;
         }
         // Set current location to driveway by doing a breadth first search starting from current location
-        currentLocation = findLocation(currentLocation, LocationNames.DRIVEWAY);
+        currentLocation = findLocationByName(currentLocation, LocationNames.DRIVEWAY);
 
         return dieMessage;
     }
@@ -418,7 +406,7 @@ public class Game implements Action, Comparator<Item> {
      * the current location
      * @return driveway location if it's found or null if it's not. Should never return null.
      */
-    public static Location findLocation(final Location startLocation, final String targetLocationName) {
+    public static Location findLocationByName(final Location startLocation, final String targetLocationName) {
         // if you're at the dirt road, just return
         if (startLocation.getName().equals(targetLocationName)) {
             return startLocation;

@@ -9,7 +9,7 @@ import java.util.List;
 
 import static com.project.textadventure.constants.GameConstants.TURN;
 
-import static com.project.textadventure.game.Game.findLocation;
+import static com.project.textadventure.game.Game.findLocationByName;
 
 public class Dam extends Location implements Action {
     private boolean wheelTurned;
@@ -72,14 +72,14 @@ public class Dam extends Location implements Action {
 
         // The lake, tailings, and intersection locations all reference the lake in their description
         // Find them and change the descriptions to not include the lake
-        final Location lake = findLocation(this, LocationNames.LAKE);
+        final Location lake = findLocationByName(this, LocationNames.LAKE);
         lake.setDescription(LocationDescriptions.LAKE_LONG_DESCRIPTION_EMPTY_LAKE);
         lake.setShortDescription(LocationDescriptions.LAKE_SHORT_DESCRIPTION_EMPTY_LAKE);
 
-        final Location tailings = findLocation(this, LocationNames.TAILINGS);
+        final Location tailings = findLocationByName(this, LocationNames.TAILINGS);
         tailings.setDescription(LocationDescriptions.TAILINGS_LONG_DESCRIPTION_EMPTY_LAKE);
 
-        final Location intersection = findLocation(this, LocationNames.INTERSECTION);
+        final Location intersection = findLocationByName(this, LocationNames.INTERSECTION);
         intersection.setDescription(LocationDescriptions.INTERSECTION_LONG_DESCRIPTION_EMPTY_LAKE);
 
         wheelTurned = true;
