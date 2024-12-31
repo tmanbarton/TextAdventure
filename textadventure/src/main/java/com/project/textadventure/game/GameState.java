@@ -224,7 +224,7 @@ public class GameState {
         driveway.setVisited(true);
 
         ///// Helpful for manual debugging to change start location and add items to it /////
-        Game game = new Game(new ArrayList<>(), mountainPass, status);
+        Game game = new Game(new ArrayList<>(), mineEntrance, status);
 //        game.addItemToInventory(pie);
 //        game.addItemToInventory(new Item(3, "There is a bow here, strung and ready for shooting", "Bow", "bow", 0));
 //        game.die();
