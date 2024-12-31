@@ -141,12 +141,12 @@ public class Game implements Action, Comparator<Item> {
                     result = "Are you sure you want to get the nails? The structure is very fragile and may fall apart and onto you.";
                     GameState.getInstance().getGame().setGameStatus(GameStatus.GETTING_NAILS);
                 }
+            } else if (itemName.equals(ItemConstants.MAGNET_NAME) && currentLocation instanceof Dam && ((Dam) currentLocation).isMagnetDropped()) {
+                result = "The magnet is firmly attached to the wheel";
             }
         } else if (getInventoryItemByName(itemName) != null) {
             result = ResponseConstants.ALREADY_CARRYING;
 
-        } else if (itemName.equals(ItemConstants.MAGNET_NAME) && currentLocation instanceof Dam && ((Dam) currentLocation).isMagnetDropped()) {
-            result = "The magnet is firmly attached to the wheel";
         } else if (itemName.equals(ItemConstants.GOLD_NAME) && !isItemInInventory(ItemConstants.JAR_NAME)) {
             result = "You need something to hold the gold flakes.";
 
@@ -192,8 +192,7 @@ public class Game implements Action, Comparator<Item> {
             removeItemFromInventory(item);
             ((Dam) currentLocation).setMagnetDropped(true);
             currentLocation.setDescription("You're on a short dam that created this lake by stopping up a large river. The dam goes north and south along the east end of the lake. Close by is a wheel with its axel extending deep into the dam. Its orange metal has faded to rust except for some different metal at the center, shining in the sun. There's a large magnet stuck to this part of the wheel. South leads around the lake and to the north there's a set of stairs.");
-            return "You drop the magnet and as it's falling it snaps to the shiny center of the wheel. You can hear " +
-                    "some mechanical clicking somewhere inside the dam.";
+            return "You drop the magnet and as it's falling it snaps to the shiny center of the wheel. A faint, mechanical clicking comes from deep inside the dam.";
         }
         if (currentLocation.getName().equals(LocationNames.BOAT)) {
             removeItemFromInventory(item);
@@ -244,7 +243,7 @@ public class Game implements Action, Comparator<Item> {
     }
 
     private String handleEatCommand(final String itemName) {
-        if (StringUtils.equals(itemName, PIE_NAME)) {
+        if (StringUtils.equals(itemName, PIE_NAME) || StringUtils.isEmpty(itemName)) {
             GameState.getInstance().incrementScore(3.14);
             removeItemFromInventory(getInventoryItemByName(PIE_NAME));
             return "You eat the pie. It's delicious. You earned 3.14 points.";
@@ -388,11 +387,6 @@ public class Game implements Action, Comparator<Item> {
         // Lose a life
         GameState.getInstance().decrementLifeCount();
 
-        if (GameState.getInstance().getLifeCount() == 0) {
-            gameStatus = GameStatus.LOSE;
-            return "You lose.";
-        }
-
         // Drop everything from inventory at current location
         final List<Item> inventoryCopy = new ArrayList<>(inventory);
         for (final Item item : inventoryCopy) {
@@ -407,6 +401,11 @@ public class Game implements Action, Comparator<Item> {
         }
         // Set current location to driveway by doing a breadth first search starting from current location
         currentLocation = findLocationByName(currentLocation, LocationNames.DRIVEWAY);
+
+        if (GameState.getInstance().getLifeCount() == 0) {
+            gameStatus = GameStatus.LOSE;
+            dieMessage += "\nYou lose.";
+        }
 
         return dieMessage;
     }

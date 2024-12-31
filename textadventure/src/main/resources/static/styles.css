@@ -52,7 +52,7 @@ input:focus {
     width: 780px;
     height: 456px;
     margin: 0 10px;
-    overflow-y: hidden;
+    overflow-y: auto;
 }
 
 #display {
@@ -61,6 +61,8 @@ input:focus {
     white-space: -pre-wrap;
     white-space: -o-pre-wrap;
     word-wrap: break-word;
+    max-height: 100%;
+    overflow-y: auto;
 }
 
 .bottom-left {
@@ -103,20 +105,6 @@ input:focus {
 
 #container {
     display: flex;
-}
-
-#game-code-container {
-    background-color: black;
-    height: 145px;
-    margin: 20px;
-    padding: 15px 15px 15px 15px;
-}
-
-#game-code {
-    width: 150px;
-    margin-top: 5px;
-    outline: 1px solid #00ff00;
-    font-size: 1.2em;
 }
 
 @-webkit-keyframes blink { 50% { visibility: hidden; }}

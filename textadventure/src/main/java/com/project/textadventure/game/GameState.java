@@ -74,6 +74,7 @@ public class GameState {
         final List<Item> mineEntranceItems =  new ArrayList<>(List.of(gold));
         final List<Item> logCabinItems =  new ArrayList<>(List.of(magnet));
         final List<Item> crumpledMineCartItems = new ArrayList<>(List.of(ruby));
+        final List<Item> graniteRoomItems = new ArrayList<>(List.of(pie));
 
         // Create all the locations for the game
         final Location antHill =                    new Location(LocationDescriptions.ANT_HILL_LONG_DESCRIPTION, LocationDescriptions.ANT_HILL_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.ANT_HILL);
@@ -91,7 +92,7 @@ public class GameState {
         final Location eastEndOfSideStreet =        new Location(LocationDescriptions.EAST_END_SIDE_STREET_LONG_DESCRIPTION, LocationDescriptions.EAST_END_SIDE_STREET_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.EAST_END_SIDE_STREET);
         final Location fieldsOfGrass =              new Location(LocationDescriptions.FIELDS_OF_GRASS_LONG_DESCRIPTION, LocationDescriptions.FIELDS_OF_GRASS_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.FIELDS_OF_GRASS);
         final Location footPath =                   new Location(LocationDescriptions.FOOT_PATH_LONG_DESCRIPTION, LocationDescriptions.FOOT_PATH_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.FOOT_PATH);
-        final Location graniteRoom =                new Location(LocationDescriptions.GRANITE_ROOM_LONG_DESCRIPTION, LocationDescriptions.GRANITE_ROOM_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.GRANITE_ROOM);
+        final Location graniteRoom =                new Location(LocationDescriptions.GRANITE_ROOM_LONG_DESCRIPTION, LocationDescriptions.GRANITE_ROOM_SHORT_DESCRIPTION, graniteRoomItems, new ArrayList<>(), false, LocationNames.GRANITE_ROOM);
         final Location insideLogCabin =             new Location(LocationDescriptions.INSIDE_LOG_CABIN_LONG_DESCRIPTION, LocationDescriptions.INSIDE_LOG_CABIN_SHORT_DESCRIPTION, logCabinItems, new ArrayList<>(), false, LocationNames.INSIDE_LOG_CABIN);
         final Location insideTavern =               new Location(LocationDescriptions.INSIDE_TAVERN_LONG_DESCRIPTION, LocationDescriptions.INSIDE_TAVERN_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.INSIDE_TAVERN);
         final Location intersection =               new Location(LocationDescriptions.INTERSECTION_LONG_DESCRIPTION, LocationDescriptions.INTERSECTION_SHORT_DESCRIPTION, new ArrayList<>(), new ArrayList<>(), false, LocationNames.INTERSECTION);
@@ -223,13 +224,13 @@ public class GameState {
         ///// Tip: Change start location for manual debugging. /////
         driveway.setVisited(true);
 
-        ///// Helpful for manual debugging to change start location and add items to it /////
-        Game game = new Game(new ArrayList<>(), mineEntrance, status);
+        ////// Helpful for manual debugging to change start location and add items to it /////
+        Game game = new Game(new ArrayList<>(), graniteRoom, status);
 //        game.addItemToInventory(pie);
 //        game.addItemToInventory(new Item(3, "There is a bow here, strung and ready for shooting", "Bow", "bow", 0));
 //        game.die();
         return game;
-        /////
+        //////
 
 //        return new Game(new ArrayList<>(), driveway, status);
     }

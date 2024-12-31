@@ -4,16 +4,14 @@ import java.util.List;
 
 public class GameConstants {
     public static final String GAME_INTRO = "You're on a mountain with several scattered mining towns. It's said that some of the mines are " +
-            "still accessible, but you've also heard stories that the local miners report seeing " +
-            "tommyknockers in some of them. I will be your eyes and hands. Use commands in the form " +
-            "\"verb noun\" to guide me. If you would like further information on how the game works, type " +
-            "\"info\".";
+            "still accessible. I will be your eyes and hands. Use commands in the form " +
+            "\"verb noun\" to guide me. If you would like further information on how the game works, type \"info\".";
 
     public static final String DEATH_BY_MINE_SHAFT = "OK. I warned you. You walk up to the wooden supports and start to remove the loose nails and, " +
             "before you can even get them out, there is a loud crack and the support you were working on " +
             "snaps and the ceiling comes crashing down on top of you. Unfortunately being crushed by a " +
             "mountain and old wood is very dangerous, thus this decision has cost you your life.";
-    public static final String LAKE_EMPTYING = "The ground begins to rumble and you see a massive wall slowly rise from the water on the far side of the lake, blocking the flow of water from the river into the lake. There's another shudder and the water begins to recede as a huge whirl pool form near the middle of the lake. Soon the water is completely gone, revealing a town that had been submerged only a few moments ago. You can get to the town to the west, down the dam.";
+    public static final String LAKE_EMPTYING = "The ground begins to rumble and you see a massive wall slowly rise from the water on the far side of the lake, blocking the flow of water from the river into the lake. There's another shudder and the water begins to recede as a huge whirl pool forms near the middle of the lake. Soon the lake is completely empty, revealing a town that had been submerged only a few moments ago. You can get to the town to the west, down the dam.";
 
     public static final String WHEEL = "wheel";
 
@@ -66,5 +64,16 @@ public class GameConstants {
     public static final String EAT = "eat";
     public static final String PUSH = "push";
 
-    public static final List<String> ALL_DIRECTIONS = List.of(NORTH_SHORT, SOUTH_SHORT, EAST_SHORT, WEST_SHORT, NE_SHORT, NW_SHORT, SE_SHORT, SW_SHORT, UP_SHORT, DOWN_SHORT, NORTH_LONG, SOUTH_LONG, EAST_LONG, WEST_LONG, NE_LONG, NW_LONG, SE_LONG, SW_LONG, UP_LONG, DOWN_LONG, IN, ENTER, OUT, EXIT);
+    public static final List<String> ALL_DIRECTIONS = List.of(
+            NORTH_SHORT, NORTH_LONG,
+            SOUTH_SHORT, SOUTH_LONG,
+            EAST_SHORT, EAST_LONG,
+            WEST_SHORT, WEST_LONG,
+            NE_SHORT, NE_LONG,
+            NW_SHORT, NW_LONG,
+            SE_SHORT, SE_LONG,
+            SW_SHORT, SW_LONG,
+            UP_SHORT, UP_LONG,
+            DOWN_SHORT, DOWN_LONG,
+            IN, ENTER, OUT, EXIT);
 }

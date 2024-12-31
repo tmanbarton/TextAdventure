@@ -119,6 +119,7 @@ public class GameController {
                     }
 
                     currentLocation.setDescription(LocationDescriptions.MINE_ENTRANCE_RECENT_CAVE_IN);
+                    GameState.getInstance().decrementScore(10);
                     return game.die();
                 default:
                     // Should never get here.
