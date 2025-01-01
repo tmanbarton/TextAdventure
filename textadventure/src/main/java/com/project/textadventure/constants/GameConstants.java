@@ -4,8 +4,9 @@ import java.util.List;
 
 public class GameConstants {
     public static final String GAME_INTRO = "You're on a mountain with several scattered mining towns. It's said that some of the mines are " +
-            "still accessible. I will be your eyes and hands. Use commands in the form " +
-            "\"verb noun\" to guide me. If you would like further information on how the game works, type \"info\".";
+            "still accessible. I will be your eyes and hands. Use cardinal directions to navigate (\"north\", \"east\", \"sw\", etc. also \"up\", " +
+            "\"down\", \"in\", \"out\"). I can \"get\" and \"drop\" items, and you can use commands in the form " +
+            "\"verb noun\" to interact with them in other ways in certain scenarios. If you would like further information on how the game works, type \"info\".";
 
     public static final String DEATH_BY_MINE_SHAFT = "OK. I warned you. You walk up to the wooden supports and start to remove the loose nails and, " +
             "before you can even get them out, there is a loud crack and the support you were working on " +

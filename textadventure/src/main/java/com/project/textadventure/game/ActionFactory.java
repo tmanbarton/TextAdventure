@@ -12,8 +12,8 @@ public class ActionFactory {
 
     /**
      * Returns the object that the action is being performed on (game, or location)
-     * @param verb Verb form of the command
-     * @param noun Noun form of the command
+     * @param verb Verb part of the command
+     * @param noun Noun part of the command
      * @return Object that the action is being performed on
      */
     public static Action getActionObject(@NonNull final String verb, @Nullable final String noun) {

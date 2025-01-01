@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Represents a connection between two locations in the game. Essentially an edge on the graph.
+ */
 @Data
 public class LocationConnection {
     private List<String> directions;

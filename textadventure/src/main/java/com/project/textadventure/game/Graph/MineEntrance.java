@@ -4,11 +4,13 @@ import com.project.textadventure.constants.ItemConstants;
 import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
 
+import static com.project.textadventure.constants.ItemConstants.ARROW_NAME;
 import static com.project.textadventure.constants.LocationDescriptions.MINE_ENTRANCE_RECENT_CAVE_IN;
 import static com.project.textadventure.constants.LocationNames.MINE_ENTRANCE;
 import static com.project.textadventure.constants.LocationNames.MINE_SHAFT;
@@ -38,6 +40,12 @@ public class MineEntrance extends Location implements Action {
         this.nailsOff = nailsOff;
     }
 
+    /**
+     * Take any actions specific to the mine entrance location, or, if no special commands are given, call the super class method to take a generic action.
+     * @param verb The verb part of the command
+     * @param noun The noun part of the command
+     * @return The response to the action to be displayed to the user
+     */
     @Override
     public String takeAction(@NonNull final String verb, @Nullable final String noun) {
         if (verb.equals("shoot") && !this.nailsOff && !this.isCollapsed) {
@@ -49,33 +57,31 @@ public class MineEntrance extends Location implements Action {
         }
     }
 
-    private String parseShootCommand(final String noun) {
+    /**
+     * Decide if the input results in shooting the arrow at the nails. If so, call
+     * respective method to shoot the arrow.
+     * @param thingToShoot noun part of the command, only "" or "arrow" will do anything
+     * @return String message from successfully shooting the arrow or
+     * a "don't know command" type message
+     */
+    String parseShootCommand(final String thingToShoot) {
         final Game game = GameState.getInstance().getGame();
         String response = "";
 
         // only "shoot" or "shoot arrow" does something at mine entrance
-        if (noun == null || noun.equals("arrow")) {
-            final Item bow = game.getInventoryItemByName("bow");
-            final Item arrow = game.getInventoryItemByName("arrow");
-            // Must have the bow and arrow in your inventory
-            if (bow == null) {
-                response = "You don't have anything to shoot with.";
-            }
-            else if (arrow == null) {
-                response = "You don't have anything to shoot.";
-            }
-            else {
-                response = shootArrow(arrow);
-            }
-        }
-        else {
-            response = generateRandomUnknownCommandResponse();
+        if (!StringUtils.isEmpty(thingToShoot) && !StringUtils.equals(thingToShoot, "arrow") || nailsOff) {
+            // Don't have the bow or arrow, so this can be treated by a regular action
+            response = super.parseShootCommand(thingToShoot);
+        } else {
+            // Have the bow and arrow, so shoot the arrow
+            response = shootArrow();
         }
         return response;
     }
 
-    private String shootArrow(final Item arrow) {
+    private String shootArrow() {
         final Game game = GameState.getInstance().getGame();
+        final Item arrow = game.getInventoryItemByName(ARROW_NAME);
         final Location currentLocation = game.getCurrentLocation();
         String response = "";
 

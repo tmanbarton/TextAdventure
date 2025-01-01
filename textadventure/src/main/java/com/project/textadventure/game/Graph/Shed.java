@@ -34,8 +34,8 @@ public class Shed extends Location implements Action {
 
     /**
      * Take any actions specific to the shed location, or, if no special commands are given, call the super class method to take a generic action.
-     * @param verb The verb of the command
-     * @param noun The noun of the command
+     * @param verb The verb part of the command
+     * @param noun The noun part of the command
      * @return The response to the action to be displayed to the user
      */
     @Override
@@ -53,8 +53,8 @@ public class Shed extends Location implements Action {
     /**
      * Decide if the input results in unlocking/opening the shed. If so, call
      * respective method to unlock/open the shed.
-     * @param verb verb of the command, "unlock" or "open" in this case
-     * @param noun noun of the command, only "" or "shed" will do anything
+     * @param verb verb part of the command, "unlock" or "open" in this case
+     * @param noun noun part of the command, only "" or "shed" will do anything
      * @return String message from successfully unlocking/opening shed or
      * a "don't know command" type message
      */

@@ -221,18 +221,16 @@ public class GameState {
 
         // Set start location by setting it as visited and creating a new Game object with that location as the current location
         // Initialize member variable startLocation so it's available to other classes
-        ///// Tip: Change start location for manual debugging. /////
         driveway.setVisited(true);
 
         ////// Helpful for manual debugging to change start location and add items to it /////
-        Game game = new Game(new ArrayList<>(), graniteRoom, status);
-//        game.addItemToInventory(pie);
+//        game = new Game(new ArrayList<>(), mineEntrance, status);
+//        game.addItemToInventory(new Item(4, ItemConstants.ARROW_LOCATION_DESCRIPTION, ItemConstants.ARROW_INVENTORY_DESCRIPTION, ItemConstants.ARROW_NAME, 0));
 //        game.addItemToInventory(new Item(3, "There is a bow here, strung and ready for shooting", "Bow", "bow", 0));
-//        game.die();
-        return game;
+//        return game;
         //////
 
-//        return new Game(new ArrayList<>(), driveway, status);
+        return new Game(new ArrayList<>(), driveway, status);
     }
 
     public String restartGame() {

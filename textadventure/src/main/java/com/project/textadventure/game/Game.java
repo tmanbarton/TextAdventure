@@ -91,8 +91,8 @@ public class Game implements Action, Comparator<Item> {
 
     /**
      * Based on the user input, call the relevant method to handle the action.
-     * @param verb The verb of the command.
-     * @param noun The noun of the command.
+     * @param verb The verb part of the command.
+     * @param noun The noun part of the command.
      * @return Response to display to the user.
      */
     @Override

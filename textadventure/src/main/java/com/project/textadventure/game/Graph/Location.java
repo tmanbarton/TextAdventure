@@ -20,8 +20,13 @@ import static com.project.textadventure.constants.GameConstants.OPEN;
 import static com.project.textadventure.constants.GameConstants.SHOOT;
 import static com.project.textadventure.constants.GameConstants.TURN;
 import static com.project.textadventure.constants.GameConstants.UNLOCK;
+import static com.project.textadventure.constants.ItemConstants.ARROW_NAME;
+import static com.project.textadventure.constants.ItemConstants.BOW_NAME;
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
+/**
+ * Represents a location in the game. Essentially a node in the graph.
+ */
 @Data
 public class Location implements Action {
     private String description;
@@ -49,12 +54,19 @@ public class Location implements Action {
         this.bfsIsVisited = false;
     }
 
-    public Location() {}
-
+    /**
+     * Connect this {@link Location} to another {@link Location}. Essentially an edge in the graph.
+     * @param locationToConnect Location to connect to
+     */
     public void connectLocation(final LocationConnection locationToConnect) {
         this.locationConnections.add(locationToConnect);
     }
 
+    /**
+     * Get the {@link Item} at the {@link Location} by name if it's there, otherwise null.
+     * @param name Name of the item
+     * @return {@link Item} at the {@link Location} with the given name, or null if not found
+     */
     public Item getLocationItemByName(final String name) {
         for(final Item item : this.items) {
             if (name.equals(item.getName())) {
@@ -64,22 +76,26 @@ public class Location implements Action {
         return null;
     }
 
-    public boolean isItemAtLocation(final String itemName) {
-        return getLocationItemByName(itemName) != null;
-    }
-
+    /**
+     * Add an {@link Item} to the {@link Location}.
+     * @param item Item to add
+     */
     public void addItemToLocation(final Item item) {
         items.add(item);
     }
 
+    /**
+     * Remove an {@link Item} from the {@link Location}.
+     * @param item Item to remove
+     */
     public void removeItemFromLocation(final Item item) {
         items.remove(item);
     }
 
     /**
      * Determine what action to take based on the verb and noun and execute the action.
-     * @param verb Verb form of the command
-     * @param noun Noun form of the command, could be empty
+     * @param verb Verb part of the command
+     * @param noun Noun part of the command, could be empty
      * @return Response to the command to display to the user
      */
     @Override
@@ -107,6 +123,11 @@ public class Location implements Action {
         return response;
     }
 
+    /**
+     * Check if the input is a valid direction based on the game constants.
+     * @param input Input to check
+     * @return True if the input is a valid direction, false otherwise
+     */
     boolean isDirection(final String input) {
         return GameConstants.ALL_DIRECTIONS.contains(input);
     }
@@ -129,6 +150,11 @@ public class Location implements Action {
         return moveToLocation(locationConnection);
     }
 
+    /**
+     * Move to the {@link Location} connected by the given connection.
+     * @param locationConnection Connection to the {@link Location} to move to
+     * @return Description of the new {@link Location} + {@link Item}s at the location
+     */
     private String moveToLocation(final LocationConnection locationConnection) {
         final Location connection = locationConnection.getLocation();
         GameState.getInstance().getGame().setCurrentLocation(connection);
@@ -140,11 +166,20 @@ public class Location implements Action {
         return connection.getDescription() + listLocationItems(connection.getItems());
     }
 
+    /**
+     * Display the current {@link Location}'s description and list the {@link Item}s at the {@link Location}.
+     * @return Description of the current location + items at the {@link Location}
+     */
     public String look() {
         final Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
         return currentLocation.getDescription() + listLocationItems(currentLocation.getItems());
     }
 
+    /**
+     * List the items at the location.
+     * @param items Items to list
+     * @return List of {@link Item}s at the {@link Location} as a String
+     */
     String listLocationItems(final List<Item> items) {
         items.sort(Comparator.comparingInt(Item::getDisplayOrder));
         final StringBuilder result = new StringBuilder();
@@ -154,39 +189,53 @@ public class Location implements Action {
         return result.isEmpty() ? "" : "\n" + result;
     }
 
+    /**
+     * Tell the user there's nothing here to unlock because unlocking is only valid at the {@link Shed}.
+     * @return Response to unlocking at this {@link Location}
+     */
     private String unlock() {
         return "There's nothing to unlock here.";
     }
 
+    /**
+     * Tell the user there's nothing here to open because opening is only valid at the {@link Shed}.
+     * @return Response to opening at this {@link Location}
+     */
     private String open() {
         return "There's nothing to open here.";
     }
 
-    private String parseShootCommand(final String noun) {
+    /**
+     * Parse the shoot command. If the noun is null or "arrow", shoot the arrow. Otherwise, return a response indicating why you can't shoot.
+     * @param thingToShoot Noun of the command
+     * @return Response to the shoot command
+     */
+    String parseShootCommand(final String thingToShoot) {
         final Game game = GameState.getInstance().getGame();
         String response = "";
 
-        // only "shoot" or "shoot arrow" does something at mine entrance
-        if (noun == null || noun.equals(ItemConstants.ARROW_NAME)) {
+        if (!game.isItemInInventory(BOW_NAME)) {
             // Must have the bow and arrow in your inventory
-            if (!game.isItemInInventory(ItemConstants.BOW_NAME)) {
-                response = "You don't have anything to shoot with.";
-            }
-            else if (!game.isItemInInventory(ItemConstants.ARROW_NAME)) {
-                response = "You don't have anything to shoot.";
-            }
+            response = "You don't have anything to shoot with.";
+        } else if (!game.isItemInInventory(ARROW_NAME)) {
+            response = "You don't have anything to shoot.";
+        } else if (StringUtils.equals(thingToShoot, ARROW_NAME) || thingToShoot == null) {
             // Shoot the arrow
-            else {
-                final Item arrow = game.getInventoryItemByName(ItemConstants.ARROW_NAME);
-                response = shootArrow(arrow);
-            }
-        }
-        else {
-            response = generateRandomUnknownCommandResponse();
+            final Item arrow = game.getInventoryItemByName(ARROW_NAME);
+            response = shootArrow(arrow);
+        } else {
+            // User has the bow and arrow, but tries to shoot something other than the arrow
+            response = "You can't shoot that.";
         }
         return response;
     }
 
+    /**
+     * The box and arrow are in the inventory. Execute shooting the arrow and remove it from the inventory and add it
+     * to the location or only remove it from inventory if shot in the boat.
+     * @param arrow Arrow to shoot
+     * @return Response to shooting the arrow
+     */
     private String shootArrow(final Item arrow) {
         final Game game = GameState.getInstance().getGame();
         if (game.getCurrentLocation().getName().equals(LocationNames.BOAT)) {
@@ -198,6 +247,10 @@ public class Location implements Action {
         return "Your arrow goes flying off into the the distance and lands with a thud on the ground.";
     }
 
+    /**
+     * Tell the user there's nothing here to turn because turning is only valid at the {@link Dam}.
+     * @return Response to opening at this {@link Location}
+     */
     private String turn() {
         return "There's nothing here to turn.";
     }

@@ -33,8 +33,8 @@ public class Dam extends Location implements Action {
 
     /**
      * Take any actions specific to the dam location, or, if no special commands are given, call the super class method to take a generic action.
-     * @param verb The verb form of the command
-     * @param noun The noun form of the command
+     * @param verb The verb part of the command
+     * @param noun The noun of the command
      * @return The response to the action to be displayed to the user
      */
     @Override

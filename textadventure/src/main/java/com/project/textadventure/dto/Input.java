@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/**
+ * Represents input from the user
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString

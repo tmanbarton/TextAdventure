@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/**
+ * Represents the shape of the response from the service
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

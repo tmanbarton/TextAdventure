@@ -5,6 +5,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
+/**
+ * Represents an item in the game with a description for the inventory, a description for the location, name, points
+ * related to it if any, and an int to determine where in the list it's displayed when taking inventory and listing items at location.
+ */
 @Data
 public class Item {
     private final String locationDescription;
@@ -25,6 +29,9 @@ public class Item {
         this.inventoryDescription = description;
     }
 
+    /**
+     * @return Equal if the names are equal
+     */
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
