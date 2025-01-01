@@ -4,6 +4,8 @@ import com.project.textadventure.constants.ItemConstants;
 import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
+import lombok.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.util.List;
 
@@ -30,8 +32,14 @@ public class Shed extends Location implements Action {
         this.open = open;
     }
 
+    /**
+     * Take any actions specific to the shed location, or, if no special commands are given, call the super class method to take a generic action.
+     * @param verb The verb of the command
+     * @param noun The noun of the command
+     * @return The response to the action to be displayed to the user
+     */
     @Override
-    public String takeAction(final String verb, final String noun) {
+    public String takeAction(@NonNull String verb, @Nullable final String noun) {
         String response = "";
         if (verb.equals("unlock") || verb.equals("open")) {
             response = parseUnlockAndOpenCommand(verb, noun);
@@ -87,12 +95,19 @@ public class Shed extends Location implements Action {
         return response;
     }
 
+    /**
+     * Unlock the shed by setting the unlocked flag to true and changing the description of the shed.
+     */
     private void unlockShed() {
         this.unlocked = true;
         this.setDescription("A cheerful little shed stands with it's lock hanging open with a picnic table to the north.");
         this.setShortDescription("You're standing before a cheerful little shed with its lock hanging open.");
     }
 
+    /**
+     * Open the shed by setting the open flag to true, changing the description of the shed, and adding items that are in the shed to the location.
+     * Also, increment the score by 10 points for solving the puzzle of unlocking and opening the shed.
+     */
     public void openShed() {
         this.setDescription("You stand before an open shed with a picnic table to the north.");
         this.setShortDescription("You're standing before a cheerful little, open shed.");
@@ -109,6 +124,8 @@ public class Shed extends Location implements Action {
         this.addItemToLocation(jar);
         this.addItemToLocation(shovel);
         this.addItemToLocation(tent);
+        // Solved this puzzle of unlocking and opening the shed. Add 10 points to the score.
+        GameState.getInstance().incrementScore(10);
     }
 
 }

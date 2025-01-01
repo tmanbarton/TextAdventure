@@ -64,10 +64,10 @@ public class GameState {
     Game initializeGame(final GameStatus status) {
         // Create items for locations
         final Item key = new Item(1, ItemConstants.KEY_LOCATION_DESCRIPTION, ItemConstants.KEY_INVENTORY_DESCRIPTION, ItemConstants.KEY_NAME, 0);
-        final Item gold = new Item(6, ItemConstants.GOLD_LOCATION_DESCRIPTION, ItemConstants.GOLD_INVENTORY_DESCRIPTION, ItemConstants.GOLD_NAME, 20);
+        final Item gold = new Item(6, ItemConstants.GOLD_LOCATION_DESCRIPTION, ItemConstants.GOLD_INVENTORY_DESCRIPTION, ItemConstants.GOLD_NAME, 30);
         final Item magnet = new Item(10, ItemConstants.MAGNET_LOCATION_DESCRIPTION, ItemConstants.MAGNET_INVENTORY_DESCRIPTION, ItemConstants.MAGNET_NAME, 0);
-        final Item ruby = new Item(11, ItemConstants.RUBY_LOCATION_DESCRIPTION, ItemConstants.RUBY_INVENTORY_DESCRIPTION, ItemConstants.RUBY_NAME, 30);
-        final Item pie = new Item(12, ItemConstants.PIE_LOCATION_DESCRIPTION, ItemConstants.PIE_INVENTORY_DESCRIPTION, ItemConstants.PIE_NAME, 0);
+        final Item ruby = new Item(11, ItemConstants.RUBY_LOCATION_DESCRIPTION, ItemConstants.RUBY_INVENTORY_DESCRIPTION, ItemConstants.RUBY_NAME, 50);
+        final Item pie = new Item(12, ItemConstants.PIE_LOCATION_DESCRIPTION, ItemConstants.PIE_INVENTORY_DESCRIPTION, ItemConstants.PIE_NAME, 3.14);
 
         // Initialize lists for respective location's items. If the game is already in progress, don't add the item to the location, otherwise add it
         final List<Item> ditchItems = new ArrayList<>(List.of(key));

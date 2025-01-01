@@ -2,28 +2,33 @@ package com.project.textadventure.game;
 
 
 import com.project.textadventure.controllers.Action;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+import org.thymeleaf.util.StringUtils;
 
 import static com.project.textadventure.constants.GameConstants.*;
 
 public class ActionFactory {
-    public static Action getActionObject(final String verb, final String noun) {
+
+    /**
+     * Returns the object that the action is being performed on (game, or location)
+     * @param verb Verb form of the command
+     * @param noun Noun form of the command
+     * @return Object that the action is being performed on
+     */
+    public static Action getActionObject(@NonNull final String verb, @Nullable final String noun) {
         final Game game = GameState.getInstance().getGame();
-        if (verb.equals("pick") && noun.startsWith("up")) {
+        if (StringUtils.startsWith(verb, "pick") && StringUtils.startsWith(noun, "up")) {
             return game;
         }
-//        final Actions action;
         final String action;
-        try {
-             action = verb.toLowerCase();
-        } catch (IllegalArgumentException ex) {
-            return null;
-        }
+        action = verb.toLowerCase();
 
         return switch(action) {
-            case GET, TAKE, FILL, DROP, THROW, QUIT, RESTART, SCORE, INFO, HELP, I, INVEN, INVENTORY, EAT, PUSH -> game;
+            case GET, TAKE, FILL, DROP, THROW, QUIT, RESTART, SCORE, INFO, HELP, INVENTORY_SHORT, INVENTORY_MEDIUM, INVENTORY_LONG, EAT, PUSH -> game;
             case NORTH_SHORT, SOUTH_SHORT, EAST_SHORT, WEST_SHORT, NE_SHORT, NW_SHORT, SE_SHORT, SW_SHORT, UP_SHORT, DOWN_SHORT,
                     NORTH_LONG, SOUTH_LONG, EAST_LONG, WEST_LONG, NE_LONG, NW_LONG, SE_LONG, SW_LONG,
-                    UP_LONG, DOWN_LONG, IN, ENTER, OUT, EXIT, LOOK, L, OPEN, UNLOCK, SHOOT, TURN -> game.getCurrentLocation();
+                    UP_LONG, DOWN_LONG, IN, ENTER, OUT, EXIT, LOOK_LONG, LOOK_SHORT, OPEN, UNLOCK, SHOOT, TURN -> game.getCurrentLocation();
             default -> null;
         };
     }

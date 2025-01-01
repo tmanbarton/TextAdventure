@@ -6,11 +6,20 @@ import com.project.textadventure.constants.LocationNames;
 import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.*;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import static com.project.textadventure.constants.GameConstants.LOOK_LONG;
+import static com.project.textadventure.constants.GameConstants.LOOK_SHORT;
+import static com.project.textadventure.constants.GameConstants.OPEN;
+import static com.project.textadventure.constants.GameConstants.SHOOT;
+import static com.project.textadventure.constants.GameConstants.TURN;
+import static com.project.textadventure.constants.GameConstants.UNLOCK;
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
 @Data
@@ -67,25 +76,31 @@ public class Location implements Action {
         items.remove(item);
     }
 
+    /**
+     * Determine what action to take based on the verb and noun and execute the action.
+     * @param verb Verb form of the command
+     * @param noun Noun form of the command, could be empty
+     * @return Response to the command to display to the user
+     */
     @Override
-    public String takeAction(final String verb, final String noun) {
+    public String takeAction(@NonNull final String verb, @Nullable final String noun) {
         String response = "";
         if (isDirection(verb)) {
             response = move(verb);
         }
-        else if (verb.equals("look") || verb.equals("l")) {
+        else if ((StringUtils.equals(verb, LOOK_LONG) || StringUtils.equals(verb, LOOK_SHORT) && StringUtils.isEmpty(noun))) {
             response = look();
         }
-        else if (verb.equals("unlock")) {
+        else if (verb.equals(UNLOCK)) {
             response = unlock();
         }
-        else if (verb.equals("open")) {
+        else if (verb.equals(OPEN)) {
             response = open();
         }
-        else if (verb.equals("shoot")) {
+        else if (verb.equals(SHOOT)) {
             response = parseShootCommand(noun);
         }
-        else if (verb.equals("turn")) {
+        else if (verb.equals(TURN)) {
             response = turn();
         }
 

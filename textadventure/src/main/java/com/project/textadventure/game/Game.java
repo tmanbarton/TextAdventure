@@ -11,8 +11,10 @@ import com.project.textadventure.game.Graph.Item;
 import com.project.textadventure.game.Graph.Location;
 import com.project.textadventure.game.Graph.MineEntrance;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.lang.Nullable;
 
 import java.util.*;
 
@@ -66,7 +68,7 @@ public class Game implements Action, Comparator<Item> {
             GameState.getInstance().incrementScore(item.getPoints());
         }
         inventory.add(item);
-        inventory.sort(new Game());
+        inventory.sort(GameState.getInstance().getGame());
     }
 
     public void removeItemFromInventory(final Item item) {
@@ -87,8 +89,14 @@ public class Game implements Action, Comparator<Item> {
         };
     }
 
+    /**
+     * Based on the user input, call the relevant method to handle the action.
+     * @param verb The verb of the command.
+     * @param noun The noun of the command.
+     * @return Response to display to the user.
+     */
     @Override
-    public String takeAction(String verb, final String noun) {
+    public String takeAction(@NonNull String verb, @Nullable final String noun) {
         String result = "";
         // To lowercase to be able to compare to enum constants to string
         verb = verb.toLowerCase();
@@ -96,7 +104,7 @@ public class Game implements Action, Comparator<Item> {
             result = handleGetCommand(noun);
         } else if (StringUtils.equals(verb, FILL)) {
             result = handleFillCommand(noun);
-        } else if (StringUtils.equals(verb, INVENTORY) || StringUtils.equals(verb, I) || StringUtils.equals(verb, INVEN)) {
+        } else if (StringUtils.equals(verb, INVENTORY_LONG) || StringUtils.equals(verb, INVENTORY_SHORT) || StringUtils.equals(verb, INVENTORY_MEDIUM)) {
             result = takeInventory();
         } else if (StringUtils.equals(verb, DROP) || StringUtils.equals(verb, THROW)) {
             result = handleDropCommand(noun);
@@ -168,7 +176,14 @@ public class Game implements Action, Comparator<Item> {
         return result;
     }
 
-    private String handleDropCommand(final String noun) {
+    /**
+     * Drop an item from the player's inventory at the current location. If the item is dropped at the dam and the item is the magnet, the dam's
+     * description is updated to reflect the dropped magnet. If the item is dropped at the boat, the item is lost forever.
+     * Otherwise, just add the item to the location and remove it from the inventory
+     * @param noun item to drop
+     * @return response to user
+     */
+    private String handleDropCommand(@Nullable final String noun) {
         if (noun == null) {
             return "What to want to drop?";
         }
@@ -231,6 +246,10 @@ public class Game implements Action, Comparator<Item> {
         return  "The jar is now full of gold flakes.";
     }
 
+    /**
+     * Format the user's inventory to display to the user or return a message saying inventory is empty
+     * @return the user's inventory
+     */
     private String takeInventory() {
         if (this.inventory.isEmpty()) {
             return ResponseConstants.NOT_CARRYING;
@@ -246,13 +265,14 @@ public class Game implements Action, Comparator<Item> {
         // Check that the pie is in the inventory and if the prompt for item to eat is a pie
         // or empty (command is just "eat").
         // If it is, remove the pie from the inventory and add 3.14 to the score.
-        if (isItemInInventory(PIE_NAME) && (StringUtils.isEmpty(itemName) || StringUtils.equals(itemName, PIE_NAME))) {
-            GameState.getInstance().incrementScore(3.14);
+        final Item item = getInventoryItemByName(itemName);
+
+        if (item != null && isItemInInventory(PIE_NAME) && (StringUtils.isEmpty(itemName) || StringUtils.equals(itemName, PIE_NAME))) {
+            GameState.getInstance().incrementScore(item.getPoints());
             removeItemFromInventory(getInventoryItemByName(PIE_NAME));
-            return "You eat the pie. It's delicious. You earned 3.14 points.";
+            return "You eat the pie. It's delicious. You earned " + item.getPoints() + " points.";
         }
 
-        final Item item = getInventoryItemByName(itemName);
         // Item is not found in the inventory
         if (item == null) {
             return StringUtils.isEmpty(itemName) ? "You don't have anything to eat." : "You're not carrying it!";
@@ -265,7 +285,7 @@ public class Game implements Action, Comparator<Item> {
     /**
      * Handle the push command. The only thing that can be pushed is the button in the mine cage.
      * @param noun thing to push. null if the user just says "push"
-     * @return response to send to the terminal
+     * @return response to display to the user
      */
     private String handlePushCommand(final String noun) {
         String result = "";
@@ -287,7 +307,7 @@ public class Game implements Action, Comparator<Item> {
      * Determine if the mine cage is at the top or bottom of the mine shaft. If it's at the top, remove Mountain Pass from its connecting location
      * and add Bottom of Vertical Mine Shaft. If it's at the bottom, remove Bottom of Vertical Mine Shaft from its connecting location and add Mountain Pass.
      *
-     * @return response to send to the terminal
+     * @return response to display to the user
      */
     private String moveMineCage() {
         String result = "The cage rattles as it starts to move and, as it reaches the end of the shaft, grinds to a halt with the squeaking of chains and pulleys.";

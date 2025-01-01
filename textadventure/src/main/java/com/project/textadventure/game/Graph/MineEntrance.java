@@ -4,6 +4,8 @@ import com.project.textadventure.constants.ItemConstants;
 import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class MineEntrance extends Location implements Action {
     }
 
     @Override
-    public String takeAction(final String verb, final String noun) {
+    public String takeAction(@NonNull final String verb, @Nullable final String noun) {
         if (verb.equals("shoot") && !this.nailsOff && !this.isCollapsed) {
             return parseShootCommand(noun);
         }
@@ -95,6 +97,8 @@ public class MineEntrance extends Location implements Action {
             }
         }
 
+        // The user solved the puzzle. Get 20 points
+        GameState.getInstance().incrementScore(20);
         currentLocation.setDescription(MINE_ENTRANCE_RECENT_CAVE_IN);
         response = "You shoot the arrow and it glances off the nails with a small ringing sound. The nails and your " +
                 "arrow land a few feet away then there's a loud crack of the support and the entrance caves in with an " +

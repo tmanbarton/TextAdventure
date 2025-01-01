@@ -4,6 +4,8 @@ import com.project.textadventure.constants.GameConstants;
 import com.project.textadventure.constants.LocationDescriptions;
 import com.project.textadventure.constants.LocationNames;
 import com.project.textadventure.controllers.Action;
+import lombok.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.util.List;
 
@@ -29,8 +31,14 @@ public class Dam extends Location implements Action {
         this.magnetDropped = magnetDropped;
     }
 
+    /**
+     * Take any actions specific to the dam location, or, if no special commands are given, call the super class method to take a generic action.
+     * @param verb The verb form of the command
+     * @param noun The noun form of the command
+     * @return The response to the action to be displayed to the user
+     */
     @Override
-    public String takeAction(final String verb, final String noun) {
+    public String takeAction(@NonNull String verb, @Nullable final String noun) {
         if (verb.equals(TURN)) {
             return parseTurnCommand(noun);
         }
@@ -39,6 +47,11 @@ public class Dam extends Location implements Action {
         }
     }
 
+    /**
+     * Parse the turn command for the dam location. Determine if the wheel is allowed to be turned and update the state if it is.
+     * @param noun The noun form of the command.
+     * @return The response to the action to be displayed to the user.
+     */
     private String parseTurnCommand(final String noun) {
         String response = "";
 

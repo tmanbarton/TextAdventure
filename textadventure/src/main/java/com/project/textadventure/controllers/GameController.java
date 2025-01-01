@@ -31,6 +31,11 @@ import static com.project.textadventure.game.Game.generateRandomUnknownCommandRe
 @RequestMapping("/api/vots/game")
 public class GameController {
 
+    /**
+     * Endpoint for the game. Takes in user input and returns the response.
+     * @param input User's input
+     * @return Response to the user's input to display to the user
+     */
     @PostMapping("/gameRequest")
     public ResponseEntity<ServiceResponse<GameResponse>> executeCommand(@RequestBody Input input) {
         final String inputString = input.getInput().toLowerCase();
@@ -39,16 +44,18 @@ public class GameController {
         final List<Pair<String, String>> commands = parseInput(inputString);
         StringBuilder result = new StringBuilder();
         for (final Pair<String, String> command : commands) {
-            // If the game is not in progress, it's some other state that requires the user to answer yes/no
-            if (game.getGameStatus() != GameStatus.IN_PROGRESS) {
+            // If the game is not in progress or is lost, it's some other state that requires the user to answer yes/no
+            if (game.getGameStatus() != GameStatus.IN_PROGRESS && game.getGameStatus() != GameStatus.LOSE) {
                 result = new StringBuilder(handleYesNoConfirmation(command.getKey()));
                 break;
             }
+            // Figure out which action to take based on the verb and noun
             final Action action = ActionFactory.getActionObject(command.getKey(), command.getValue());
             if (action == null) {
                 result = new StringBuilder(generateRandomUnknownCommandResponse());
                 break;
             }
+            // Execute the action and append the result to the response
             result.append(action.takeAction(command.getKey(), command.getValue()));
         }
         final GameResponse resp = new GameResponse(result.toString(), input.getInput());

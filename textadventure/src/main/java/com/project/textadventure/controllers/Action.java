@@ -1,11 +1,14 @@
 package com.project.textadventure.controllers;
 
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+
 public interface Action {
     /**
-     *
-     * @param verb
-     * @param noun
-     * @return
+     * Take an action in the game
+     * @param verb The verb form of the command
+     * @param noun The noun form of the command
+     * @return The response to the action to be displayed to the user
      */
-    String takeAction(final String verb, final String noun);
+    String takeAction(@NonNull final String verb, @Nullable final String noun);
 }
