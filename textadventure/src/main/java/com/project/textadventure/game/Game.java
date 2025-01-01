@@ -49,7 +49,7 @@ public class Game implements Action, Comparator<Item> {
 
     public Item getInventoryItemByName(final String name) {
         for(final Item item : this.inventory) {
-            if (name.equals(item.getName())) {
+            if (StringUtils.equals(item.getName(), name)) {
                 return item;
             }
         }
@@ -243,13 +243,23 @@ public class Game implements Action, Comparator<Item> {
     }
 
     private String handleEatCommand(final String itemName) {
-        if (StringUtils.equals(itemName, PIE_NAME) || StringUtils.isEmpty(itemName)) {
+        // Check that the pie is in the inventory and if the prompt for item to eat is a pie
+        // or empty (command is just "eat").
+        // If it is, remove the pie from the inventory and add 3.14 to the score.
+        if (isItemInInventory(PIE_NAME) && (StringUtils.isEmpty(itemName) || StringUtils.equals(itemName, PIE_NAME))) {
             GameState.getInstance().incrementScore(3.14);
             removeItemFromInventory(getInventoryItemByName(PIE_NAME));
             return "You eat the pie. It's delicious. You earned 3.14 points.";
-        } else {
-            return "That's not something you can eat.";
         }
+
+        final Item item = getInventoryItemByName(itemName);
+        // Item is not found in the inventory
+        if (item == null) {
+            return StringUtils.isEmpty(itemName) ? "You don't have anything to eat." : "You're not carrying it!";
+        }
+
+        // The item is found but not edible
+        return "That's not something you can eat.";
     }
 
     /**
