@@ -96,11 +96,12 @@ public class Game implements Action, Comparator<Item> {
      * @return Response to display to the user.
      */
     @Override
-    public String takeAction(@NonNull String verb, @Nullable final String noun) {
+    public String takeAction(@NonNull String verb, @Nullable String noun) {
         String result = "";
         // To lowercase to be able to compare to enum constants to string
         verb = verb.toLowerCase();
-        if (StringUtils.equals(verb, GET) || StringUtils.equals(verb, TAKE)) {
+        if (isGetCommand(verb, noun)) {
+            noun = simplifyNoun(noun);
             result = handleGetCommand(noun);
         } else if (StringUtils.equals(verb, FILL)) {
             result = handleFillCommand(noun);
@@ -123,6 +124,30 @@ public class Game implements Action, Comparator<Item> {
             return ResponseConstants.HELP_RESPONSE;
         }
         return result;
+    }
+
+    /**
+     * Check if the command is any form of a get command. Could be "get", "take", or "pick up".
+     * @param verb The verb part of the command.
+     * @param noun The noun part of the command.
+     * @return True if the command is a get command, false otherwise.
+     */
+    private boolean isGetCommand(@NonNull String verb, @Nullable final String noun) {
+        return StringUtils.equals(verb, GET) || StringUtils.equals(verb, TAKE) ||
+                (noun != null && StringUtils.equals(verb, "pick") && StringUtils.equals(noun.substring(0, 2), "up"));
+    }
+
+    /**
+     * When the command is parsed for "pick up", it comes out as verb = "pick", noun = "up [item]".
+     * This method simplifies the noun part of the command to just the item.
+     * @param noun The noun part of the command.
+     */
+    String simplifyNoun(@NonNull String noun) {
+        // Simplify "pick up" to "get"
+        if (StringUtils.equals(noun.substring(0, 3), "up ")) {
+            noun = noun.substring(3);
+        }
+        return noun;
     }
 
     /**

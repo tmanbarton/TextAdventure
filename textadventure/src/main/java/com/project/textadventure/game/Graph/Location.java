@@ -14,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import static com.project.textadventure.constants.GameConstants.GO;
 import static com.project.textadventure.constants.GameConstants.LOOK_LONG;
 import static com.project.textadventure.constants.GameConstants.LOOK_SHORT;
 import static com.project.textadventure.constants.GameConstants.OPEN;
@@ -99,37 +100,39 @@ public class Location implements Action {
      * @return Response to the command to display to the user
      */
     @Override
-    public String takeAction(@NonNull final String verb, @Nullable final String noun) {
+    public String takeAction(@NonNull String verb, @Nullable final String noun) {
         String response = "";
-        if (isDirection(verb)) {
-            response = move(verb);
-        }
-        else if ((StringUtils.equals(verb, LOOK_LONG) || StringUtils.equals(verb, LOOK_SHORT) && StringUtils.isEmpty(noun))) {
+        // If the verb is "go", then we expect the noun to be the direction
+        final String newNoun = StringUtils.equals(verb, GO) ? null : noun;
+        final String newVerb = StringUtils.equals(verb, GO) ? noun : verb;
+        if (isDirection(newVerb, newNoun)) {
+            response = move(newVerb);
+        } else if ((StringUtils.equals(verb, LOOK_LONG) || StringUtils.equals(verb, LOOK_SHORT)) && StringUtils.isEmpty(noun)) {
             response = look();
-        }
-        else if (verb.equals(UNLOCK)) {
+        } else if (verb.equals(UNLOCK)) {
             response = unlock();
-        }
-        else if (verb.equals(OPEN)) {
+        } else if (verb.equals(OPEN)) {
             response = open();
-        }
-        else if (verb.equals(SHOOT)) {
+        } else if (verb.equals(SHOOT)) {
             response = parseShootCommand(noun);
-        }
-        else if (verb.equals(TURN)) {
+        } else if (verb.equals(TURN)) {
             response = turn();
+        } else {
+            response = generateRandomUnknownCommandResponse();
         }
-
         return response;
     }
 
     /**
      * Check if the input is a valid direction based on the game constants.
-     * @param input Input to check
+     * @param verb Input to check
      * @return True if the input is a valid direction, false otherwise
      */
-    boolean isDirection(final String input) {
-        return GameConstants.ALL_DIRECTIONS.contains(input);
+    boolean isDirection(String verb, String noun) {
+        if (StringUtils.isNotEmpty(noun)) {
+            return false;
+        }
+        return GameConstants.ALL_DIRECTIONS.contains(verb);
     }
 
     private String move(final String direction) {

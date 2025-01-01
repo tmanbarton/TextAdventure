@@ -44,6 +44,7 @@ public class GameConstants {
 
     // Commands
     public static final String GET = "get";
+    public static final String GO = "go";
     public static final String TAKE = "take";
     public static final String DROP = "drop";
     public static final String THROW = "throw";

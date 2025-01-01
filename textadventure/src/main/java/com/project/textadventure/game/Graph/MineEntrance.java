@@ -79,6 +79,11 @@ public class MineEntrance extends Location implements Action {
         return response;
     }
 
+    /**
+     * Shoot the arrow at the nails, adding the nails to the location and causing the mine entrance to collapse.
+     * Also add arrow to location as usual when it's shot.
+     * @return The response to the action to be displayed to the user
+     */
     private String shootArrow() {
         final Game game = GameState.getInstance().getGame();
         final Item arrow = game.getInventoryItemByName(ARROW_NAME);
