@@ -105,6 +105,7 @@ public class Location implements Action {
         // If the verb is "go", then we expect the noun to be the direction
         final String newNoun = StringUtils.equals(verb, GO) ? null : noun;
         final String newVerb = StringUtils.equals(verb, GO) ? noun : verb;
+
         if (isDirection(newVerb, newNoun)) {
             response = move(newVerb);
         } else if ((StringUtils.equals(verb, LOOK_LONG) || StringUtils.equals(verb, LOOK_SHORT)) && StringUtils.isEmpty(noun)) {
@@ -138,18 +139,17 @@ public class Location implements Action {
     private String move(final String direction) {
         final Game game = GameState.getInstance().getGame();
         final Location currentLocation = game.getCurrentLocation();
-        final Optional<LocationConnection> optionalConnection = currentLocation.getLocationConnections()
+        final Optional<LocationConnection> connection = currentLocation.getLocationConnections()
                 .stream()
                 .filter(connectingLocation -> connectingLocation.getDirections().contains(direction))
                 .findFirst();
 
-        if (optionalConnection.isEmpty()) {
+        if (connection.isEmpty() ||
+                // Special case for the underground lake where you can't cross without going in the boat
+                (currentLocation instanceof UndergroundLake && !((UndergroundLake) currentLocation).isBoatAtLocation() && StringUtils.equals(direction, "in"))) {
             return "You can't go that way.";
         }
-        final LocationConnection locationConnection = optionalConnection.get();
-        if (currentLocation instanceof UndergroundLake && ((UndergroundLake) currentLocation).boatAtLocation) {
-            return moveToLocation(locationConnection);
-        }
+        final LocationConnection locationConnection = connection.get();
         return moveToLocation(locationConnection);
     }
 
@@ -159,14 +159,15 @@ public class Location implements Action {
      * @return Description of the new {@link Location} + {@link Item}s at the location
      */
     private String moveToLocation(final LocationConnection locationConnection) {
-        final Location connection = locationConnection.getLocation();
-        GameState.getInstance().getGame().setCurrentLocation(connection);
+        final Location toLocation = locationConnection.getLocation();
 
-        if (connection.isVisited()) {
-            return connection.getShortDescription() + listLocationItems(connection.getItems());
+        GameState.getInstance().getGame().setCurrentLocation(toLocation);
+
+        if (toLocation.isVisited()) {
+            return toLocation.getShortDescription() + listLocationItems(toLocation.getItems());
         }
-        connection.setVisited(true);
-        return connection.getDescription() + listLocationItems(connection.getItems());
+        toLocation.setVisited(true);
+        return toLocation.getDescription() + listLocationItems(toLocation.getItems());
     }
 
     /**

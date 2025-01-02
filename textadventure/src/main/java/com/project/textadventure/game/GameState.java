@@ -71,8 +71,8 @@ public class GameState {
 
         // Initialize lists for respective location's items. If the game is already in progress, don't add the item to the location, otherwise add it
         final List<Item> ditchItems = new ArrayList<>(List.of(key));
-        final List<Item> mineEntranceItems =  new ArrayList<>(List.of(gold));
-        final List<Item> logCabinItems =  new ArrayList<>(List.of(magnet));
+        final List<Item> mineEntranceItems = new ArrayList<>(List.of(gold));
+        final List<Item> logCabinItems = new ArrayList<>(List.of(magnet));
         final List<Item> crumpledMineCartItems = new ArrayList<>(List.of(ruby));
         final List<Item> graniteRoomItems = new ArrayList<>(List.of(pie));
 
@@ -129,7 +129,6 @@ public class GameState {
         boat.connectLocation(new LocationConnection(List.of(NE_LONG, NE_SHORT), undergroundLakeNE));
         boat.connectLocation(new LocationConnection(List.of(SE_LONG, SE_SHORT), undergroundLakeSE));
         bottomOfVerticalMineShaft.connectLocation(new LocationConnection(List.of(WEST_LONG, WEST_SHORT), dankPassage));
-//        bottomOfVerticalMineShaft.connectLocation.(new ConnectingLocation(List.of(IN, ENTER), mine cage));
         brokenRock.connectLocation(new LocationConnection(List.of(DOWN_LONG, DOWN_SHORT), dirtyPassage));
         crumpledMineCart.connectLocation(new LocationConnection(List.of(UP_LONG, UP_SHORT), dynamiteHoles));
         dam.connectLocation(new LocationConnection(List.of(NORTH_LONG, NORTH_SHORT, UP_LONG, UP_SHORT), topOfStairs));
@@ -224,7 +223,7 @@ public class GameState {
         driveway.setVisited(true);
 
         ////// Helpful for manual debugging to change start location and add items to it /////
-//        game = new Game(new ArrayList<>(), mineEntrance, status);
+//        game = new Game(new ArrayList<>(), undergroundLakeNE, status);
 //        game.addItemToInventory(new Item(4, ItemConstants.ARROW_LOCATION_DESCRIPTION, ItemConstants.ARROW_INVENTORY_DESCRIPTION, ItemConstants.ARROW_NAME, 0));
 //        game.addItemToInventory(new Item(3, "There is a bow here, strung and ready for shooting", "Bow", "bow", 0));
 //        return game;

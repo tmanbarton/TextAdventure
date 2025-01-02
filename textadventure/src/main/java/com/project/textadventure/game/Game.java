@@ -412,8 +412,8 @@ public class Game implements Action, Comparator<Item> {
         // Mine cage is currently at the bottom of the mine shaft, connected to the bottom of vertical mine shaft location.
         // Remove bottom of mine shaft from mine cage, add mountain pass to mine cage, and set cage connections to mountain pass
         locationConnectedToMineCage.getLocationConnections().removeIf(locationConnection -> locationConnection.getLocation().getName().equals(MINE_CAGE));
-        currentLocation.setLocationConnections(List.of(new LocationConnection(locationConnectedToMineCage.getName().equals(MOUNTAIN_PASS) ? List.of(WEST_LONG, WEST_SHORT, OUT, EXIT) : List.of(EAST_LONG, EAST_SHORT, OUT, EXIT), targetLocation)));
-        targetLocation.getLocationConnections().add(new LocationConnection(currentLocation.getName().equals(MOUNTAIN_PASS) ? List.of(WEST_LONG, WEST_SHORT, IN, ENTER) : List.of(EAST_LONG, EAST_SHORT, IN, ENTER), currentLocation));
+        currentLocation.setLocationConnections(List.of(new LocationConnection(targetLocation.getName().equals(MOUNTAIN_PASS) ? List.of(EAST_LONG, EAST_SHORT, OUT, EXIT) : List.of(WEST_LONG, WEST_SHORT, OUT, EXIT), targetLocation)));
+        targetLocation.getLocationConnections().add(new LocationConnection(targetLocation.getName().equals(MOUNTAIN_PASS) ? List.of(WEST_LONG, WEST_SHORT, IN, ENTER) : List.of(EAST_LONG, EAST_SHORT, IN, ENTER), currentLocation));
 
         // Update descriptions of the locations to reflect whether the mine cage is there or not
         targetLocation.setDescription(locationConnectedToMineCage.getName().equals(MOUNTAIN_PASS) ? BOTTOM_MINE_SHAFT_WITH_CAGE_LONG_DESCRIPTION : MOUNTAIN_PASS_WITH_CAGE_LONG_DESCRIPTION);
@@ -493,12 +493,8 @@ public class Game implements Action, Comparator<Item> {
             }
             current.bfsIsVisited = true;
             locationsVisited.add(current);
-            final List<LocationConnection> neighbors = current.getLocationConnections();
 
-            if (neighbors == null) {
-                continue;
-            }
-            for (final LocationConnection neighbor : neighbors) {
+            for (final LocationConnection neighbor : current.getLocationConnections()) {
                 if (!neighbor.getLocation().bfsIsVisited) {
                     queue.add(neighbor.getLocation());
                 }
