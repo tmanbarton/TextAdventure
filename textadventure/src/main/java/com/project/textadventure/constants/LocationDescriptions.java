@@ -42,9 +42,9 @@ public class LocationDescriptions {
     public static final String TOP_OF_HILL_SHORT_DESCRIPTION = "You're at the top of a hill.";
     public static final String TOP_OF_STAIRS_SHORT_DESCRIPTION = "You're at the top of a set of wooden stairs.";
     public static final String UPSTAIRS_LOG_CABIN_SHORT_DESCRIPTION = "You're on the second floor of the log cabin.";
-    public static final String UNDERGROUND_LAKE_SE_SHORT_DESCRIPTION = "You're on the se side of an underground lake.";
-    public static final String UNDERGROUND_LAKE_NE_SHORT_DESCRIPTION = "You're on the ne side of an underground lake.";
-    public static final String  UNDERGROUND_LAKE_WEST_SHORT_DESCRIPTION = "You're on the west side of an underground lake.";
+    public static final String UNDERGROUND_LAKE_NE_SHORT_DESCRIPTION_NO_BOAT = "You're on the ne side of an underground lake.";
+    public static final String UNDERGROUND_LAKE_SE_SHORT_DESCRIPTION_NO_BOAT = "You're on the se side of an underground lake.";
+    public static final String UNDERGROUND_LAKE_WEST_SHORT_DESCRIPTION_NO_BOAT = "You're on the west side of an underground lake.";
     public static final String WEST_END_SIDE_STREET_SHORT_DESCRIPTION = "You're at the west end of a side street.";
 
 
@@ -75,7 +75,7 @@ public class LocationDescriptions {
     public static final String LIGHTNING_TREE_LONG_DESCRIPTION = "You're in a little clearing with a large tree in the middle that looks like it was struck by lightning a long time ago. The bark has long since fallen off and the remaining part of the tree is a reddish color. The ditch goes east from here.";
     public static final String MINE_CAGE_LONG_DESCRIPTION = "You're in an old, but functional mine cage in a vertical mine shaft that squeals ominously when you move. There's a button labeled \"Up/Down\" to the side.";
     public static final String MINE_ENTRANCE_LONG_DESCRIPTION = "You're at the entrance of an abandoned gold mine. The supports on it are looking a little worn and there are some loose nails that might come in handy if you could get them out of the rotten wood from a safe distance. You could enter to the east if you're very careful. Piles of tailings scatter the area, leaving only one path leading away from the entrance, heading north.";
-    public static final String MINE_SHAFT_LONG_DESCRIPTION = "This is the mine shaft. It looks like it could cave in at any moment. There's a small wooden sign here that says \"BEWARE OF TOMMYKNOCKERS\" with an ugly picture of one of the green-skinned, dwarf-sized creatures. The mine shaft continues east and goes out to the north.";
+    public static final String MINE_SHAFT_LONG_DESCRIPTION = "This is the mine shaft. It looks like it could cave in at any moment. There's a small wooden sign here that says \"BEWARE OF TOMMYKNOCKERS\" with an ugly picture of one of the green-skinned, dwarf-sized creatures. The mine shaft continues east and goes out to the west.";
     public static final String MOUNTAIN_PASS_WITH_CAGE_LONG_DESCRIPTION = "The road you're on has reached a mountain pass. This vantage point gives a magnificent view of the valley. The road goes down the mountain to the south and there's a working mine cage to the west with a button labeled \"Up/Down\" to the side.";
     public static final String MOUNTAIN_PASS_NO_CAGE_LONG_DESCRIPTION = "The road you're on has reached a mountain pass. This vantage point gives a magnificent view of the valley. The road goes down the mountain to the south and a vertical mine shaft to the west with a button labeled \"Up/Down\" to the side.";
     public static final String MUSTY_BEND_LONG_DESCRIPTION = "You're at a bend in the rails with a musty feel in the air. The rails go east and south here.";
@@ -90,9 +90,9 @@ public class LocationDescriptions {
     public static final String TOP_OF_HILL_LONG_DESCRIPTION = "You are on at the end of a road at the top of a steep hill and have a magnificent view of the lush, green valley. There's a foot path going into the trees to the west and the road goes down the hill to the south.";
     public static final String TOP_OF_STAIRS_LONG_DESCRIPTION = "You are at the top of a set of wooden stairs embedded in the hill. The stairs are next to a street running east and west through the center of the abandoned town. A dam is to the south at the bottom of the stairs.";
     public static final String UPSTAIRS_LOG_CABIN_LONG_DESCRIPTION = "The second floor of this cabin isn't nearly as well kept as the first floor. There are cob webs all over and dust blankets every uncovered surface. There's a spiral staircase going back to the first floor.";
-    public static final String UNDERGROUND_LAKE_WEST_LONG_DESCRIPTION = "You are on the west side of a large underground lake with a rickety wooden boat at the shore. It looks like the place flooded long after it was abandoned. There are two passages across the lake from where you are standing: one going southeast and one going northeast. There's a dim light coming from around a corner to the south.";
-    public static final String UNDERGROUND_LAKE_SE_LONG_DESCRIPTION = "You are on the se side of a large underground lake. There are passages to the west an ne across the lake. There's a dim light coming from the west passage and the tunnel you're in now continues to the east.";
-    public static final String UNDERGROUND_LAKE_NE_LONG_DESCRIPTION = "You are on the ne side of a large underground lake. There are passages to the west and se across the lake. There's a dim light coming from the west passage and mine rails lead into a passage to the east from here.";
+    public static final String UNDERGROUND_LAKE_WEST_LONG_DESCRIPTION_NO_BOAT = "You are on the west side of a large underground lake. It looks like the place flooded long after it was abandoned. There are two passages across the lake from where you are standing: one going southeast and one going northeast. There's a dim light coming from around a corner to the south.";
+    public static final String UNDERGROUND_LAKE_SE_LONG_DESCRIPTION_NO_BOAT = "You are on the se side of a large underground lake. There are passages to the west an ne across the lake. There's a dim light coming from the west passage and the tunnel you're in now continues to the east.";
+    public static final String UNDERGROUND_LAKE_NE_LONG_DESCRIPTION_NO_BOAT = "You are on the ne side of a large underground lake. There are passages to the west and se across the lake. There's a dim light coming from the west passage and mine rails lead into a passage to the east from here.";
     public static final String WEST_END_SIDE_STREET_LONG_DESCRIPTION = "You are at the west end of a side street in an abandoned gold mining town. Branching off from this street is a smaller road to the north.";
 
     // Modified descriptions for when something changes at a location
@@ -106,5 +106,11 @@ public class LocationDescriptions {
     public static final String SHED_OPEN_LONG_DESCRIPTION = "You stand before an open shed with a picnic table to the south.";
     public static final String SHED_OPEN_SHORT_DESCRIPTION = "You're standing before a cheerful little, open shed.";
     public static final String TAILINGS_LONG_DESCRIPTION_EMPTY_LAKE = "All around are piles of tailings that look like they have been puked into this valley. There's not much else to be seen except the entrance to a mine to the south. There's a path leading east and another going north.";
+    public static final String UNDERGROUND_LAKE_NE_LONG_DESCRIPTION_WITH_BOAT = "You are on the ne side of a large underground lake with a rickety wooden boat at the shore. There are passages to the west and se across the lake. There's a dim light coming from the west passage and mine rails lead into a passage to the east from here.";
+    public static final String UNDERGROUND_LAKE_SE_LONG_DESCRIPTION_WITH_BOAT = "You are on the se side of a large underground lake with a rickety wooden boat at the shore. There are passages to the west an ne across the lake. There's a dim light coming from the west passage and the tunnel you're in now continues to the east.";
+    public static final String UNDERGROUND_LAKE_NE_SHORT_DESCRIPTION_WITH_BOAT = "You're on the ne side of an underground lake with a rickety wooden boat at the shore.";
+    public static final String UNDERGROUND_LAKE_SE_SHORT_DESCRIPTION_WITH_BOAT = "You're on the se side of an underground lake with a rickety wooden boat at the shore.";
+    public static final String UNDERGROUND_LAKE_WEST_LONG_DESCRIPTION_WITH_BOAT = "You are on the west side of a large underground lake with a rickety wooden boat at the shore. It looks like the place flooded long after it was abandoned. There are two passages across the lake from where you are standing: one going southeast and one going northeast. There's a dim light coming from around a corner to the south.";
+    public static final String UNDERGROUND_LAKE_WEST_SHORT_DESCRIPTION_WITH_BOAT = "You're on the west side of an underground lake with a rickety wooden boat at the shore.";
 
 }

@@ -14,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import static com.project.textadventure.constants.GameConstants.BAD_DIRECTION;
 import static com.project.textadventure.constants.GameConstants.GO;
 import static com.project.textadventure.constants.GameConstants.LOOK_LONG;
 import static com.project.textadventure.constants.GameConstants.LOOK_SHORT;
@@ -136,7 +137,7 @@ public class Location implements Action {
         return GameConstants.ALL_DIRECTIONS.contains(verb);
     }
 
-    private String move(final String direction) {
+    String move(final String direction) {
         final Game game = GameState.getInstance().getGame();
         final Location currentLocation = game.getCurrentLocation();
         final Optional<LocationConnection> connection = currentLocation.getLocationConnections()
@@ -144,10 +145,8 @@ public class Location implements Action {
                 .filter(connectingLocation -> connectingLocation.getDirections().contains(direction))
                 .findFirst();
 
-        if (connection.isEmpty() ||
-                // Special case for the underground lake where you can't cross without going in the boat
-                (currentLocation instanceof UndergroundLake && !((UndergroundLake) currentLocation).isBoatAtLocation() && StringUtils.equals(direction, "in"))) {
-            return "You can't go that way.";
+        if (connection.isEmpty()) {
+            return BAD_DIRECTION;
         }
         final LocationConnection locationConnection = connection.get();
         return moveToLocation(locationConnection);

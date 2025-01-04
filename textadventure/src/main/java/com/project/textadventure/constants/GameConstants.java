@@ -13,6 +13,7 @@ public class GameConstants {
             "snaps and the ceiling comes crashing down on top of you. Unfortunately being crushed by a " +
             "mountain and old wood is very dangerous, thus this decision has cost you your life.";
     public static final String LAKE_EMPTYING = "The ground begins to rumble and you see a massive wall slowly rise from the water on the far side of the lake, blocking the flow of water from the river into the lake. There's another shudder and the water begins to recede as a huge whirl pool forms near the middle of the lake. Soon the lake is completely empty, revealing a town that had been submerged only a few moments ago. You can get to the town to the west, down the dam.";
+    public static final String BAD_DIRECTION = "You can't go that way.";
 
     // Interactive elements that aren't pick-upable
     public static final String WHEEL = "wheel";
@@ -43,6 +44,32 @@ public class GameConstants {
     public static final String ENTER = "enter";
     public static final String OUT = "out";
     public static final String EXIT = "exit";
+    public static final List<String> WEST_DIRECTIONS = List.of(WEST_SHORT, WEST_LONG);
+    public static final List<String> EAST_DIRECTIONS = List.of(EAST_SHORT, EAST_LONG);
+    public static final List<String> NORTH_DIRECTIONS = List.of(NORTH_SHORT, NORTH_LONG);
+    public static final List<String> SOUTH_DIRECTIONS = List.of(SOUTH_SHORT, SOUTH_LONG);
+    public static final List<String> NE_DIRECTIONS = List.of(NE_SHORT, NE_LONG);
+    public static final List<String> NW_DIRECTIONS = List.of(NW_SHORT, NW_LONG);
+    public static final List<String> SE_DIRECTIONS = List.of(SE_SHORT, SE_LONG);
+    public static final List<String> SW_DIRECTIONS = List.of(SW_SHORT, SW_LONG);
+    public static final List<String> UP_DIRECTIONS = List.of(UP_SHORT, UP_LONG);
+    public static final List<String> DOWN_DIRECTIONS = List.of(DOWN_SHORT, DOWN_LONG);
+    public static final List<String> IN_DIRECTIONS = List.of(IN, ENTER);
+    public static final List<String> OUT_DIRECTIONS = List.of(OUT, EXIT);
+
+    public static final List<String> ALL_DIRECTIONS = List.of(
+            NORTH_SHORT, NORTH_LONG,
+            SOUTH_SHORT, SOUTH_LONG,
+            EAST_SHORT, EAST_LONG,
+            WEST_SHORT, WEST_LONG,
+            NE_SHORT, NE_LONG,
+            NW_SHORT, NW_LONG,
+            SE_SHORT, SE_LONG,
+            SW_SHORT, SW_LONG,
+            UP_SHORT, UP_LONG,
+            DOWN_SHORT, DOWN_LONG,
+            IN, ENTER, OUT, EXIT);
+
 
     // Commands
     public static final String GET = "get";
@@ -68,17 +95,4 @@ public class GameConstants {
     public static final String EAT = "eat";
     public static final String PUSH = "push";
     public static final String PRESS = "press";
-
-    public static final List<String> ALL_DIRECTIONS = List.of(
-            NORTH_SHORT, NORTH_LONG,
-            SOUTH_SHORT, SOUTH_LONG,
-            EAST_SHORT, EAST_LONG,
-            WEST_SHORT, WEST_LONG,
-            NE_SHORT, NE_LONG,
-            NW_SHORT, NW_LONG,
-            SE_SHORT, SE_LONG,
-            SW_SHORT, SW_LONG,
-            UP_SHORT, UP_LONG,
-            DOWN_SHORT, DOWN_LONG,
-            IN, ENTER, OUT, EXIT);
 }
