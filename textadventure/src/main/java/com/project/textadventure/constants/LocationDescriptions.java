@@ -56,7 +56,7 @@ public class LocationDescriptions {
     public static final String BOTTOM_MINE_SHAFT_NO_CAGE_LONG_DESCRIPTION = "You are at the bottom of a vertical mine shaft. The mine shaft is east and there's a button labeled \"Up/Down\" to the side. A mine railway starts here and runs west.";
     public static final String BROKEN_ROCK_LONG_DESCRIPTION = "The only thing up here is a bunch of broken rock.";
     public static final String CRUMPLED_MINE_CART_LONG_DESCRIPTION = "You've reached a dead end. A crumpled mine cart, no longer able to run on the rails, is laying on its side having dumped a large ruby onto the rails.";
-    public static final String DAM_LONG_DESCRIPTION = "You're on a short dam that created this lake long ago. The dam goes north and south along the east end of the lake. Close by is a wheel with its axel extending deep into the dam. Its orange metal has faded to rust except for some different, palm-sized metal at the center, shining in the sun. South leads around the lake and to the north there's a set of stairs.";
+    public static final String DAM_LONG_DESCRIPTION = "You're on a short dam that created this lake long ago. The dam goes north and south along the east end of the lake. Close by is a wheel, its axel extending deep into the dam. Its orange metal has faded to rust except for some different, palm-sized metal at the center, shining in the sun. South leads around the lake and to the north there's a set of stairs.";
     public static final String DANK_PASSAGE_LONG_DESCRIPTION = "The walls and floor here are wet. The dank atmosphere of this place makes it a little muggy. The rails go west and you can see some metal equipment to the east.";
     public static final String DIRT_ROAD_LONG_DESCRIPTION = "You are on a badly washboarded dirt road in dire need of maintenance that extends west and runs winding down the hill to the east. A pine forest hugs the road on both sides.";
     public static final String DIRTY_PASSAGE_LONG_DESCRIPTION = "You're in a dirty broken passage. To the west the passage gets wider. To the east the passage narrows. Above you part of the ceiling caved in, leaving a hole and a pile of debris that cover the rails.";
@@ -96,14 +96,15 @@ public class LocationDescriptions {
     public static final String WEST_END_SIDE_STREET_LONG_DESCRIPTION = "You are at the west end of a side street in an abandoned gold mining town. Branching off from this street is a smaller road to the north.";
 
     // Modified descriptions for when something changes at a location
-    public static final String MINE_ENTRANCE_RECENT_CAVE_IN = "You're at the entrance of an abandoned gold mine, a recent cave-in preventing entry. Piles of tailings scatter the area, leaving only one path leading away from the entrance, heading north.";
+    public static final String DAM_LONG_DESCRIPTION_WHEEL_TURNED = "You're on a short dam that goes north and south along the east end of the lake, now empty. Close by is a wheel, its axel extending deep into the dam. Its orange metal has faded to rust except for a palm-sized magnet stuck to it in the center. You can go into the town down the dam to the west. South leads around the lake and to the north there's a set of stairs.";
+    public static final String INTERSECTION_LONG_DESCRIPTION_EMPTY_LAKE = "You have reached an intersection in the road. It leads into the forest to the north and west and a southern road goes into a thinner part of the forest.";
     public static final String LAKE_LONG_DESCRIPTION_EMPTY_LAKE = "You are on the south side of an empty lake. There's a path going west and there's a dam to the north.";
     public static final String LAKE_SHORT_DESCRIPTION_EMPTY_LAKE = "You're on the south side of an empty lake.";
-    public static final String TAILINGS_LONG_DESCRIPTION_EMPTY_LAKE = "All around are piles of tailings that look like they have been puked into this valley. There's not much else to be seen except the entrance to a mine to the south. There's a path leading east and another going north.";
-    public static final String INTERSECTION_LONG_DESCRIPTION_EMPTY_LAKE = "You have reached an intersection in the road. It leads into the forest to the north and west and a southern road goes into a thinner part of the forest.";
+    public static final String MINE_ENTRANCE_RECENT_CAVE_IN = "You're at the entrance of an abandoned gold mine, a recent cave-in preventing entry. Piles of tailings scatter the area, leaving only one path leading away from the entrance, heading north.";
     public static final String SHED_UNLOCKED_LONG_DESCRIPTION = "A cheerful little shed stands with it's lock hanging open with a picnic table to the south.";
     public static final String SHED_UNLOCKED_SHORT_DESCRIPTION = "You're standing before a cheerful little shed with its lock hanging open.";
     public static final String SHED_OPEN_LONG_DESCRIPTION = "You stand before an open shed with a picnic table to the south.";
     public static final String SHED_OPEN_SHORT_DESCRIPTION = "You're standing before a cheerful little, open shed.";
+    public static final String TAILINGS_LONG_DESCRIPTION_EMPTY_LAKE = "All around are piles of tailings that look like they have been puked into this valley. There's not much else to be seen except the entrance to a mine to the south. There's a path leading east and another going north.";
 
 }

@@ -225,8 +225,7 @@ public class Location implements Action {
             response = "You don't have anything to shoot.";
         } else if (StringUtils.equals(thingToShoot, ARROW_NAME) || thingToShoot == null) {
             // Shoot the arrow
-            final Item arrow = game.getInventoryItemByName(ARROW_NAME);
-            response = shootArrow(arrow);
+            response = shootArrow();
         } else {
             // User has the bow and arrow, but tries to shoot something other than the arrow
             response = "You can't shoot that.";
@@ -237,11 +236,11 @@ public class Location implements Action {
     /**
      * The box and arrow are in the inventory. Execute shooting the arrow and remove it from the inventory and add it
      * to the location or only remove it from inventory if shot in the boat.
-     * @param arrow Arrow to shoot
      * @return Response to shooting the arrow
      */
-    private String shootArrow(final Item arrow) {
+    String shootArrow() {
         final Game game = GameState.getInstance().getGame();
+        final Item arrow = game.getInventoryItemByName(ARROW_NAME);
         if (game.getCurrentLocation().getName().equals(LocationNames.BOAT)) {
             game.removeItemFromInventory(arrow);
             return "Your arrow goes flying off into the the distance and splashes into the water, never to be found again.";

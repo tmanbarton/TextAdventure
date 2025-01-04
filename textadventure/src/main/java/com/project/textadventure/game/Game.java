@@ -238,7 +238,6 @@ public class Game implements Action, Comparator<Item> {
         if (noun.equals(ItemConstants.MAGNET_NAME) && currentLocation instanceof Dam) {
             removeItemFromInventory(item);
             ((Dam) currentLocation).setMagnetDropped(true);
-            currentLocation.setDescription("You're on a short dam that created this lake by stopping up a large river. The dam goes north and south along the east end of the lake. Close by is a wheel with its axel extending deep into the dam. Its orange metal has faded to rust except for some different metal at the center, shining in the sun. There's a large magnet stuck to this part of the wheel. South leads around the lake and to the north there's a set of stairs.");
             return "You drop the magnet and as it's falling it snaps to the shiny center of the wheel. A faint, mechanical clicking comes from deep inside the dam.";
         }
         if (currentLocation.getName().equals(LocationNames.BOAT)) {

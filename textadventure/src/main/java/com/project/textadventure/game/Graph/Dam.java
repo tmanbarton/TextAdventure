@@ -96,6 +96,8 @@ public class Dam extends Location implements Action {
         final Location intersection = findLocationByName(this, LocationNames.INTERSECTION);
         intersection.setDescription(LocationDescriptions.INTERSECTION_LONG_DESCRIPTION_EMPTY_LAKE);
 
+        this.setDescription(LocationDescriptions.DAM_LONG_DESCRIPTION_WHEEL_TURNED);
+
         wheelTurned = true;
 
         return GameConstants.LAKE_EMPTYING;

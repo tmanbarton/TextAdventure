@@ -14,7 +14,6 @@ import static com.project.textadventure.constants.ItemConstants.ARROW_NAME;
 import static com.project.textadventure.constants.LocationDescriptions.MINE_ENTRANCE_RECENT_CAVE_IN;
 import static com.project.textadventure.constants.LocationNames.MINE_ENTRANCE;
 import static com.project.textadventure.constants.LocationNames.MINE_SHAFT;
-import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
 public class MineEntrance extends Location implements Action {
     private boolean nailsOff;
@@ -35,9 +34,6 @@ public class MineEntrance extends Location implements Action {
 
     public boolean areNailsOff() {
         return nailsOff;
-    }
-    public void setNailsOff(final boolean nailsOff) {
-        this.nailsOff = nailsOff;
     }
 
     /**
@@ -64,19 +60,16 @@ public class MineEntrance extends Location implements Action {
      * @return String message from successfully shooting the arrow or
      * a "don't know command" type message
      */
+    @Override
     String parseShootCommand(final String thingToShoot) {
-        final Game game = GameState.getInstance().getGame();
-        String response = "";
-
-        // only "shoot" or "shoot arrow" does something at mine entrance
+        // Only "shoot" or "shoot arrow" does something at mine entrance
         if (!StringUtils.isEmpty(thingToShoot) && !StringUtils.equals(thingToShoot, "arrow") || nailsOff) {
             // Don't have the bow or arrow, so this can be treated by a regular action
-            response = super.parseShootCommand(thingToShoot);
+            return super.parseShootCommand(thingToShoot);
         } else {
-            // Have the bow and arrow, so shoot the arrow
-            response = shootArrow();
+            // Have the bow and arrow, so shoot the arrow and do special stuff for MineEntrance Location
+            return shootArrow();
         }
-        return response;
     }
 
     /**
@@ -84,7 +77,8 @@ public class MineEntrance extends Location implements Action {
      * Also add arrow to location as usual when it's shot.
      * @return The response to the action to be displayed to the user
      */
-    private String shootArrow() {
+    @Override
+    String shootArrow() {
         final Game game = GameState.getInstance().getGame();
         final Item arrow = game.getInventoryItemByName(ARROW_NAME);
         final Location currentLocation = game.getCurrentLocation();
@@ -96,17 +90,14 @@ public class MineEntrance extends Location implements Action {
         currentLocation.addItemToLocation(nails);
         nailsOff = true;
 
-        // 2 ways to get to mine shaft. Find and remove both
+        // 2 ways to get to mine shaft (in and east). Find and set connecting locations to empty. Do this instead of removing the
+        // connections, otherwise BFS won't work for locations in the mine since they will be cut off.
         final List<LocationConnection> locationConnections = currentLocation.getLocationConnections();
-        locationConnections.removeIf(location -> location.getLocation().getName().equals(MINE_SHAFT));
-
-        for (final LocationConnection locationConnection : currentLocation.getLocationConnections()) {
-            if (locationConnection.getLocation().getName().equals(MINE_SHAFT)) {
-                locationConnection.getLocation().getLocationConnections().removeIf(
-                        mineShaftLocation -> mineShaftLocation.getLocation().getName().equals(MINE_ENTRANCE)
-                );
+        locationConnections.forEach(location -> {
+            if (location.getLocation().getName().equals(MINE_SHAFT)) {
+                location.setDirections(List.of());
             }
-        }
+        });
 
         // The user solved the puzzle. Get 20 points
         GameState.getInstance().incrementScore(20);
