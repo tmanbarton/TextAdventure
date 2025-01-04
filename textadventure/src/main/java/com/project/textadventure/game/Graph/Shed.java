@@ -5,31 +5,36 @@ import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
 import lombok.NonNull;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
 
+import static com.project.textadventure.constants.LocationDescriptions.SHED_OPEN_LONG_DESCRIPTION;
+import static com.project.textadventure.constants.LocationDescriptions.SHED_OPEN_SHORT_DESCRIPTION;
+import static com.project.textadventure.constants.LocationDescriptions.SHED_UNLOCKED_LONG_DESCRIPTION;
+import static com.project.textadventure.constants.LocationDescriptions.SHED_UNLOCKED_SHORT_DESCRIPTION;
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
 public class Shed extends Location implements Action {
-    boolean unlocked;
-    boolean open;
+    boolean isUnlocked;
+    boolean isOpen;
     public Shed(final String description,
                 final String shortDescription,
                 final List<Item> items,
                 final List<LocationConnection> locationConnections,
                 final boolean visited,
                 final String name,
-                final boolean unlocked,
-                final boolean open) {
+                final boolean isUnlocked,
+                final boolean isOpen) {
         super(description,
                 shortDescription,
                 items,
                 locationConnections,
                 visited,
                 name);
-        this.unlocked = unlocked;
-        this.open = open;
+        this.isUnlocked = isUnlocked;
+        this.isOpen = isOpen;
     }
 
     /**
@@ -61,47 +66,49 @@ public class Shed extends Location implements Action {
     private String parseUnlockAndOpenCommand(final String verb, final String noun) {
         final Game game = GameState.getInstance().getGame();
         final Item key = game.getInventoryItemByName("key");
-        String response;
         // Check if the verb is "unlock"
-        if (verb.equals("unlock")) {
-            if (this.unlocked) {
-                response = "The shed is already unlocked.";
+        if (StringUtils.equals(noun, "shed") || noun == null ) {
+            if (verb.equals("unlock")) {
+                if (this.isOpen) {
+                    return "The shed is already unlocked and open.";
+                } else if (this.isUnlocked) {
+                    return "The shed is already unlocked.";
+                } else if (key == null) {
+                    return "You need a key to unlock the shed.";
+                } else {
+                    unlockShed();
+                    return "The shed is now unlocked.";
+                }
+            } else if (verb.equals("open")) {
+                // Check if the verb is "open"
+                if (this.isOpen) {
+                    return "The shed is already open.";
+                } else if (!this.isUnlocked && key == null) {
+                    return "You must unlock the shed before opening it.";
+                } else {
+                    openShed();
+                    String response;
+                    response = !this.isUnlocked ? "First unlocking the shed, the shed now stands open." : "The shed now stands open.";
+                    // In case the user did the open command before the unlock command, set the shed as unlocked even if it was already unlocked
+                    this.isUnlocked = true;
+                    response += listLocationItems(game.getCurrentLocation().getItems());
+                    return response;
+                }
+            } else {
+                return generateRandomUnknownCommandResponse();
             }
-            else if (key == null) {
-                response = "You need a key to unlock the shed.";
-            }
-            else {
-                unlockShed();
-                response = "The shed is now unlocked.";
-            }
+        } else {
+            return generateRandomUnknownCommandResponse();
         }
-        // Check if the verb is "open"
-        else if (verb.equals("open")) {
-            if (this.open) {
-                response = "The shed is already open.";
-            }
-            else if (!this.unlocked && key == null) {
-                response = "You must unlock the shed before opening it.";
-            }
-            else {
-                openShed();
-                response = !this.unlocked ? "First unlocking the shed, the shed now stands open." : "The shed now stands open.";
-                response += listLocationItems(game.getCurrentLocation().getItems());
-            }
-        }
-        else {
-            response = generateRandomUnknownCommandResponse();
-        }
-        return response;
     }
 
     /**
      * Unlock the shed by setting the unlocked flag to true and changing the description of the shed.
      */
     private void unlockShed() {
-        this.unlocked = true;
-        this.setDescription("A cheerful little shed stands with it's lock hanging open with a picnic table to the north.");
-        this.setShortDescription("You're standing before a cheerful little shed with its lock hanging open.");
+        this.isUnlocked = true;
+        this.setDescription(SHED_UNLOCKED_LONG_DESCRIPTION);
+        this.setShortDescription(SHED_UNLOCKED_SHORT_DESCRIPTION);
     }
 
     /**
@@ -109,9 +116,9 @@ public class Shed extends Location implements Action {
      * Also, increment the score by 10 points for solving the puzzle of unlocking and opening the shed.
      */
     public void openShed() {
-        this.setDescription("You stand before an open shed with a picnic table to the north.");
-        this.setShortDescription("You're standing before a cheerful little, open shed.");
-        this.open = true;
+        this.setDescription(SHED_OPEN_LONG_DESCRIPTION);
+        this.setShortDescription(SHED_OPEN_SHORT_DESCRIPTION);
+        this.isOpen = true;
         final Item hammer = new Item(2, ItemConstants.HAMMER_LOCATION_DESCRIPTION, ItemConstants.HAMMER_INVENTORY_DESCRIPTION, ItemConstants.HAMMER_NAME, 0);
         final Item bow = new Item(3, ItemConstants.BOW_LOCATION_DESCRIPTION, ItemConstants.BOW_INVENTORY_DESCRIPTION, ItemConstants.BOW_NAME, 0);
         final Item arrow = new Item(4, ItemConstants.ARROW_LOCATION_DESCRIPTION, ItemConstants.ARROW_INVENTORY_DESCRIPTION, ItemConstants.ARROW_NAME, 0);

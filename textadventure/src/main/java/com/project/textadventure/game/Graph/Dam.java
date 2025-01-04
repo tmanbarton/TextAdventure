@@ -4,7 +4,9 @@ import com.project.textadventure.constants.GameConstants;
 import com.project.textadventure.constants.LocationDescriptions;
 import com.project.textadventure.constants.LocationNames;
 import com.project.textadventure.controllers.Action;
+import com.project.textadventure.game.GameState;
 import lombok.NonNull;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
@@ -39,7 +41,7 @@ public class Dam extends Location implements Action {
      */
     @Override
     public String takeAction(@NonNull String verb, @Nullable final String noun) {
-        if (verb.equals(TURN)) {
+        if (StringUtils.equals(verb, TURN)) {
             return parseTurnCommand(noun);
         }
         else {
@@ -53,21 +55,20 @@ public class Dam extends Location implements Action {
      * @return The response to the action to be displayed to the user.
      */
     private String parseTurnCommand(final String noun) {
-        String response = "";
-
         // only "turn wheel" or "turn" does something at dam
         if (noun == null || noun.equals(GameConstants.WHEEL)) {
             if (magnetDropped && !wheelTurned) {
-                response = turnWheel();
+                GameState.getInstance().incrementScore(25);
+                return turnWheel();
             }
             else if (!magnetDropped) {
-                response = "The wheel is locked firmly in place.";
+                return "The wheel is locked firmly in place.";
+            } else if (wheelTurned) {
+                return "You turn the wheel. Nothing happens.";
             }
         }
-        else {
-            response = "There's nothing to turn here.";
-        }
-        return response;
+        return "You can't turn that.";
+
     }
 
     /**

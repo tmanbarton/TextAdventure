@@ -14,7 +14,9 @@ public class GameConstants {
             "mountain and old wood is very dangerous, thus this decision has cost you your life.";
     public static final String LAKE_EMPTYING = "The ground begins to rumble and you see a massive wall slowly rise from the water on the far side of the lake, blocking the flow of water from the river into the lake. There's another shudder and the water begins to recede as a huge whirl pool forms near the middle of the lake. Soon the lake is completely empty, revealing a town that had been submerged only a few moments ago. You can get to the town to the west, down the dam.";
 
+    // Interactive elements that aren't pick-upable
     public static final String WHEEL = "wheel";
+    public static final String BUTTON = "button";
 
     // Directions
     public static final String NORTH_SHORT = "n";
@@ -65,6 +67,7 @@ public class GameConstants {
     public static final String TURN = "turn";
     public static final String EAT = "eat";
     public static final String PUSH = "push";
+    public static final String PRESS = "press";
 
     public static final List<String> ALL_DIRECTIONS = List.of(
             NORTH_SHORT, NORTH_LONG,

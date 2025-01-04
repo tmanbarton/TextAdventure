@@ -27,6 +27,7 @@ import static com.project.textadventure.constants.LocationDescriptions.MOUNTAIN_
 import static com.project.textadventure.constants.LocationNames.BOTTOM_OF_VERTICAL_MINE_SHAFT;
 import static com.project.textadventure.constants.LocationNames.MINE_CAGE;
 import static com.project.textadventure.constants.LocationNames.MOUNTAIN_PASS;
+import static com.project.textadventure.constants.ResponseConstants.HELP_RESPONSE;
 import static com.project.textadventure.constants.ResponseConstants.INFO_RESPONSE;
 
 
@@ -101,27 +102,31 @@ public class Game implements Action, Comparator<Item> {
         // To lowercase to be able to compare to enum constants to string
         verb = verb.toLowerCase();
         if (isGetCommand(verb, noun)) {
-            noun = simplifyNoun(noun);
+            noun = noun == null ? noun : simplifyNoun(noun);
             result = handleGetCommand(noun);
         } else if (StringUtils.equals(verb, FILL)) {
             result = handleFillCommand(noun);
-        } else if (StringUtils.equals(verb, INVENTORY_LONG) || StringUtils.equals(verb, INVENTORY_SHORT) || StringUtils.equals(verb, INVENTORY_MEDIUM)) {
-            result = takeInventory();
         } else if (StringUtils.equals(verb, DROP) || StringUtils.equals(verb, THROW)) {
             result = handleDropCommand(noun);
         } else if (StringUtils.equals(verb, EAT)) {
             result = handleEatCommand(noun);
-        } else if (StringUtils.equals(verb, PUSH)) {
-            result = handlePushCommand(noun);
-        } else if (StringUtils.equals(verb, QUIT) || StringUtils.equals(verb, RESTART)) {
-            result = "Are you sure you want to " + (StringUtils.equals(verb, QUIT) ? "quit?" : "restart?");
-            gameStatus = GameStatus.QUITTING;
-        } else if (StringUtils.equals(verb, SCORE)) {
-            return "Your score: " + GameState.getInstance().getScore();
-        } else if (StringUtils.equals(verb, INFO)) {
-            return INFO_RESPONSE;
-        } else if (StringUtils.equals(verb, HELP)) {
-            return ResponseConstants.HELP_RESPONSE;
+        } else if (StringUtils.equals(verb, PUSH) || StringUtils.equals(verb, PRESS)) {
+            result = handlePushCommand(verb, noun);
+        } else if (noun == null) {
+            if (StringUtils.equals(verb, INVENTORY_LONG) || StringUtils.equals(verb, INVENTORY_SHORT) || StringUtils.equals(verb, INVENTORY_MEDIUM)) {
+                result = takeInventory();
+            } else if (StringUtils.equals(verb, QUIT) || StringUtils.equals(verb, RESTART)) {
+                result = "Are you sure you want to " + (StringUtils.equals(verb, QUIT) ? "quit?" : "restart?");
+                gameStatus = GameStatus.QUITTING;
+            } else if (StringUtils.equals(verb, SCORE)) {
+                return "Your score: " + GameState.getInstance().getScore();
+            } else if (StringUtils.equals(verb, INFO)) {
+                return INFO_RESPONSE;
+            } else if (StringUtils.equals(verb, HELP)) {
+                return HELP_RESPONSE;
+            }
+        } else {
+            result = generateRandomUnknownCommandResponse();
         }
         return result;
     }
@@ -144,7 +149,9 @@ public class Game implements Action, Comparator<Item> {
      */
     String simplifyNoun(@NonNull String noun) {
         // Simplify "pick up" to "get"
-        if (StringUtils.equals(noun.substring(0, 3), "up ")) {
+        if (StringUtils.equals(noun, "up")) {
+            noun = null;
+        } else if (StringUtils.equals(noun.substring(0, 2), "up ")) {
             noun = noun.substring(3);
         }
         return noun;
@@ -312,15 +319,15 @@ public class Game implements Action, Comparator<Item> {
      * @param noun thing to push. null if the user just says "push"
      * @return response to display to the user
      */
-    private String handlePushCommand(final String noun) {
+    private String handlePushCommand(final String verb, final String noun) {
         String result = "";
         if (currentLocation.getName().equals(LocationNames.MINE_CAGE) ||
                 currentLocation.getName().equals(LocationNames.MOUNTAIN_PASS) ||
                 currentLocation.getName().equals(LocationNames.BOTTOM_OF_VERTICAL_MINE_SHAFT)) {
-            if (StringUtils.equals("button", noun) || noun == null) {
+            if (StringUtils.equals(BUTTON, noun) || noun == null) {
                 result = moveMineCage();
             } else {
-                result = "You can't push that.";
+                result = "You can't " + (StringUtils.equals(verb, PRESS) ? "press" : "push") + " that.";
             }
         } else {
             result = "There's nothing to push here.";
@@ -335,14 +342,13 @@ public class Game implements Action, Comparator<Item> {
      * @return response to display to the user
      */
     private String moveMineCage() {
-        String result = "The cage rattles as it starts to move and, as it reaches the end of the shaft, grinds to a halt with the squeaking of chains and pulleys.";
         final Location bottomOfVerticalMineShaft = findLocationByName(currentLocation, BOTTOM_OF_VERTICAL_MINE_SHAFT);
         final Location mountainPass = findLocationByName(currentLocation, MOUNTAIN_PASS);
 
         if (StringUtils.equals(currentLocation.getName(), MOUNTAIN_PASS)) {
-            result = moveMineCageFromAConnectingLocation(bottomOfVerticalMineShaft);
+            return moveMineCageFromAConnectingLocation(bottomOfVerticalMineShaft);
         } else if (StringUtils.equals(currentLocation.getName(), BOTTOM_OF_VERTICAL_MINE_SHAFT)) {
-            result = moveMineCageFromAConnectingLocation(mountainPass);
+            return moveMineCageFromAConnectingLocation(mountainPass);
         } else if (StringUtils.equals(currentLocation.getName(), MINE_CAGE)) {
             // Current location is mine cage location.
             // Change connections based on whether it's connected to mountain pass or bottom of vertical mine shaft
@@ -355,7 +361,7 @@ public class Game implements Action, Comparator<Item> {
                 moveMineCageFromWithinMineCage(mountainPass, bottomOfVerticalMineShaft);
             }
         }
-        return result;
+        return "The cage rattles as it starts to move and, as it reaches the end of the shaft, grinds to a halt with the squeaking of chains and pulleys.";
     }
 
     /**
