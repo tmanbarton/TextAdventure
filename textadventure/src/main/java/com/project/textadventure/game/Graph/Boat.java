@@ -1,26 +1,14 @@
 package com.project.textadventure.game.Graph;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.List;
-import java.util.Optional;
 
 import static com.project.textadventure.constants.GameConstants.NE_DIRECTIONS;
-import static com.project.textadventure.constants.GameConstants.NE_LONG;
-import static com.project.textadventure.constants.GameConstants.NE_SHORT;
 import static com.project.textadventure.constants.GameConstants.SE_DIRECTIONS;
-import static com.project.textadventure.constants.GameConstants.SE_LONG;
-import static com.project.textadventure.constants.GameConstants.SE_SHORT;
 import static com.project.textadventure.constants.GameConstants.WEST_DIRECTIONS;
-import static com.project.textadventure.constants.GameConstants.WEST_LONG;
-import static com.project.textadventure.constants.GameConstants.WEST_SHORT;
-import static com.project.textadventure.constants.LocationDescriptions.UNDERGROUND_LAKE_NE_LONG_DESCRIPTION_NO_BOAT;
 import static com.project.textadventure.constants.LocationDescriptions.UNDERGROUND_LAKE_NE_LONG_DESCRIPTION_WITH_BOAT;
 import static com.project.textadventure.constants.LocationDescriptions.UNDERGROUND_LAKE_NE_SHORT_DESCRIPTION_WITH_BOAT;
-import static com.project.textadventure.constants.LocationDescriptions.UNDERGROUND_LAKE_SE_LONG_DESCRIPTION_NO_BOAT;
 import static com.project.textadventure.constants.LocationDescriptions.UNDERGROUND_LAKE_SE_LONG_DESCRIPTION_WITH_BOAT;
 import static com.project.textadventure.constants.LocationDescriptions.UNDERGROUND_LAKE_SE_SHORT_DESCRIPTION_WITH_BOAT;
-import static com.project.textadventure.constants.LocationDescriptions.UNDERGROUND_LAKE_WEST_LONG_DESCRIPTION_NO_BOAT;
 import static com.project.textadventure.constants.LocationDescriptions.UNDERGROUND_LAKE_WEST_LONG_DESCRIPTION_WITH_BOAT;
 import static com.project.textadventure.constants.LocationDescriptions.UNDERGROUND_LAKE_WEST_SHORT_DESCRIPTION_WITH_BOAT;
 

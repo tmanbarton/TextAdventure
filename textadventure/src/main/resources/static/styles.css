@@ -52,7 +52,12 @@ input:focus {
     width: 780px;
     height: 456px;
     margin: 0 10px;
-    overflow-y: auto;
+    overflow-y: scroll;
+    scrollbar-width: none; /* Firefox */
+}
+
+#display-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
 }
 
 #display {
