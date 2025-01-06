@@ -3,15 +3,20 @@ package com.project.textadventure.game.Graph;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
 import org.apache.commons.lang3.StringUtils;
+import org.thymeleaf.util.ListUtils;
 
 import java.util.List;
 
+import static com.project.textadventure.constants.GameConstants.EAST_AND_IN_DIRECTIONS;
+import static com.project.textadventure.constants.GameConstants.EAST_AND_OUT_DIRECTIONS;
 import static com.project.textadventure.constants.GameConstants.EAST_LONG;
 import static com.project.textadventure.constants.GameConstants.EAST_SHORT;
 import static com.project.textadventure.constants.GameConstants.ENTER;
 import static com.project.textadventure.constants.GameConstants.EXIT;
 import static com.project.textadventure.constants.GameConstants.IN;
 import static com.project.textadventure.constants.GameConstants.OUT;
+import static com.project.textadventure.constants.GameConstants.WEST_AND_IN_DIRECTIONS;
+import static com.project.textadventure.constants.GameConstants.WEST_AND_OUT_DIRECTIONS;
 import static com.project.textadventure.constants.GameConstants.WEST_LONG;
 import static com.project.textadventure.constants.GameConstants.WEST_SHORT;
 import static com.project.textadventure.constants.LocationDescriptions.BOTTOM_MINE_SHAFT_NO_CAGE_LONG_DESCRIPTION;
@@ -118,8 +123,8 @@ public class MineShaft extends Location {
             // The mine cage is currently connected to the current location and is moving to the opposite location
             // Remove mine cage from current location and vice versa, and add target location to mine cage and vice versa
             currentLocationConnections.removeIf(locationConnection -> locationConnection.getLocation().getName().equals(MINE_CAGE));
-            mineCage.setLocationConnections(List.of(new LocationConnection(this.getName().equals(MOUNTAIN_PASS) ? List.of(WEST_LONG, WEST_SHORT, OUT, EXIT) : List.of(EAST_LONG, EAST_SHORT, OUT, EXIT), targetLocation)));
-            targetLocation.getLocationConnections().add(new LocationConnection(this.getName().equals(MOUNTAIN_PASS) ? List.of(EAST_LONG, EAST_SHORT, IN, ENTER) : List.of(WEST_LONG, WEST_SHORT, IN, ENTER), mineCage));
+            mineCage.setLocationConnections(List.of(new LocationConnection(this.getName().equals(MOUNTAIN_PASS) ? WEST_AND_OUT_DIRECTIONS : EAST_AND_OUT_DIRECTIONS, targetLocation)));
+            targetLocation.getLocationConnections().add(new LocationConnection(this.getName().equals(MOUNTAIN_PASS) ? EAST_AND_IN_DIRECTIONS : WEST_AND_IN_DIRECTIONS, mineCage));
 
             // Update the descriptions of the locations to reflect whether the mine cage is there or not
             this.setDescription(this.getName().equals(MOUNTAIN_PASS) ? MOUNTAIN_PASS_NO_CAGE_LONG_DESCRIPTION : BOTTOM_MINE_SHAFT_NO_CAGE_LONG_DESCRIPTION);
@@ -132,8 +137,8 @@ public class MineShaft extends Location {
             // Current location is bottom of mine shaft location and the mine cage is at the top of the shaft (mountainPass location)
             // Remove mountain pass from mine cage and vice versa, and add bottom of mine shaft to cage and vice versa
             targetLocation.getLocationConnections().removeIf(locationConnection -> locationConnection.getLocation().getName().equals(MINE_CAGE));
-            currentLocationConnections.add(new LocationConnection(this.getName().equals(MOUNTAIN_PASS) ? List.of(WEST_LONG, WEST_SHORT, IN, ENTER) : List.of(EAST_LONG, EAST_SHORT, IN, ENTER), mineCage));
-            mineCage.setLocationConnections(List.of(new LocationConnection(this.getName().equals(MOUNTAIN_PASS) ? List.of(EAST_LONG, EAST_SHORT, OUT, EXIT) : List.of(WEST_LONG, WEST_SHORT, OUT, EXIT), this)));
+            currentLocationConnections.add(new LocationConnection(this.getName().equals(MOUNTAIN_PASS) ? WEST_AND_IN_DIRECTIONS : EAST_AND_IN_DIRECTIONS, mineCage));
+            mineCage.setLocationConnections(List.of(new LocationConnection(this.getName().equals(MOUNTAIN_PASS) ? EAST_AND_OUT_DIRECTIONS : WEST_AND_OUT_DIRECTIONS, this)));
 
             // Update the descriptions of the locations to reflect whether the mine cage is there or not
             this.setDescription(this.getName().equals(MOUNTAIN_PASS) ? MOUNTAIN_PASS_WITH_CAGE_LONG_DESCRIPTION : BOTTOM_MINE_SHAFT_WITH_CAGE_LONG_DESCRIPTION);
@@ -156,8 +161,8 @@ public class MineShaft extends Location {
         // Mine cage is currently at the bottom of the mine shaft, connected to the bottom of vertical mine shaft location.
         // Remove bottom of mine shaft from mine cage, add mountain pass to mine cage, and set cage connections to mountain pass
         locationConnectedToMineCage.getLocationConnections().removeIf(locationConnection -> locationConnection.getLocation().getName().equals(MINE_CAGE));
-        this.setLocationConnections(List.of(new LocationConnection(targetLocation.getName().equals(MOUNTAIN_PASS) ? List.of(EAST_LONG, EAST_SHORT, OUT, EXIT) : List.of(WEST_LONG, WEST_SHORT, OUT, EXIT), targetLocation)));
-        targetLocation.getLocationConnections().add(new LocationConnection(targetLocation.getName().equals(MOUNTAIN_PASS) ? List.of(WEST_LONG, WEST_SHORT, IN, ENTER) : List.of(EAST_LONG, EAST_SHORT, IN, ENTER), this));
+        this.setLocationConnections(List.of(new LocationConnection(targetLocation.getName().equals(MOUNTAIN_PASS) ? EAST_AND_OUT_DIRECTIONS : WEST_AND_OUT_DIRECTIONS, targetLocation)));
+        targetLocation.getLocationConnections().add(new LocationConnection(targetLocation.getName().equals(MOUNTAIN_PASS) ? WEST_AND_IN_DIRECTIONS : EAST_AND_IN_DIRECTIONS, this));
 
         // Update descriptions of the locations to reflect whether the mine cage is there or not
         targetLocation.setDescription(locationConnectedToMineCage.getName().equals(MOUNTAIN_PASS) ? BOTTOM_MINE_SHAFT_WITH_CAGE_LONG_DESCRIPTION : MOUNTAIN_PASS_WITH_CAGE_LONG_DESCRIPTION);

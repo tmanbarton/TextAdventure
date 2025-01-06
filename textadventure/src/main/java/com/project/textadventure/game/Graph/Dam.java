@@ -13,6 +13,7 @@ import java.util.List;
 
 import static com.project.textadventure.constants.GameConstants.TURN;
 
+import static com.project.textadventure.constants.GameConstants.WEST_AND_DOWN_DIRECTIONS;
 import static com.project.textadventure.game.Game.findLocationByName;
 
 public class Dam extends Location implements Action {
@@ -80,7 +81,7 @@ public class Dam extends Location implements Action {
         // Find the edge of the graph (ConnectingLocation object) that connects the dam to the lake town and set the directions to down and west
         for(final LocationConnection locationConnection : this.getLocationConnections()) {
             if (locationConnection.getLocation().getName().equals(LocationNames.LAKE_TOWN)) {
-                locationConnection.setDirections(List.of(GameConstants.WEST_LONG, GameConstants.WEST_SHORT, GameConstants.DOWN_LONG, GameConstants.DOWN_SHORT));
+                locationConnection.setDirections(WEST_AND_DOWN_DIRECTIONS);
             }
         }
 

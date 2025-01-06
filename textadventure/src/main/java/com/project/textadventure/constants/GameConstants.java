@@ -57,6 +57,39 @@ public class GameConstants {
     public static final List<String> IN_DIRECTIONS = List.of(IN, ENTER);
     public static final List<String> OUT_DIRECTIONS = List.of(OUT, EXIT);
 
+    public static final List<String> WEST_AND_DOWN_DIRECTIONS = List.of(WEST_SHORT, WEST_LONG, DOWN_SHORT, DOWN_LONG);
+    public static final List<String> WEST_AND_UP_DIRECTIONS = List.of(WEST_SHORT, WEST_LONG, UP_LONG, UP_SHORT);
+    public static final List<String> WEST_AND_IN_DIRECTIONS = List.of(WEST_SHORT, WEST_LONG, IN, ENTER);
+    public static final List<String> WEST_AND_OUT_DIRECTIONS = List.of(WEST_SHORT, WEST_LONG, OUT, EXIT);
+    public static final List<String> EAST_AND_DOWN_DIRECTIONS = List.of(EAST_SHORT, EAST_LONG, DOWN_SHORT, DOWN_LONG);
+    public static final List<String> EAST_AND_UP_DIRECTIONS = List.of(EAST_SHORT, EAST_LONG, UP_LONG, UP_SHORT);
+    public static final List<String> EAST_AND_IN_DIRECTIONS = List.of(EAST_SHORT, EAST_LONG, IN, ENTER);
+    public static final List<String> EAST_AND_OUT_DIRECTIONS = List.of(EAST_SHORT, EAST_LONG, OUT, EXIT);
+    public static final List<String> NORTH_AND_DOWN_DIRECTIONS = List.of(NORTH_SHORT, NORTH_LONG, DOWN_SHORT, DOWN_LONG);
+    public static final List<String> NORTH_AND_UP_DIRECTIONS = List.of(NORTH_SHORT, NORTH_LONG, UP_LONG, UP_SHORT);
+    public static final List<String> NORTH_AND_IN_DIRECTIONS = List.of(NORTH_SHORT, NORTH_LONG, IN, ENTER);
+    public static final List<String> NORTH_AND_OUT_DIRECTIONS = List.of(NORTH_SHORT, NORTH_LONG, OUT, EXIT);
+    public static final List<String> SOUTH_AND_DOWN_DIRECTIONS = List.of(SOUTH_SHORT, SOUTH_LONG, DOWN_SHORT, DOWN_LONG);
+    public static final List<String> SOUTH_AND_UP_DIRECTIONS = List.of(SOUTH_SHORT, SOUTH_LONG, UP_LONG, UP_SHORT);
+    public static final List<String> SOUTH_AND_IN_DIRECTIONS = List.of(SOUTH_SHORT, SOUTH_LONG, IN, ENTER);
+    public static final List<String> SOUTH_AND_OUT_DIRECTIONS = List.of(SOUTH_SHORT, SOUTH_LONG, OUT, EXIT);
+    public static final List<String> NE_AND_DOWN_DIRECTIONS = List.of(NE_SHORT, NE_LONG, DOWN_SHORT, DOWN_LONG);
+    public static final List<String> NE_AND_UP_DIRECTIONS = List.of(NE_SHORT, NE_LONG, UP_LONG, UP_SHORT);
+    public static final List<String> NE_AND_IN_DIRECTIONS = List.of(NE_SHORT, NE_LONG, IN, ENTER);
+    public static final List<String> NE_AND_OUT_DIRECTIONS = List.of(NE_SHORT, NE_LONG, OUT, EXIT);
+    public static final List<String> NW_AND_DOWN_DIRECTIONS = List.of(NW_SHORT, NW_LONG, DOWN_SHORT, DOWN_LONG);
+    public static final List<String> NW_AND_UP_DIRECTIONS = List.of(NW_SHORT, NW_LONG, UP_LONG, UP_SHORT);
+    public static final List<String> NW_AND_IN_DIRECTIONS = List.of(NW_SHORT, NW_LONG, IN, ENTER);
+    public static final List<String> NW_AND_OUT_DIRECTIONS = List.of(NW_SHORT, NW_LONG, OUT, EXIT);
+    public static final List<String> SE_AND_DOWN_DIRECTIONS = List.of(SE_SHORT, SE_LONG, DOWN_SHORT, DOWN_LONG);
+    public static final List<String> SE_AND_UP_DIRECTIONS = List.of(SE_SHORT, SE_LONG, UP_LONG, UP_SHORT);
+    public static final List<String> SE_AND_IN_DIRECTIONS = List.of(SE_SHORT, SE_LONG, IN, ENTER);
+    public static final List<String> SE_AND_OUT_DIRECTIONS = List.of(SE_SHORT, SE_LONG, OUT, EXIT);
+    public static final List<String> SW_AND_DOWN_DIRECTIONS = List.of(SW_SHORT, SW_LONG, DOWN_SHORT, DOWN_LONG);
+    public static final List<String> SW_AND_UP_DIRECTIONS = List.of(SW_SHORT, SW_LONG, UP_LONG, UP_SHORT);
+    public static final List<String> SW_AND_IN_DIRECTIONS = List.of(SW_SHORT, SW_LONG, IN, ENTER);
+    public static final List<String> SW_AND_OUT_DIRECTIONS = List.of(SW_SHORT, SW_LONG, OUT, EXIT);
+
     public static final List<String> ALL_DIRECTIONS = List.of(
             NORTH_SHORT, NORTH_LONG,
             SOUTH_SHORT, SOUTH_LONG,

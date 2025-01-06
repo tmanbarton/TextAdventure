@@ -36,6 +36,7 @@ import static com.project.textadventure.constants.ResponseConstants.INFO_RESPONS
 @Setter
 public class Game implements Action, Comparator<Item> {
     private List<Item> inventory;
+    private int inventoryLimit = 7;
     private Location currentLocation;
     private GameStatus gameStatus;
 
@@ -64,13 +65,17 @@ public class Game implements Action, Comparator<Item> {
         return getInventoryItemByName(itemName) != null;
     }
 
-    public void addItemToInventory(final Item item) {
+    public String addItemToInventory(final Item item) {
         // Add points to score if the item has points associated with it
+        if (inventory.size() == inventoryLimit) {
+            return "You can't carry anything more.";
+        }
         if (item.getPoints() > 0) {
             GameState.getInstance().incrementScore(item.getPoints());
         }
         inventory.add(item);
         inventory.sort(GameState.getInstance().getGame());
+        return null;
     }
 
     public void removeItemFromInventory(final Item item) {
@@ -167,46 +172,50 @@ public class Game implements Action, Comparator<Item> {
         if (itemName == null) {
             return ResponseConstants.WHAT_DO_YOU_WANT_TO_GET;
         }
-        String result = "";
         final Item item = currentLocation.getLocationItemByName(itemName);
         final Item jar = getInventoryItemByName(ItemConstants.JAR_NAME);
 
         if (item == null) {
-            result = "I don't see that here.";
             if (itemName.equals(ItemConstants.NAILS_NAME) && currentLocation instanceof MineEntrance && !((MineEntrance) currentLocation).areNailsOff()) {
                 if (((MineEntrance) currentLocation).isCollapsed()) {
                     // The user has previously taken the nails by hand instead of shot them with the arrow as intended, and they are now inaccessible
-                    result = "The nails are buried under rubble from the collapsed mine; you can't get to them.";
+                    return  "The nails are buried under rubble from the collapsed mine; you can't get to them.";
                 } else {
                     // If it hasn't collapsed, they haven't taken the nails at all, prompt/warn to make sure they actually want to take them
-                    result = "Are you sure you want to get the nails? The structure is very fragile and may fall apart and onto you.";
                     GameState.getInstance().getGame().setGameStatus(GameStatus.GETTING_NAILS);
+                    return  "Are you sure you want to get the nails? The structure is very fragile and may fall apart and onto you.";
                 }
             } else if (itemName.equals(ItemConstants.MAGNET_NAME) && currentLocation instanceof Dam && ((Dam) currentLocation).isMagnetDropped()) {
-                result = "The magnet is firmly attached to the wheel";
+                return  "The magnet is firmly attached to the wheel";
             }
         } else if (getInventoryItemByName(itemName) != null) {
-            result = ResponseConstants.ALREADY_CARRYING;
+            return ResponseConstants.ALREADY_CARRYING;
 
         } else if (itemName.equals(ItemConstants.GOLD_NAME) && !isItemInInventory(ItemConstants.JAR_NAME)) {
-            result = "You need something to hold the gold flakes.";
+            return  "You need something to hold the gold flakes.";
 
         } else if (itemName.equals(ItemConstants.GOLD_NAME) && isItemInInventory(ItemConstants.JAR_NAME)) {
+            final String result = addItemToInventory(item);
+            if (result != null) {
+                return result;
+            }
             jar.setInventoryDescription("Jar full of gold flakes");
-            addItemToInventory(item);
             currentLocation.removeItemFromLocation(item);
-            result = "The jar is now full of gold flakes.";
+            return "The jar is now full of gold flakes.";
 
         } else {
+            final String result = addItemToInventory(item);
+            if (result != null) {
+                return result;
+            }
             if (currentLocation.getName().equals(LocationNames.CRUMPLED_MINE_CART)) {
                 // If the user has taken the ruby from the mine cart location, update the description to not include the ruby.
                 currentLocation.setDescription("You've reached a dead end. A crumpled mine cart, no longer able to run on the rails, is laying on its side.");
             }
-            addItemToInventory(item);
             currentLocation.removeItemFromLocation(item);
-            result = ResponseConstants.OK;
+            return ResponseConstants.OK;
         }
-        return result;
+        return "I don't see that here.";
     }
 
     /**
@@ -273,7 +282,10 @@ public class Game implements Action, Comparator<Item> {
             return "The jar is already full of gold flakes.";
         }
         jar.setInventoryDescription("Jar full of gold flakes");
-        addItemToInventory(gold);
+        final String result = addItemToInventory(gold);
+        if (result != null) {
+            return result;
+        }
         currentLocation.removeItemFromLocation(gold);
         return  "The jar is now full of gold flakes.";
     }
@@ -321,9 +333,6 @@ public class Game implements Action, Comparator<Item> {
      */
     private String handlePushCommand(final String verb, final String noun) {
         String result = "";
-//        if (currentLocation.getName().equals(LocationNames.MINE_CAGE) ||
-//                currentLocation.getName().equals(LocationNames.MOUNTAIN_PASS) ||
-//                currentLocation.getName().equals(LocationNames.BOTTOM_OF_VERTICAL_MINE_SHAFT)) {
         if (currentLocation instanceof MineShaft) {
             if (StringUtils.equals(BUTTON, noun) || noun == null) {
                 result = ((MineShaft) currentLocation).moveMineCage();

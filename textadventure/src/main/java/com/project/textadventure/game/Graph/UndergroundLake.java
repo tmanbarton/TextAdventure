@@ -8,6 +8,7 @@ import java.util.Optional;
 import static com.project.textadventure.constants.GameConstants.BAD_DIRECTION;
 import static com.project.textadventure.constants.GameConstants.ENTER;
 import static com.project.textadventure.constants.GameConstants.IN;
+import static com.project.textadventure.constants.GameConstants.IN_DIRECTIONS;
 import static com.project.textadventure.constants.GameConstants.NE_LONG;
 import static com.project.textadventure.constants.GameConstants.NE_SHORT;
 import static com.project.textadventure.constants.GameConstants.SE_LONG;
@@ -44,7 +45,7 @@ public class UndergroundLake extends Location {
     @Override
     String move(final String direction) {
         Optional <LocationConnection> boatConnection = Optional.empty();
-        if (boatAtLocation && (StringUtils.equals(direction, IN) || StringUtils.equals(direction, ENTER))) {
+        if (boatAtLocation && IN_DIRECTIONS.contains(direction)) {
             // Set the current location's description to not have the boat in it since the player is going to be on the boat
             if (StringUtils.equals(this.getDescription(), UNDERGROUND_LAKE_WEST_LONG_DESCRIPTION_WITH_BOAT)) {
                 this.setDescription(UNDERGROUND_LAKE_WEST_LONG_DESCRIPTION_NO_BOAT);

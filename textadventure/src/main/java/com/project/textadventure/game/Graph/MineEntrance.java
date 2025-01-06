@@ -12,7 +12,6 @@ import java.util.List;
 
 import static com.project.textadventure.constants.ItemConstants.ARROW_NAME;
 import static com.project.textadventure.constants.LocationDescriptions.MINE_ENTRANCE_RECENT_CAVE_IN;
-import static com.project.textadventure.constants.LocationNames.MINE_ENTRANCE;
 import static com.project.textadventure.constants.LocationNames.MINE_SHAFT;
 
 public class MineEntrance extends Location implements Action {
@@ -46,8 +45,7 @@ public class MineEntrance extends Location implements Action {
     public String takeAction(@NonNull final String verb, @Nullable final String noun) {
         if (verb.equals("shoot") && !this.nailsOff && !this.isCollapsed) {
             return parseShootCommand(noun);
-        }
-        else {
+        } else {
             // return early instead of use response so there's not an extra <br> at the end
             return super.takeAction(verb, noun);
         }
@@ -60,17 +58,17 @@ public class MineEntrance extends Location implements Action {
      * @return String message from successfully shooting the arrow or
      * a "don't know command" type message
      */
-    @Override
-    String parseShootCommand(final String thingToShoot) {
-        // Only "shoot" or "shoot arrow" does something at mine entrance
-        if (!StringUtils.isEmpty(thingToShoot) && !StringUtils.equals(thingToShoot, "arrow") || nailsOff) {
-            // Don't have the bow or arrow, so this can be treated by a regular action
-            return super.parseShootCommand(thingToShoot);
-        } else {
-            // Have the bow and arrow, so shoot the arrow and do special stuff for MineEntrance Location
-            return shootArrow();
-        }
-    }
+//    @Override
+//    String parseShootCommand(final String thingToShoot) {
+//        // Only "shoot" or "shoot arrow" does something at mine entrance, and only if nails are still on meaning the user hasn't shot the arrow yet
+//        if (!StringUtils.isEmpty(thingToShoot) && !StringUtils.equals(thingToShoot, "arrow")) {
+//            // Don't have the bow or arrow, so this can be treated as a regular action
+//            return super.parseShootCommand(thingToShoot);
+//        } else {
+//            // Have the bow and arrow, so shoot the arrow and do special stuff for MineEntrance Location
+//            return nailsOff ? super.shootArrow() : shootArrow();
+//        }
+//    }
 
     /**
      * Shoot the arrow at the nails, adding the nails to the location and causing the mine entrance to collapse.
@@ -79,10 +77,13 @@ public class MineEntrance extends Location implements Action {
      */
     @Override
     String shootArrow() {
+        if (nailsOff) {
+            return super.shootArrow();
+        }
+
         final Game game = GameState.getInstance().getGame();
         final Item arrow = game.getInventoryItemByName(ARROW_NAME);
         final Location currentLocation = game.getCurrentLocation();
-        String response = "";
 
         game.removeItemFromInventory(arrow);
         addItemToLocation(arrow);
@@ -102,10 +103,8 @@ public class MineEntrance extends Location implements Action {
         // The user solved the puzzle. Get 20 points
         GameState.getInstance().incrementScore(20);
         currentLocation.setDescription(MINE_ENTRANCE_RECENT_CAVE_IN);
-        response = "You shoot the arrow and it glances off the nails with a small ringing sound. The nails and your " +
+        return "You shoot the arrow and it glances off the nails with a small ringing sound. The nails and your " +
                 "arrow land a few feet away then there's a loud crack of the support and the entrance caves in with an " +
                 "even louder crash and cloud of dust. Good thing you didn't try to take them by hand.";
-
-        return response;
     }
 }
