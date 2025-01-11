@@ -2,6 +2,7 @@ package com.project.textadventure.game;
 
 
 import com.project.textadventure.controllers.Action;
+import com.project.textadventure.game.Graph.MineEntrance;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.thymeleaf.util.StringUtils;

@@ -102,27 +102,25 @@ public class Location implements Action {
      */
     @Override
     public String takeAction(@NonNull String verb, @Nullable final String noun) {
-        String response = "";
         // If the verb is "go", then we expect the noun to be the direction
         final String newNoun = StringUtils.equals(verb, GO) ? null : noun;
         final String newVerb = StringUtils.equals(verb, GO) ? noun : verb;
 
         if (isDirection(newVerb, newNoun)) {
-            response = move(newVerb);
+            return move(newVerb);
         } else if ((StringUtils.equals(verb, LOOK_LONG) || StringUtils.equals(verb, LOOK_SHORT)) && StringUtils.isEmpty(noun)) {
-            response = look();
+            return look();
         } else if (verb.equals(UNLOCK)) {
-            response = unlock();
+            return "There's nothing to unlock here.";
         } else if (verb.equals(OPEN)) {
-            response = open();
+            return "There's nothing to open here.";
         } else if (verb.equals(SHOOT)) {
-            response = parseShootCommand(noun);
+            return parseShootCommand(noun);
         } else if (verb.equals(TURN)) {
-            response = turn();
+            return "There's nothing here to turn.";
         } else {
-            response = generateRandomUnknownCommandResponse();
+            return generateRandomUnknownCommandResponse();
         }
-        return response;
     }
 
     /**
@@ -192,21 +190,6 @@ public class Location implements Action {
         return result.isEmpty() ? "" : "\n" + result;
     }
 
-    /**
-     * Tell the user there's nothing here to unlock because unlocking is only valid at the {@link Shed}.
-     * @return Response to unlocking at this {@link Location}
-     */
-    private String unlock() {
-        return "There's nothing to unlock here.";
-    }
-
-    /**
-     * Tell the user there's nothing here to open because opening is only valid at the {@link Shed}.
-     * @return Response to opening at this {@link Location}
-     */
-    private String open() {
-        return "There's nothing to open here.";
-    }
 
     /**
      * Parse the shoot command. If the noun is null or "arrow", shoot the arrow. Otherwise, return a response indicating why you can't shoot.
@@ -247,14 +230,6 @@ public class Location implements Action {
         game.removeItemFromInventory(arrow);
         addItemToLocation(arrow);
         return "Your arrow goes flying off into the the distance and lands with a thud on the ground.";
-    }
-
-    /**
-     * Tell the user there's nothing here to turn because turning is only valid at the {@link Dam}.
-     * @return Response to opening at this {@link Location}
-     */
-    private String turn() {
-        return "There's nothing here to turn.";
     }
 
     @Override

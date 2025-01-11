@@ -13,7 +13,9 @@ import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
 import com.project.textadventure.game.Graph.Location;
 import com.project.textadventure.game.Graph.MineEntrance;
+//import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +40,10 @@ public class GameController {
      */
     @PostMapping("/gameRequest")
     public ResponseEntity<ServiceResponse<GameResponse>> executeCommand(@RequestBody Input input) {
-        final String inputString = input.getInput().toLowerCase();
+        String inputString = input.getInput().toLowerCase();
+        // Escape HTML characters in input to prevent JS injection
+        inputString = StringEscapeUtils.escapeHtml4(inputString);
+        // Escape input for preventing JS injection
         final Game game = GameState.getInstance().getGame();
         // Get list of commands from input in the form Pair<verb, noun>
         final List<Pair<String, String>> commands = parseInput(inputString);
@@ -58,7 +63,9 @@ public class GameController {
             // Execute the action and append the result to the response
             result.append(action.takeAction(command.getKey(), command.getValue()));
         }
-        final GameResponse resp = new GameResponse(result.toString(), input.getInput());
+        // Create GameResponse object. Escape the input again so it actually displays correctly
+        // instead of showing up as if nothing was entered
+        final GameResponse resp = new GameResponse(result.toString(), StringEscapeUtils.escapeHtml4(input.getInput()));
         final ServiceResponse<GameResponse> response = new ServiceResponse<>("success", resp);
 
         return new ResponseEntity<>(response, HttpStatus.OK);

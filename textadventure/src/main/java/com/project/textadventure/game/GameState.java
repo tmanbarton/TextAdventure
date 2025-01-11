@@ -65,11 +65,11 @@ public class GameState {
 
     Game initializeGame(final GameStatus status) {
         // Create items for locations
-        final Item key = new Item(1, ItemConstants.KEY_LOCATION_DESCRIPTION, ItemConstants.KEY_INVENTORY_DESCRIPTION, ItemConstants.KEY_NAME, 0);
-        final Item gold = new Item(6, ItemConstants.GOLD_LOCATION_DESCRIPTION, ItemConstants.GOLD_INVENTORY_DESCRIPTION, ItemConstants.GOLD_NAME, 30);
-        final Item magnet = new Item(10, ItemConstants.MAGNET_LOCATION_DESCRIPTION, ItemConstants.MAGNET_INVENTORY_DESCRIPTION, ItemConstants.MAGNET_NAME, 0);
-        final Item ruby = new Item(11, ItemConstants.RUBY_LOCATION_DESCRIPTION, ItemConstants.RUBY_INVENTORY_DESCRIPTION, ItemConstants.RUBY_NAME, 50);
-        final Item pie = new Item(12, ItemConstants.PIE_LOCATION_DESCRIPTION, ItemConstants.PIE_INVENTORY_DESCRIPTION, ItemConstants.PIE_NAME, 3.14);
+        final Item key = new Item(1, ItemConstants.KEY_LOCATION_DESCRIPTION, ItemConstants.KEY_INVENTORY_DESCRIPTION, ItemConstants.KEY_NAME, 0, 1);
+        final Item gold = new Item(6, ItemConstants.GOLD_LOCATION_DESCRIPTION, ItemConstants.GOLD_INVENTORY_DESCRIPTION, ItemConstants.GOLD_NAME, 30, 4);
+        final Item magnet = new Item(10, ItemConstants.MAGNET_LOCATION_DESCRIPTION, ItemConstants.MAGNET_INVENTORY_DESCRIPTION, ItemConstants.MAGNET_NAME, 0, 1);
+        final Item ruby = new Item(11, ItemConstants.RUBY_LOCATION_DESCRIPTION, ItemConstants.RUBY_INVENTORY_DESCRIPTION, ItemConstants.RUBY_NAME, 50, 5);
+        final Item pie = new Item(12, ItemConstants.PIE_LOCATION_DESCRIPTION, ItemConstants.PIE_INVENTORY_DESCRIPTION, ItemConstants.PIE_NAME, 0, 1);
 
         // Initialize lists for respective location's items. If the game is already in progress, don't add the item to the location, otherwise add it
         final List<Item> ditchItems = new ArrayList<>(List.of(key));
@@ -226,17 +226,16 @@ public class GameState {
 
         ////// Helpful for manual debugging to change start location and add items to it /////
         game = new Game(new ArrayList<>(), mineEntrance, status);
-//        game.addItemToInventory(new Item(10, ItemConstants.MAGNET_LOCATION_DESCRIPTION, ItemConstants.MAGNET_INVENTORY_DESCRIPTION, ItemConstants.MAGNET_NAME, 0));
-        game.addItemToInventory(new Item(4, ItemConstants.ARROW_LOCATION_DESCRIPTION, ItemConstants.ARROW_INVENTORY_DESCRIPTION, ItemConstants.ARROW_NAME, 0));
-        game.addItemToInventory(new Item(3, ItemConstants.BOW_LOCATION_DESCRIPTION, ItemConstants.BOW_INVENTORY_DESCRIPTION, ItemConstants.BOW_NAME, 0));
+//        game.addItemToInventory(new Item(10, ItemConstants.MAGNET_LOCATION_DESCRIPTION, ItemConstants.MAGNET_INVENTORY_DESCRIPTION, ItemConstants.MAGNET_NAME, 0, 1));
+        game.addItemToInventory(new Item(4, ItemConstants.ARROW_LOCATION_DESCRIPTION, ItemConstants.ARROW_INVENTORY_DESCRIPTION, ItemConstants.ARROW_NAME, 0, 1));
+        game.addItemToInventory(new Item(3, ItemConstants.BOW_LOCATION_DESCRIPTION, ItemConstants.BOW_INVENTORY_DESCRIPTION, ItemConstants.BOW_NAME, 0, 3));
         return game;
         //////
 
 //        return new Game(new ArrayList<>(), driveway, status);
     }
 
-    public String restartGame() {
+    public void restartGame() {
         this.game = initializeGame(GameStatus.IN_PROGRESS);
-        return this.game.getCurrentLocation().getDescription();
     }
 }

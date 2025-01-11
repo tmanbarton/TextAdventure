@@ -103,6 +103,24 @@ public class GameConstants {
             DOWN_SHORT, DOWN_LONG,
             IN, ENTER, OUT, EXIT);
 
+    public static final List<String> TREE_LOCATIONS = List.of(
+            LocationNames.ANT_HILL,
+            LocationNames.ARCHERY_RANGE,
+            LocationNames.DAM,
+            LocationNames.DIRT_ROAD,
+            LocationNames.DITCH,
+            LocationNames.DRIVEWAY,
+            LocationNames.WEST_END_SIDE_STREET,
+            LocationNames.FOOT_PATH,
+            LocationNames.INTERSECTION,
+            LocationNames.LAKE,
+            LocationNames.LIGHTNING_TREE,
+            LocationNames.MOUNTAIN_PASS,
+            LocationNames.OUTSIDE_LOG_CABIN,
+            LocationNames.PICNIC_TABLE,
+            LocationNames.PRIVATE_PROPERTY,
+            LocationNames.SHED,
+            LocationNames.TOP_OF_HILL);
 
     // Commands
     public static final String GET = "get";

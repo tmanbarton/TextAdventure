@@ -2,6 +2,7 @@ package com.project.textadventure.game.Graph;
 
 import com.project.textadventure.constants.ItemConstants;
 import com.project.textadventure.controllers.Action;
+import com.project.textadventure.controllers.GameStatus;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
 import org.apache.commons.lang3.StringUtils;
@@ -11,8 +12,10 @@ import org.springframework.lang.Nullable;
 import java.util.List;
 
 import static com.project.textadventure.constants.ItemConstants.ARROW_NAME;
+import static com.project.textadventure.constants.ItemConstants.NAILS_NAME;
 import static com.project.textadventure.constants.LocationDescriptions.MINE_ENTRANCE_RECENT_CAVE_IN;
 import static com.project.textadventure.constants.LocationNames.MINE_SHAFT;
+import static com.project.textadventure.game.Game.isGetCommand;
 
 public class MineEntrance extends Location implements Action {
     private boolean nailsOff;
@@ -21,10 +24,6 @@ public class MineEntrance extends Location implements Action {
     public MineEntrance(final String description, final String shortDescription, final List<Item> items, final List<LocationConnection> locationConnections, final boolean visited, final String name, final boolean nailsOff) {
         super(description, shortDescription, items, locationConnections, visited, name);
         this.nailsOff = nailsOff;
-    }
-
-    public boolean isCollapsed() {
-        return isCollapsed;
     }
 
     public void setCollapsed(boolean collapsed) {
@@ -43,32 +42,30 @@ public class MineEntrance extends Location implements Action {
      */
     @Override
     public String takeAction(@NonNull final String verb, @Nullable final String noun) {
-        if (verb.equals("shoot") && !this.nailsOff && !this.isCollapsed) {
+        if (verb.equals("shoot") && !nailsOff && !isCollapsed) {
             return parseShootCommand(noun);
+        } else if (isGetCommand(verb, noun)) {
+            return handleGetCommand(verb, noun);
         } else {
             // return early instead of use response so there's not an extra <br> at the end
             return super.takeAction(verb, noun);
         }
     }
 
-    /**
-     * Decide if the input results in shooting the arrow at the nails. If so, call
-     * respective method to shoot the arrow.
-     * @param thingToShoot noun part of the command, only "" or "arrow" will do anything
-     * @return String message from successfully shooting the arrow or
-     * a "don't know command" type message
-     */
-//    @Override
-//    String parseShootCommand(final String thingToShoot) {
-//        // Only "shoot" or "shoot arrow" does something at mine entrance, and only if nails are still on meaning the user hasn't shot the arrow yet
-//        if (!StringUtils.isEmpty(thingToShoot) && !StringUtils.equals(thingToShoot, "arrow")) {
-//            // Don't have the bow or arrow, so this can be treated as a regular action
-//            return super.parseShootCommand(thingToShoot);
-//        } else {
-//            // Have the bow and arrow, so shoot the arrow and do special stuff for MineEntrance Location
-//            return nailsOff ? super.shootArrow() : shootArrow();
-//        }
-//    }
+    private String handleGetCommand(final String verb, final String itemName) {
+        if (StringUtils.equals(itemName, NAILS_NAME)) {
+            if (nailsOff) {
+                // The user has previously taken the nails by hand instead of shot them with the arrow as intended, and they are now inaccessible
+                return "The nails are buried under rubble from the collapsed mine; you can't get to them.";
+            } else {
+                // If it hasn't collapsed, they haven't taken the nails at all, prompt/warn to make sure they actually want to take them
+                GameState.getInstance().getGame().setGameStatus(GameStatus.GETTING_NAILS);
+                return "Are you sure you want to get the nails? The structure is very fragile and may fall apart and onto you.";
+            }
+        } else {
+            return super.takeAction(verb, itemName);
+        }
+    }
 
     /**
      * Shoot the arrow at the nails, adding the nails to the location and causing the mine entrance to collapse.

@@ -32,7 +32,6 @@ public class LocationDescriptions {
     public static final String MUSTY_BEND_SHORT_DESCRIPTION = "You're at a musty bend.";
     public static final String NARROW_CORRIDOR_SHORT_DESCRIPTION = "You're in a narrow corridor.";
     public static final String OUTSIDE_LOG_CABIN_SHORT_DESCRIPTION = "You're outside Log Cabin.";
-    public static final String OUTSIDE_MINE_CAGE_SHORT_DESCRIPTION = "";
     public static final String OUTSIDE_TAVERN_SHORT_DESCRIPTION = "You're outside Tommyknocker Tavern.";
     public static final String PICNIC_TABLE_SHORT_DESCRIPTION = "You're at Picnic Table.";
     public static final String PRIVATE_PROPERTY_SHORT_DESCRIPTION = "You're at Private Property.";

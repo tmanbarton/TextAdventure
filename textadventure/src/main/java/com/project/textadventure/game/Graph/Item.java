@@ -16,13 +16,16 @@ public class Item {
     private final String name;
     private final int displayOrder;
     private final double points;
+    private final double weight;
 
-    public Item(final int displayOrder, final String locationDescription, final String inventoryDescription, final String name, final double points) {
+    public Item(final int displayOrder, final String locationDescription, final String inventoryDescription, final String name, final double points,
+                final double weight) {
         this.displayOrder = displayOrder;
         this.locationDescription = locationDescription;
         this.inventoryDescription = inventoryDescription;
         this.name = name;
         this.points = points;
+        this.weight = weight;
     }
 
     public void setInventoryDescription(final String description) {

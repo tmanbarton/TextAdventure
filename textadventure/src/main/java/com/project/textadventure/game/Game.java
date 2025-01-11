@@ -36,7 +36,8 @@ import static com.project.textadventure.constants.ResponseConstants.INFO_RESPONS
 @Setter
 public class Game implements Action, Comparator<Item> {
     private List<Item> inventory;
-    private int inventoryLimit = 7;
+    // Limit based on weight
+    private int inventoryLimit = 15;
     private Location currentLocation;
     private GameStatus gameStatus;
 
@@ -67,7 +68,7 @@ public class Game implements Action, Comparator<Item> {
 
     public String addItemToInventory(final Item item) {
         // Add points to score if the item has points associated with it
-        if (inventory.size() == inventoryLimit) {
+        if (getInventoryWeight() == inventoryLimit) {
             return "You can't carry anything more.";
         }
         if (item.getPoints() > 0) {
@@ -76,6 +77,14 @@ public class Game implements Action, Comparator<Item> {
         inventory.add(item);
         inventory.sort(GameState.getInstance().getGame());
         return null;
+    }
+
+    private Double getInventoryWeight() {
+        double totalWeight = 0;
+        for (final Item item : inventory) {
+            totalWeight += item.getWeight();
+        }
+        return totalWeight;
     }
 
     public void removeItemFromInventory(final Item item) {
@@ -104,37 +113,43 @@ public class Game implements Action, Comparator<Item> {
      */
     @Override
     public String takeAction(@NonNull String verb, @Nullable String noun) {
-        String result = "";
-        // To lowercase to be able to compare to enum constants to string
-        verb = verb.toLowerCase();
         if (isGetCommand(verb, noun)) {
             noun = noun == null ? noun : simplifyNoun(noun);
-            result = handleGetCommand(noun);
+            return handleGetCommand(noun);
+
         } else if (StringUtils.equals(verb, FILL)) {
-            result = handleFillCommand(noun);
+            return handleFillCommand(noun);
+
         } else if (StringUtils.equals(verb, DROP) || StringUtils.equals(verb, THROW)) {
-            result = handleDropCommand(noun);
+            return handleDropCommand(noun);
+
         } else if (StringUtils.equals(verb, EAT)) {
-            result = handleEatCommand(noun);
+            return handleEatCommand(noun);
+
         } else if (StringUtils.equals(verb, PUSH) || StringUtils.equals(verb, PRESS)) {
-            result = handlePushCommand(verb, noun);
+            return handlePushCommand(verb, noun);
+
         } else if (noun == null) {
+            // Command was only one word
             if (StringUtils.equals(verb, INVENTORY_LONG) || StringUtils.equals(verb, INVENTORY_SHORT) || StringUtils.equals(verb, INVENTORY_MEDIUM)) {
-                result = takeInventory();
+                return takeInventory();
+
             } else if (StringUtils.equals(verb, QUIT) || StringUtils.equals(verb, RESTART)) {
-                result = "Are you sure you want to " + (StringUtils.equals(verb, QUIT) ? "quit?" : "restart?");
                 gameStatus = GameStatus.QUITTING;
+                return "Are you sure you want to " + (StringUtils.equals(verb, QUIT) ? "quit?" : "restart?");
+
             } else if (StringUtils.equals(verb, SCORE)) {
                 return "Your score: " + GameState.getInstance().getScore();
+
             } else if (StringUtils.equals(verb, INFO)) {
                 return INFO_RESPONSE;
+
             } else if (StringUtils.equals(verb, HELP)) {
                 return HELP_RESPONSE;
             }
-        } else {
-            result = generateRandomUnknownCommandResponse();
         }
-        return result;
+        return generateRandomUnknownCommandResponse();
+
     }
 
     /**
@@ -143,7 +158,7 @@ public class Game implements Action, Comparator<Item> {
      * @param noun The noun part of the command.
      * @return True if the command is a get command, false otherwise.
      */
-    private boolean isGetCommand(@NonNull String verb, @Nullable final String noun) {
+    public static boolean isGetCommand(@NonNull String verb, @Nullable final String noun) {
         return StringUtils.equals(verb, GET) || StringUtils.equals(verb, TAKE) ||
                 (noun != null && StringUtils.equals(verb, "pick") && StringUtils.equals(noun.substring(0, 2), "up"));
     }
@@ -174,10 +189,11 @@ public class Game implements Action, Comparator<Item> {
         }
         final Item item = currentLocation.getLocationItemByName(itemName);
         final Item jar = getInventoryItemByName(ItemConstants.JAR_NAME);
+        final boolean isJarInInventory = isItemInInventory(ItemConstants.JAR_NAME);
 
         if (item == null) {
             if (itemName.equals(ItemConstants.NAILS_NAME) && currentLocation instanceof MineEntrance && !((MineEntrance) currentLocation).areNailsOff()) {
-                if (((MineEntrance) currentLocation).isCollapsed()) {
+                if (((MineEntrance) currentLocation).areNailsOff()) {
                     // The user has previously taken the nails by hand instead of shot them with the arrow as intended, and they are now inaccessible
                     return  "The nails are buried under rubble from the collapsed mine; you can't get to them.";
                 } else {
@@ -188,13 +204,14 @@ public class Game implements Action, Comparator<Item> {
             } else if (itemName.equals(ItemConstants.MAGNET_NAME) && currentLocation instanceof Dam && ((Dam) currentLocation).isMagnetDropped()) {
                 return  "The magnet is firmly attached to the wheel";
             }
-        } else if (getInventoryItemByName(itemName) != null) {
+        }
+        else if (getInventoryItemByName(itemName) != null) {
             return ResponseConstants.ALREADY_CARRYING;
 
-        } else if (itemName.equals(ItemConstants.GOLD_NAME) && !isItemInInventory(ItemConstants.JAR_NAME)) {
+        } else if (itemName.equals(ItemConstants.GOLD_NAME) && !isJarInInventory) {
             return  "You need something to hold the gold flakes.";
 
-        } else if (itemName.equals(ItemConstants.GOLD_NAME) && isItemInInventory(ItemConstants.JAR_NAME)) {
+        } else if (itemName.equals(ItemConstants.GOLD_NAME) && isJarInInventory) {
             final String result = addItemToInventory(item);
             if (result != null) {
                 return result;
@@ -311,10 +328,10 @@ public class Game implements Action, Comparator<Item> {
         // If it is, remove the pie from the inventory and add 3.14 to the score.
         final Item item = getInventoryItemByName(itemName);
 
-        if (item != null && isItemInInventory(PIE_NAME) && (StringUtils.isEmpty(itemName) || StringUtils.equals(itemName, PIE_NAME))) {
-            GameState.getInstance().incrementScore(item.getPoints());
+        if (isItemInInventory(PIE_NAME) && (StringUtils.isEmpty(itemName) || StringUtils.equals(itemName, PIE_NAME))) {
             removeItemFromInventory(getInventoryItemByName(PIE_NAME));
-            return "You eat the pie. It's delicious. You earned " + item.getPoints() + " points.";
+            GameState.getInstance().incrementScore(3.14);
+            return "You eat the pie. It's delicious. You earned 3.14 points.";
         }
 
         // Item is not found in the inventory
