@@ -17,8 +17,8 @@ public class GameTest {
     void getInventoryItemByNameSuccess() {
         final Game game = new Game(new ArrayList<>(), new Location("", "", new ArrayList<>(), new ArrayList<>(), false, ""), GameStatus.NEW);
 
-        final Item item1 = new Item(1, "test description", "test description", "test name", 0);
-        final Item item2 = new Item(2, "test", "test", "name1", 0);
+        final Item item1 = new Item(1, "test description", "test description", "test name", 0, 1);
+        final Item item2 = new Item(2, "test", "test", "name1", 0, 2);
         game.addItemToInventory(item1);
         game.addItemToInventory(item2);
         final Item actual = game.getInventoryItemByName("test name");
@@ -30,7 +30,7 @@ public class GameTest {
     void getInventoryItemByNameFailure() {
         Game game = new Game(new ArrayList<>(), new Location("", "", new ArrayList<>(), new ArrayList<>(), false, ""), GameStatus.NEW);
 
-        final Item item1 = new Item(1, "test description", "test description", "test", 0);
+        final Item item1 = new Item(1, "test description", "test description", "test", 0, 1);
         game.addItemToInventory(item1);
         final Item actual = game.getInventoryItemByName("test name");
         assertNull(actual);

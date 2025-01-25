@@ -37,7 +37,7 @@ import static com.project.textadventure.constants.ResponseConstants.INFO_RESPONS
 public class Game implements Action, Comparator<Item> {
     private List<Item> inventory;
     // Limit based on weight
-    private int inventoryLimit = 15;
+    private int inventoryLimit = 10;
     private Location currentLocation;
     private GameStatus gameStatus;
 
@@ -68,7 +68,7 @@ public class Game implements Action, Comparator<Item> {
 
     public String addItemToInventory(final Item item) {
         // Add points to score if the item has points associated with it
-        if (getInventoryWeight() == inventoryLimit) {
+        if (getInventoryWeight() > inventoryLimit) {
             return "You can't carry anything more.";
         }
         if (item.getPoints() > 0) {

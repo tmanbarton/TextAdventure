@@ -84,7 +84,7 @@ public class MineEntrance extends Location implements Action {
 
         game.removeItemFromInventory(arrow);
         addItemToLocation(arrow);
-        final Item nails = new Item(7, ItemConstants.NAILS_LOCATION_DESCRIPTION, ItemConstants.NAILS_INVENTORY_DESCRIPTION, ItemConstants.NAILS_NAME, 0);
+        final Item nails = new Item(7, ItemConstants.NAILS_LOCATION_DESCRIPTION, ItemConstants.NAILS_INVENTORY_DESCRIPTION, ItemConstants.NAILS_NAME, 0, 1);
         currentLocation.addItemToLocation(nails);
         nailsOff = true;
 
