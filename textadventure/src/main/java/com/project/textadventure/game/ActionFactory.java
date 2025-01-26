@@ -2,7 +2,6 @@ package com.project.textadventure.game;
 
 
 import com.project.textadventure.controllers.Action;
-import com.project.textadventure.game.Graph.MineEntrance;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.thymeleaf.util.StringUtils;
@@ -26,7 +25,7 @@ public class ActionFactory {
         action = verb.toLowerCase();
 
         return switch(action) {
-            case GET, TAKE, FILL, DROP, THROW, QUIT, RESTART, SCORE, INFO, HELP, INVENTORY_SHORT, INVENTORY_MEDIUM, INVENTORY_LONG,
+            case GET, TAKE, FILL, DROP, THROW, QUIT, RESTART, SCORE, INFO, HELP, INVENTORY_SHORT, INVENTORY_LONG,
                     EAT, PUSH, PRESS -> game;
             case GO, NORTH_SHORT, SOUTH_SHORT, EAST_SHORT, WEST_SHORT, NE_SHORT, NW_SHORT, SE_SHORT, SW_SHORT, UP_SHORT, DOWN_SHORT,
                     NORTH_LONG, SOUTH_LONG, EAST_LONG, WEST_LONG, NE_LONG, NW_LONG, SE_LONG, SW_LONG,

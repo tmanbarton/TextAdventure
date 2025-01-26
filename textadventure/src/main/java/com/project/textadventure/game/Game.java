@@ -131,7 +131,7 @@ public class Game implements Action, Comparator<Item> {
 
         } else if (noun == null) {
             // Command was only one word
-            if (StringUtils.equals(verb, INVENTORY_LONG) || StringUtils.equals(verb, INVENTORY_SHORT) || StringUtils.equals(verb, INVENTORY_MEDIUM)) {
+            if (StringUtils.equals(verb, INVENTORY_LONG) || StringUtils.equals(verb, INVENTORY_SHORT)) {
                 return takeInventory();
 
             } else if (StringUtils.equals(verb, QUIT) || StringUtils.equals(verb, RESTART)) {

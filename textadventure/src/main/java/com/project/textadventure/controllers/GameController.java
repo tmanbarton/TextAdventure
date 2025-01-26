@@ -14,6 +14,7 @@ import com.project.textadventure.game.GameState;
 import com.project.textadventure.game.Graph.Location;
 import com.project.textadventure.game.Graph.MineEntrance;
 //import org.apache.commons.text.StringEscapeUtils;
+import com.project.textadventure.game.InputParser;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.http.HttpStatus;
@@ -41,12 +42,12 @@ public class GameController {
     @PostMapping("/gameRequest")
     public ResponseEntity<ServiceResponse<GameResponse>> executeCommand(@RequestBody Input input) {
         String inputString = input.getInput().toLowerCase();
-        // Escape HTML characters in input to prevent JS injection
+        // Escape HTML characters in input to prevent JS injection/XSS
         inputString = StringEscapeUtils.escapeHtml4(inputString);
-        // Escape input for preventing JS injection
         final Game game = GameState.getInstance().getGame();
         // Get list of commands from input in the form Pair<verb, noun>
-        final List<Pair<String, String>> commands = parseInput(inputString);
+        // todo refactor now that parseInput has been refactored to return "get" for all get commands, etc.
+        final List<Pair<String, String>> commands = InputParser.parseInput(inputString);
         StringBuilder result = new StringBuilder();
         for (final Pair<String, String> command : commands) {
             // If the game is not in progress or is lost, it's some other state that requires the user to answer yes/no
@@ -69,29 +70,6 @@ public class GameController {
         final ServiceResponse<GameResponse> response = new ServiceResponse<>("success", resp);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    /**
-     * Split input on spaces and separates it into verb and noun. Remove any " the "s from the command.
-     * If there are multiple commands, split them on "and" and "then" and separate them into verb and noun.
-     * @param input User's input
-     * @return List of commands
-     */
-    private List<Pair<String, String>> parseInput(final String input) {
-        // Split input on "and" and "then" to separate into multiple commands
-        final String[] commands = input.split("and|then");
-        final ArrayList<Pair<String, String>> parsedCommands = new ArrayList<>();
-
-        for (String command : commands) {
-            // Remove any " the "s from the command
-            command = command.replaceAll("\\Wthe\\W", " ");
-            final String[] parsedCommand = command.trim().split(" ", 2);
-            final String verb = parsedCommand[0];
-            final String noun = parsedCommand.length > 1 ? parsedCommand[1] : null;
-            final Pair<String, String> commandPair = new ImmutablePair<>(verb, noun);
-            parsedCommands.add(commandPair);
-        }
-        return parsedCommands;
     }
 
     /**

@@ -12,9 +12,9 @@ public class LocationTest {
     @Test
     @DisplayName("Finding an Item that exists in the Location's Item list returns the specified Item.")
     void testGetLocationItemByNameSuccess() {
-        Item expected = new Item(1, "", "", "name 1", 1);
-        Item item1 = new Item(2, "", "", "name 2", 2);
-        Item item2 = new Item(3, "", "", "name 3", 3);
+        Item expected = new Item(1, "", "", "name 1", 1, 2);
+        Item item1 = new Item(2, "", "", "name 2", 2, 1);
+        Item item2 = new Item(3, "", "", "name 3", 3, 3);
         Item actual = new Location(
                 "",
                 "",
@@ -29,9 +29,9 @@ public class LocationTest {
     @Test
     @DisplayName("Finding an Item that doesn't exist in the Location's Item list returns null.")
     void testGetLocationItemByNameFail() {
-        Item item1 = new Item(2, "", "", "name 2", 1);
-        Item item2 = new Item(3, "", "", "name 3", 2);
-        Item item3 = new Item(1, "", "", "name 1", 3);
+        Item item1 = new Item(2, "", "", "name 2", 1, 1);
+        Item item2 = new Item(3, "", "", "name 3", 2, 2);
+        Item item3 = new Item(1, "", "", "name 1", 3, 3);
         Item actual = new Location(
                 "",
                 "",
@@ -60,7 +60,7 @@ public class LocationTest {
     @DisplayName("Test adding an item to the Location.")
     void testAddItemToLocation() {
         Location location = new Location("full desc", "short desc", new ArrayList<>(), new ArrayList<>(), false, "name");
-        Item expected = new Item(1, "location desc", "inven desc", "name", 12);
+        Item expected = new Item(1, "location desc", "inven desc", "name", 12, 3);
         location.addItemToLocation(expected);
 
         Item actual = location.getItems().get(0);
@@ -71,7 +71,7 @@ public class LocationTest {
     @DisplayName("Test removing an item from the Location.")
     void testRemoveItemFromLocation() {
         Location location = new Location("full desc", "short desc", new ArrayList<>(), new ArrayList<>(), false, "name");
-        Item item = new Item(1, "location desc", "inven desc", "name", 23);
+        Item item = new Item(1, "location desc", "inven desc", "name", 23, 5);
         location.addItemToLocation(item);
         location.removeItemFromLocation(item);
 

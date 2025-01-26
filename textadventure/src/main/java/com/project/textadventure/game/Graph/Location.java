@@ -1,7 +1,6 @@
 package com.project.textadventure.game.Graph;
 
 import com.project.textadventure.constants.GameConstants;
-import com.project.textadventure.constants.ItemConstants;
 import com.project.textadventure.constants.LocationNames;
 import com.project.textadventure.controllers.Action;
 import com.project.textadventure.game.*;
