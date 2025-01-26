@@ -1,5 +1,7 @@
 package com.project.textadventure.constants;
 
+import com.project.textadventure.controllers.GameStatus;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -170,6 +172,10 @@ public class GameConstants {
     public static final String SHOOT = "shoot";
     public static final String TURN = "turn";
     public static final String EAT = "eat";
+    public static final String YES_LONG = "yes";
+    public static final String YES_SHORT = "y";
+    public static final String NO_LONG = "no";
+    public static final String NO_SHORT = "n";
 
     public static final List<String> MOVE_COMMANDS = new ArrayList<>(List.of(GO, MOVE, WALK, RUN));
     static {
@@ -193,16 +199,19 @@ public class GameConstants {
     public static final Map<List<String>, String> EAT_COMMAND_MAP = Map.of(List.of(EAT), EAT);
     public static final Map<List<String>, String> PUSH_COMMAND_MAP = Map.of(List.of(PUSH, PRESS, POKE), PUSH);
     public static final Map<List<String>, String> FILL_COMMAND_MAP = Map.of(List.of(FILL, FILL_UP), FILL);
+    public static final Map<List<String>, String> YES_COMMAND_MAP = Map.of(List.of(YES_LONG, YES_SHORT), YES_LONG);
+    public static final Map<List<String>, String> NO_COMMAND_MAP = Map.of(List.of(NO_LONG, NO_SHORT), NO_LONG);
 
     public static final List<String> ALL_COMMANDS = new ArrayList<>(List.of(
             GO, MOVE, WALK, RUN, GET, GRAB, PICK_UP, TAKE, DROP, THROW, PUT_DOWN, TAKE_INVENTORY, INVENTORY_LONG, INVENTORY_SHORT, QUIT, RESTART,
-            SCORE, INFO, HELP, LOOK_LONG, LOOK_SHORT, LOOK_AROUND, PUSH, PRESS, POKE, FILL, FILL_UP, OPEN, UNLOCK, SHOOT, TURN, EAT));
+            SCORE, INFO, HELP, LOOK_LONG, LOOK_SHORT, LOOK_AROUND, PUSH, PRESS, POKE, FILL, FILL_UP, OPEN, UNLOCK, SHOOT, TURN, EAT, YES_LONG, YES_SHORT, NO_LONG, NO_SHORT));
     static {
         ALL_COMMANDS.addAll(ALL_DIRECTIONS);
     }
-
     public static final List<Map<List<String>, String>> ALL_COMMAND_MAPS = List.of(
             MOVE_COMMAND_MAP, GET_COMMAND_MAP, DROP_COMMAND_MAP, INVENTORY_COMMAND_MAP, RESTART_COMMAND_MAP, LOOK_COMMAND_MAP,
             HELP_COMMAND_MAP, INFO_COMMAND_MAP, SCORE_COMMAND_MAP, OPEN_COMMAND_MAP, UNLOCK_COMMAND_MAP, SHOOT_COMMAND_MAP,
-            TURN_COMMAND_MAP, EAT_COMMAND_MAP, PUSH_COMMAND_MAP, FILL_COMMAND_MAP);
+            TURN_COMMAND_MAP, EAT_COMMAND_MAP, PUSH_COMMAND_MAP, FILL_COMMAND_MAP, YES_COMMAND_MAP, NO_COMMAND_MAP);
+
+    public static final List<GameStatus> YES_NO_STATES = List.of(GameStatus.NEW, GameStatus.QUITTING, GameStatus.GETTING_NAILS);
 }

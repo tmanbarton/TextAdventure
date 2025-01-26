@@ -7,7 +7,6 @@ import com.project.textadventure.dto.Input;
 import com.project.textadventure.dto.GameResponse;
 import com.project.textadventure.dto.ServiceResponse;
 
-import com.project.textadventure.game.ActionFactory;
 import com.project.textadventure.game.Graph.LocationConnection;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
@@ -15,7 +14,7 @@ import com.project.textadventure.game.Graph.Location;
 import com.project.textadventure.game.Graph.MineEntrance;
 //import org.apache.commons.text.StringEscapeUtils;
 import com.project.textadventure.game.InputParser;
-import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +22,15 @@ import org.springframework.web.bind.annotation.*;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.textadventure.constants.GameConstants.GAME_INTRO;
+import static com.project.textadventure.constants.GameConstants.NO_LONG;
+import static com.project.textadventure.constants.GameConstants.NO_SHORT;
+import static com.project.textadventure.constants.GameConstants.YES_LONG;
+import static com.project.textadventure.constants.GameConstants.YES_NO_STATES;
+import static com.project.textadventure.constants.GameConstants.YES_SHORT;
 import static com.project.textadventure.constants.ResponseConstants.OK;
-import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
 @RestController
 @RequestMapping("/api/vots/game")
@@ -46,23 +48,19 @@ public class GameController {
         inputString = StringEscapeUtils.escapeHtml4(inputString);
         final Game game = GameState.getInstance().getGame();
         // Get list of commands from input in the form Pair<verb, noun>
-        // todo refactor now that parseInput has been refactored to return "get" for all get commands, etc.
         final List<Pair<String, String>> commands = InputParser.parseInput(inputString);
         StringBuilder result = new StringBuilder();
+        // Loop over each command and execute it
         for (final Pair<String, String> command : commands) {
-            // If the game is not in progress or is lost, it's some other state that requires the user to answer yes/no
-            if (game.getGameStatus() != GameStatus.IN_PROGRESS && game.getGameStatus() != GameStatus.LOSE) {
+            // If the game is in a state that requires a yes/no answer, handle that before user can do anything else
+            if (YES_NO_STATES.contains(game.getGameStatus())) {
                 result = new StringBuilder(handleYesNoConfirmation(command.getKey()));
                 break;
             }
-            // Figure out which action to take based on the verb and noun
-            final Action action = ActionFactory.getActionObject(command.getKey(), command.getValue());
-            if (action == null) {
-                result = new StringBuilder(generateRandomUnknownCommandResponse());
-                break;
-            }
-            // Execute the action and append the result to the response
-            result.append(action.takeAction(command.getKey(), command.getValue()));
+
+            // Execute the action on the Location or any class that extends Location
+            // and append the result to the response
+            result.append(game.getCurrentLocation().takeAction(command.getKey(), command.getValue()));
         }
         // Create GameResponse object. Escape the input again so it actually displays correctly
         // instead of showing up as if nothing was entered
@@ -82,7 +80,7 @@ public class GameController {
         final Game game = GameState.getInstance().getGame();
         final GameStatus status = game.getGameStatus();
 
-        if (input.equals("yes") || input.equals("y")) {
+        if (StringUtils.equals(input, YES_LONG) || StringUtils.equals(input, YES_SHORT)) {
             // Resume the game since user answered the question
             game.setGameStatus(GameStatus.IN_PROGRESS);
             switch (status) {
@@ -117,8 +115,8 @@ public class GameController {
                     // Should never get here.
                     return "Invalid game status. Something went wrong.";
             }
-        } else if (input.equals("n") || input.equals("no")) {
-            // Resume the game since user answered the question
+        } else if (StringUtils.equals(input, NO_SHORT) || StringUtils.equals(input, NO_LONG)) {
+            // Resume/start the game now that the question is answered
             game.setGameStatus(GameStatus.IN_PROGRESS);
             return switch (status) {
                 // If this is a new game, we start by asking if the user wants help. If they say no, we start the game with

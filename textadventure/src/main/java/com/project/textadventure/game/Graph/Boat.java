@@ -25,7 +25,6 @@ public class Boat extends Location {
      * @param direction The direction to move in
      * @return The result of the move to display to the user
      */
-    @Override
     String move(final String direction) {
         // From boat you can only move W, NE, and SE. If it's any of those directions, set boat at location to true for
         // the location you're going to
@@ -53,6 +52,6 @@ public class Boat extends Location {
             }
         });
         // Move as normally after setting boat at location, if needed
-        return super.move(direction);
+        return super.parseMoveCommand(direction);
     }
 }

@@ -5,14 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.Optional;
 
-import static com.project.textadventure.constants.GameConstants.BAD_DIRECTION;
-import static com.project.textadventure.constants.GameConstants.ENTER;
-import static com.project.textadventure.constants.GameConstants.IN;
 import static com.project.textadventure.constants.GameConstants.IN_DIRECTIONS;
-import static com.project.textadventure.constants.GameConstants.NE_LONG;
-import static com.project.textadventure.constants.GameConstants.NE_SHORT;
-import static com.project.textadventure.constants.GameConstants.SE_LONG;
-import static com.project.textadventure.constants.GameConstants.SE_SHORT;
 import static com.project.textadventure.constants.LocationDescriptions.UNDERGROUND_LAKE_NE_LONG_DESCRIPTION_NO_BOAT;
 import static com.project.textadventure.constants.LocationDescriptions.UNDERGROUND_LAKE_NE_LONG_DESCRIPTION_WITH_BOAT;
 import static com.project.textadventure.constants.LocationDescriptions.UNDERGROUND_LAKE_NE_SHORT_DESCRIPTION_NO_BOAT;
@@ -22,9 +15,6 @@ import static com.project.textadventure.constants.LocationDescriptions.UNDERGROU
 import static com.project.textadventure.constants.LocationDescriptions.UNDERGROUND_LAKE_WEST_LONG_DESCRIPTION_NO_BOAT;
 import static com.project.textadventure.constants.LocationDescriptions.UNDERGROUND_LAKE_WEST_LONG_DESCRIPTION_WITH_BOAT;
 import static com.project.textadventure.constants.LocationDescriptions.UNDERGROUND_LAKE_WEST_SHORT_DESCRIPTION_NO_BOAT;
-import static com.project.textadventure.constants.LocationNames.UNDERGROUND_LAKE_NE;
-import static com.project.textadventure.constants.LocationNames.UNDERGROUND_LAKE_SE;
-import static com.project.textadventure.constants.LocationNames.UNDERGROUND_LAKE_WEST;
 
 public class UndergroundLake extends Location {
     private boolean boatAtLocation;
@@ -43,7 +33,7 @@ public class UndergroundLake extends Location {
      * @return The result of the move to display to the user
      */
     @Override
-    String move(final String direction) {
+    String parseMoveCommand(final String direction) {
         Optional <LocationConnection> boatConnection = Optional.empty();
         if (boatAtLocation && IN_DIRECTIONS.contains(direction)) {
             // Set the current location's description to not have the boat in it since the player is going to be on the boat
@@ -64,8 +54,8 @@ public class UndergroundLake extends Location {
                     .filter(locationConnection -> locationConnection.getLocation().getName().equals("boat"))
                     .findFirst();
         }
-        final String result = super.move(direction);
-        // Set boat connection's directions to empty after moving. Must be after, or super.move won't know the boat is a viable option.
+        final String result = super.parseMoveCommand(direction);
+        // Set boat connection's directions to empty after moving. Must be after, or regular move won't know the boat is a viable option.
         // Only do so if the boat is the destination and the player is moving into the boat
         boatConnection.ifPresent(locationConnection -> locationConnection.setDirections(List.of()));
         return result;

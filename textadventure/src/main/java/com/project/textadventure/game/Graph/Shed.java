@@ -2,6 +2,7 @@ package com.project.textadventure.game.Graph;
 
 import com.project.textadventure.constants.ItemConstants;
 import com.project.textadventure.controllers.Action;
+import com.project.textadventure.game.ActionExecutorUtils;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
 import lombok.NonNull;
@@ -39,18 +40,18 @@ public class Shed extends Location implements Action {
 
     /**
      * Take any actions specific to the shed location, or, if no special commands are given, call the super class method to take a generic action.
-     * @param verb The verb part of the command
+     * @param command The verb part of the command
      * @param noun The noun part of the command
      * @return The response to the action to be displayed to the user
      */
     @Override
-    public String takeAction(@NonNull String verb, @Nullable final String noun) {
+    public String takeAction(@NonNull String command, @Nullable final String noun) {
         String response = "";
-        if (verb.equals("unlock") || verb.equals("open")) {
-            response = parseUnlockAndOpenCommand(verb, noun);
+        if (command.equals("unlock") || command.equals("open")) {
+            response = parseUnlockAndOpenCommand(command, noun);
         }
         else {
-            response = super.takeAction(verb, noun);
+            response = super.takeAction(command, noun);
         }
         return response;
     }
@@ -91,7 +92,7 @@ public class Shed extends Location implements Action {
                     response = !this.isUnlocked ? "First unlocking the shed, the shed now stands open." : "The shed now stands open.";
                     // In case the user did the open command before the unlock command, set the shed as unlocked even if it was already unlocked
                     this.isUnlocked = true;
-                    response += listLocationItems(game.getCurrentLocation().getItems());
+                    response += ActionExecutorUtils.listLocationItems(game.getCurrentLocation().getItems());
                     return response;
                 }
             } else {

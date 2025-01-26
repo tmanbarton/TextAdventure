@@ -5,6 +5,7 @@ import com.project.textadventure.controllers.Action;
 import com.project.textadventure.controllers.GameStatus;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
+import com.project.textadventure.game.ActionExecutor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -36,19 +37,19 @@ public class MineEntrance extends Location implements Action {
 
     /**
      * Take any actions specific to the mine entrance location, or, if no special commands are given, call the super class method to take a generic action.
-     * @param verb The verb part of the command
+     * @param command The verb part of the command
      * @param noun The noun part of the command
      * @return The response to the action to be displayed to the user
      */
     @Override
-    public String takeAction(@NonNull final String verb, @Nullable final String noun) {
-        if (verb.equals("shoot") && !nailsOff && !isCollapsed) {
-            return parseShootCommand(noun);
-        } else if (isGetCommand(verb, noun)) {
-            return handleGetCommand(verb, noun);
+    public String takeAction(@NonNull final String command, @Nullable final String noun) {
+        if (command.equals("shoot") && !nailsOff && !isCollapsed) {
+            return executeShootCommand(noun);
+        } else if (isGetCommand(command, noun)) {
+            return handleGetCommand(command, noun);
         } else {
             // return early instead of use response so there's not an extra <br> at the end
-            return super.takeAction(verb, noun);
+            return super.takeAction(command, noun);
         }
     }
 
@@ -72,10 +73,9 @@ public class MineEntrance extends Location implements Action {
      * Also add arrow to location as usual when it's shot.
      * @return The response to the action to be displayed to the user
      */
-    @Override
     String shootArrow() {
         if (nailsOff) {
-            return super.shootArrow();
+            return ActionExecutor.shootArrow();
         }
 
         final Game game = GameState.getInstance().getGame();

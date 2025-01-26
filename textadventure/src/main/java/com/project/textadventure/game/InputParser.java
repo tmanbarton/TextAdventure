@@ -11,8 +11,12 @@ import java.util.Map;
 
 import static com.project.textadventure.constants.GameConstants.ALL_COMMANDS;
 import static com.project.textadventure.constants.GameConstants.ALL_COMMAND_MAPS;
-import static com.project.textadventure.constants.GameConstants.ALL_DIRECTIONS;
 import static com.project.textadventure.constants.GameConstants.MOVE;
+import static com.project.textadventure.constants.GameConstants.NO_LONG;
+import static com.project.textadventure.constants.GameConstants.NO_SHORT;
+import static com.project.textadventure.constants.GameConstants.YES_LONG;
+import static com.project.textadventure.constants.GameConstants.YES_NO_STATES;
+import static com.project.textadventure.constants.GameConstants.YES_SHORT;
 
 public class InputParser {
     /**
@@ -67,6 +71,14 @@ public class InputParser {
      */
     @Nullable
     public static String getActualCommand(@NonNull final String inputAction) {
+        // Check if we're in a state that requires yes/no response and. if so, simplify input to "yes"/"no"
+        if (YES_NO_STATES.contains(GameState.getInstance().getGame().getGameStatus())) {
+            if (StringUtils.equals(inputAction, YES_LONG) || StringUtils.equals(inputAction, YES_SHORT)) {
+                return YES_LONG;
+            } else if (StringUtils.equals(inputAction, NO_LONG) || StringUtils.equals(inputAction, NO_SHORT)) {
+                return NO_LONG;
+            }
+        }
         return ALL_COMMAND_MAPS.stream()
                 .flatMap(map -> map.entrySet().stream()) // Flatten all map entries into a single stream
                 .filter(entry -> entry.getKey().contains(inputAction)) // Check if the key list contains the input action
