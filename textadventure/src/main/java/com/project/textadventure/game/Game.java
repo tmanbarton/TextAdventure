@@ -30,6 +30,12 @@ import static com.project.textadventure.constants.LocationNames.MINE_CAGE;
 import static com.project.textadventure.constants.LocationNames.MOUNTAIN_PASS;
 import static com.project.textadventure.constants.ResponseConstants.HELP_RESPONSE;
 import static com.project.textadventure.constants.ResponseConstants.INFO_RESPONSE;
+import static com.project.textadventure.game.ActionExecutorUtils.addItemToInventory;
+import static com.project.textadventure.game.ActionExecutorUtils.addItemToLocation;
+import static com.project.textadventure.game.ActionExecutorUtils.getInventoryItemByName;
+import static com.project.textadventure.game.ActionExecutorUtils.getLocationItemByName;
+import static com.project.textadventure.game.ActionExecutorUtils.isItemInInventory;
+import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromLocation;
 
 
 @Getter
@@ -53,33 +59,7 @@ public class Game implements Action, Comparator<Item> {
         return gameStatus;
     }
 
-    public Item getInventoryItemByName(final String name) {
-        for(final Item item : this.inventory) {
-            if (StringUtils.equals(item.getName(), name)) {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    public boolean isItemInInventory(final String itemName) {
-        return getInventoryItemByName(itemName) != null;
-    }
-
-    public String addItemToInventory(final Item item) {
-        // Add points to score if the item has points associated with it
-        if (getInventoryWeight() > inventoryLimit) {
-            return "You can't carry anything more.";
-        }
-        if (item.getPoints() > 0) {
-            GameState.getInstance().incrementScore(item.getPoints());
-        }
-        inventory.add(item);
-        inventory.sort(GameState.getInstance().getGame());
-        return null;
-    }
-
-    private Double getInventoryWeight() {
+    Double getInventoryWeight() {
         double totalWeight = 0;
         for (final Item item : inventory) {
             totalWeight += item.getWeight();
@@ -115,7 +95,7 @@ public class Game implements Action, Comparator<Item> {
     public String takeAction(@NonNull String verb, @Nullable String noun) {
         if (isGetCommand(verb, noun)) {
             noun = noun == null ? noun : simplifyNoun(noun);
-            return handleGetCommand(noun);
+            return "handleGetCommand(noun);";
 
         } else if (StringUtils.equals(verb, FILL)) {
             return handleFillCommand(noun);
@@ -179,63 +159,6 @@ public class Game implements Action, Comparator<Item> {
     }
 
     /**
-     * Add item to inventory and/or do any special handling for specific items at specific locations
-     * @param itemName item to get
-     * @return response to user
-     */
-    private String handleGetCommand(final String itemName) {
-        if (itemName == null) {
-            return ResponseConstants.WHAT_DO_YOU_WANT_TO_GET;
-        }
-        final Item item = currentLocation.getLocationItemByName(itemName);
-        final Item jar = getInventoryItemByName(ItemConstants.JAR_NAME);
-        final boolean isJarInInventory = isItemInInventory(ItemConstants.JAR_NAME);
-
-        if (item == null) {
-            if (itemName.equals(ItemConstants.NAILS_NAME) && currentLocation instanceof MineEntrance && !((MineEntrance) currentLocation).areNailsOff()) {
-                if (((MineEntrance) currentLocation).areNailsOff()) {
-                    // The user has previously taken the nails by hand instead of shot them with the arrow as intended, and they are now inaccessible
-                    return  "The nails are buried under rubble from the collapsed mine; you can't get to them.";
-                } else {
-                    // If it hasn't collapsed, they haven't taken the nails at all, prompt/warn to make sure they actually want to take them
-                    GameState.getInstance().getGame().setGameStatus(GameStatus.GETTING_NAILS);
-                    return  "Are you sure you want to get the nails? The structure is very fragile and may fall apart and onto you.";
-                }
-            } else if (itemName.equals(ItemConstants.MAGNET_NAME) && currentLocation instanceof Dam && ((Dam) currentLocation).isMagnetDropped()) {
-                return  "The magnet is firmly attached to the wheel";
-            }
-        }
-        else if (getInventoryItemByName(itemName) != null) {
-            return ResponseConstants.ALREADY_CARRYING;
-
-        } else if (itemName.equals(ItemConstants.GOLD_NAME) && !isJarInInventory) {
-            return  "You need something to hold the gold flakes.";
-
-        } else if (itemName.equals(ItemConstants.GOLD_NAME) && isJarInInventory) {
-            final String result = addItemToInventory(item);
-            if (result != null) {
-                return result;
-            }
-            jar.setInventoryDescription("Jar full of gold flakes");
-            currentLocation.removeItemFromLocation(item);
-            return "The jar is now full of gold flakes.";
-
-        } else {
-            final String result = addItemToInventory(item);
-            if (result != null) {
-                return result;
-            }
-            if (currentLocation.getName().equals(LocationNames.CRUMPLED_MINE_CART)) {
-                // If the user has taken the ruby from the mine cart location, update the description to not include the ruby.
-                currentLocation.setDescription("You've reached a dead end. A crumpled mine cart, no longer able to run on the rails, is laying on its side.");
-            }
-            currentLocation.removeItemFromLocation(item);
-            return ResponseConstants.OK;
-        }
-        return "I don't see that here.";
-    }
-
-    /**
      * Drop an item from the player's inventory at the current location. If the item is dropped at the dam and the item is the magnet, the dam's
      * description is updated to reflect the dropped magnet. If the item is dropped at the boat, the item is lost forever.
      * Otherwise, just add the item to the location and remove it from the inventory
@@ -254,7 +177,7 @@ public class Game implements Action, Comparator<Item> {
             final Item gold = getInventoryItemByName(ItemConstants.GOLD_NAME);
             if (gold != null) {
                 item.setInventoryDescription("Jar");
-                currentLocation.addItemToLocation(gold);
+                addItemToLocation(gold);
                 removeItemFromInventory(gold);
             }
         }
@@ -272,7 +195,7 @@ public class Game implements Action, Comparator<Item> {
             return "You're " + item.getName() + " splashes into the water next to the boat and sinks to the bottom, never to be found again.";
         }
         removeItemFromInventory(item);
-        currentLocation.addItemToLocation(item);
+        addItemToLocation(item);
         return ResponseConstants.OK;
     }
 
@@ -288,7 +211,7 @@ public class Game implements Action, Comparator<Item> {
             return "That's not something you can fill.";
         }
         final Item jar = getInventoryItemByName(ItemConstants.JAR_NAME);
-        final Item gold = currentLocation.getLocationItemByName(ItemConstants.GOLD_NAME);
+        final Item gold = getLocationItemByName(ItemConstants.GOLD_NAME);
         if (jar == null) {
             return "You don't have anything to fill.";
         }
@@ -303,7 +226,7 @@ public class Game implements Action, Comparator<Item> {
         if (result != null) {
             return result;
         }
-        currentLocation.removeItemFromLocation(gold);
+        removeItemFromLocation(gold);
         return  "The jar is now full of gold flakes.";
     }
 
@@ -390,7 +313,7 @@ public class Game implements Action, Comparator<Item> {
         final List<Item> inventoryCopy = new ArrayList<>(inventory);
         for (final Item item : inventoryCopy) {
             removeItemFromInventory(item);
-            currentLocation.addItemToLocation(item);
+            addItemToLocation(item);
         }
 
         // Based on location, the message the user sees when they die is different.

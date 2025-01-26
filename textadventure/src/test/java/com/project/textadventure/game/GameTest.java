@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
+import static com.project.textadventure.game.ActionExecutorUtils.addItemToInventory;
+import static com.project.textadventure.game.ActionExecutorUtils.getInventoryItemByName;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -19,9 +21,9 @@ public class GameTest {
 
         final Item item1 = new Item(1, "test description", "test description", "test name", 0, 1);
         final Item item2 = new Item(2, "test", "test", "name1", 0, 2);
-        game.addItemToInventory(item1);
-        game.addItemToInventory(item2);
-        final Item actual = game.getInventoryItemByName("test name");
+        addItemToInventory(item1);
+        addItemToInventory(item2);
+        final Item actual = getInventoryItemByName("test name");
         assertNotNull(actual);
     }
 
@@ -31,8 +33,8 @@ public class GameTest {
         Game game = new Game(new ArrayList<>(), new Location("", "", new ArrayList<>(), new ArrayList<>(), false, ""), GameStatus.NEW);
 
         final Item item1 = new Item(1, "test description", "test description", "test", 0, 1);
-        game.addItemToInventory(item1);
-        final Item actual = game.getInventoryItemByName("test name");
+        addItemToInventory(item1);
+        final Item actual = getInventoryItemByName("test name");
         assertNull(actual);
     }
 }

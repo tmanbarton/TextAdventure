@@ -30,7 +30,9 @@ import static com.project.textadventure.constants.GameConstants.TURN;
 import static com.project.textadventure.constants.GameConstants.UNLOCK;
 import static com.project.textadventure.constants.ItemConstants.ARROW_NAME;
 import static com.project.textadventure.constants.ItemConstants.BOW_NAME;
+import static com.project.textadventure.game.ActionExecutor.executeGetCommand;
 import static com.project.textadventure.game.ActionExecutor.executeLookCommand;
+import static com.project.textadventure.game.ActionExecutorUtils.isItemInInventory;
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
 /**
@@ -68,36 +70,6 @@ public class Location {
     }
 
     /**
-     * Get the {@link Item} at the {@link Location} by name if it's there, otherwise null.
-     * @param name Name of the item
-     * @return {@link Item} at the {@link Location} with the given name, or null if not found
-     */
-    public Item getLocationItemByName(final String name) {
-        for(final Item item : this.items) {
-            if (name.equals(item.getName())) {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Add an {@link Item} to the {@link Location}.
-     * @param item Item to add
-     */
-    public void addItemToLocation(final Item item) {
-        items.add(item);
-    }
-
-    /**
-     * Remove an {@link Item} from the {@link Location}.
-     * @param item Item to remove
-     */
-    public void removeItemFromLocation(final Item item) {
-        items.remove(item);
-    }
-
-    /**
      * Determine what action to take based on the verb and noun and execute the action.
      * @param command Verb part of the command
      * @param noun Noun part of the command, could be empty
@@ -107,7 +79,7 @@ public class Location {
         if (StringUtils.equals(command, MOVE)) {
             return parseMoveCommand(noun);
         } else if (StringUtils.equals(command, GET)) {
-            return null;//todo
+            return executeGetCommand(noun);
         } else if (StringUtils.equals(command, DROP)) {
             return null;//todo
         } else if (StringUtils.equals(command, INVENTORY_LONG)) {
@@ -172,10 +144,10 @@ public class Location {
         final Game game = GameState.getInstance().getGame();
         String response = "";
 
-        if (!game.isItemInInventory(BOW_NAME)) {
+        if (!isItemInInventory(BOW_NAME)) {
             // Must have the bow and arrow in your inventory
             response = "You don't have anything to shoot with.";
-        } else if (!game.isItemInInventory(ARROW_NAME)) {
+        } else if (!isItemInInventory(ARROW_NAME)) {
             response = "You don't have anything to shoot.";
         } else if (StringUtils.equals(thingToShoot, ARROW_NAME) || thingToShoot == null) {
             // Shoot the arrow

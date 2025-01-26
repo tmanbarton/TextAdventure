@@ -15,6 +15,8 @@ import static com.project.textadventure.constants.LocationDescriptions.SHED_OPEN
 import static com.project.textadventure.constants.LocationDescriptions.SHED_OPEN_SHORT_DESCRIPTION;
 import static com.project.textadventure.constants.LocationDescriptions.SHED_UNLOCKED_LONG_DESCRIPTION;
 import static com.project.textadventure.constants.LocationDescriptions.SHED_UNLOCKED_SHORT_DESCRIPTION;
+import static com.project.textadventure.game.ActionExecutorUtils.addItemToLocation;
+import static com.project.textadventure.game.ActionExecutorUtils.getInventoryItemByName;
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
 public class Shed extends Location implements Action {
@@ -66,7 +68,7 @@ public class Shed extends Location implements Action {
      */
     private String parseUnlockAndOpenCommand(final String verb, final String noun) {
         final Game game = GameState.getInstance().getGame();
-        final Item key = game.getInventoryItemByName("key");
+        final Item key = getInventoryItemByName("key");
         // Check if the verb is "unlock"
         if (StringUtils.equals(noun, "shed") || noun == null ) {
             if (verb.equals("unlock")) {
@@ -126,12 +128,12 @@ public class Shed extends Location implements Action {
         final Item jar = new Item(5, ItemConstants.JAR_LOCATION_DESCRIPTION, ItemConstants.JAR_INVENTORY_DESCRIPTION, ItemConstants.JAR_NAME, 0, 1);
         final Item shovel = new Item(8, ItemConstants.SHOVEL_LOCATION_DESCRIPTION, ItemConstants.SHOVEL_INVENTORY_DESCRIPTION, ItemConstants.SHOVEL_NAME, 0, 3);
         final Item tent = new Item(9, ItemConstants.TENT_LOCATION_DESCRIPTION, ItemConstants.TENT_INVENTORY_DESCRIPTION, ItemConstants.TENT_NAME, 0, 5);
-        this.addItemToLocation(hammer);
-        this.addItemToLocation(bow);
-        this.addItemToLocation(arrow);
-        this.addItemToLocation(jar);
-        this.addItemToLocation(shovel);
-        this.addItemToLocation(tent);
+        addItemToLocation(hammer);
+        addItemToLocation(bow);
+        addItemToLocation(arrow);
+        addItemToLocation(jar);
+        addItemToLocation(shovel);
+        addItemToLocation(tent);
         // Solved this puzzle of unlocking and opening the shed. Add 10 points to the score.
         GameState.getInstance().incrementScore(10);
     }

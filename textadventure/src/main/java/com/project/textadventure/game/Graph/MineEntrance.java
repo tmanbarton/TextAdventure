@@ -16,6 +16,8 @@ import static com.project.textadventure.constants.ItemConstants.ARROW_NAME;
 import static com.project.textadventure.constants.ItemConstants.NAILS_NAME;
 import static com.project.textadventure.constants.LocationDescriptions.MINE_ENTRANCE_RECENT_CAVE_IN;
 import static com.project.textadventure.constants.LocationNames.MINE_SHAFT;
+import static com.project.textadventure.game.ActionExecutorUtils.addItemToLocation;
+import static com.project.textadventure.game.ActionExecutorUtils.getInventoryItemByName;
 import static com.project.textadventure.game.Game.isGetCommand;
 
 public class MineEntrance extends Location implements Action {
@@ -79,13 +81,13 @@ public class MineEntrance extends Location implements Action {
         }
 
         final Game game = GameState.getInstance().getGame();
-        final Item arrow = game.getInventoryItemByName(ARROW_NAME);
+        final Item arrow = getInventoryItemByName(ARROW_NAME);
         final Location currentLocation = game.getCurrentLocation();
 
         game.removeItemFromInventory(arrow);
         addItemToLocation(arrow);
         final Item nails = new Item(7, ItemConstants.NAILS_LOCATION_DESCRIPTION, ItemConstants.NAILS_INVENTORY_DESCRIPTION, ItemConstants.NAILS_NAME, 0, 1);
-        currentLocation.addItemToLocation(nails);
+        addItemToLocation(nails);
         nailsOff = true;
 
         // 2 ways to get to mine shaft (in and east). Find and set connecting locations to empty. Do this instead of removing the
