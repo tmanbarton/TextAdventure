@@ -30,6 +30,7 @@ import static com.project.textadventure.constants.GameConstants.TURN;
 import static com.project.textadventure.constants.GameConstants.UNLOCK;
 import static com.project.textadventure.constants.ItemConstants.ARROW_NAME;
 import static com.project.textadventure.constants.ItemConstants.BOW_NAME;
+import static com.project.textadventure.game.ActionExecutor.executeDropCommand;
 import static com.project.textadventure.game.ActionExecutor.executeGetCommand;
 import static com.project.textadventure.game.ActionExecutor.executeLookCommand;
 import static com.project.textadventure.game.ActionExecutorUtils.isItemInInventory;
@@ -81,7 +82,7 @@ public class Location {
         } else if (StringUtils.equals(command, GET)) {
             return executeGetCommand(noun);
         } else if (StringUtils.equals(command, DROP)) {
-            return null;//todo
+            return executeDropCommand(noun);
         } else if (StringUtils.equals(command, INVENTORY_LONG)) {
             return null;//todo
         } else if (StringUtils.equals(command, RESTART)) {
@@ -149,7 +150,7 @@ public class Location {
             response = "You don't have anything to shoot with.";
         } else if (!isItemInInventory(ARROW_NAME)) {
             response = "You don't have anything to shoot.";
-        } else if (StringUtils.equals(thingToShoot, ARROW_NAME) || thingToShoot == null) {
+        } else if (StringUtils.equals(thingToShoot, ARROW_NAME) || StringUtils.isEmpty(thingToShoot)) {
             // Shoot the arrow
             response = ActionExecutor.shootArrow();
         } else {

@@ -31,6 +31,7 @@ import static com.project.textadventure.constants.GameConstants.YES_LONG;
 import static com.project.textadventure.constants.GameConstants.YES_NO_STATES;
 import static com.project.textadventure.constants.GameConstants.YES_SHORT;
 import static com.project.textadventure.constants.ResponseConstants.OK;
+import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
 @RestController
 @RequestMapping("/api/vots/game")
@@ -51,6 +52,12 @@ public class GameController {
         final List<Pair<String, String>> commands = InputParser.parseInput(inputString);
         StringBuilder result = new StringBuilder();
         // Loop over each command and execute it
+
+        if (commands.isEmpty()) {
+            // If no commands were found, generate a response indicating this is not a valid command
+            result.append(generateRandomUnknownCommandResponse());
+        }
+
         for (final Pair<String, String> command : commands) {
             // If the game is in a state that requires a yes/no answer, handle that before user can do anything else
             if (YES_NO_STATES.contains(game.getGameStatus())) {
@@ -95,7 +102,7 @@ public class GameController {
                 case GETTING_NAILS:
                     final Location currentLocation = game.getCurrentLocation();
                     // Set isCollapsed to true for future logic to know what can and can't be done at this location
-                    ((MineEntrance) currentLocation).setCollapsed(true);
+                    ((MineEntrance) currentLocation).setNailsTakenByHand(true);
 
                     final List<LocationConnection> locationConnections = currentLocation.getLocationConnections();
                     locationConnections.removeIf(location -> location.getLocation().getName().equals(LocationNames.MINE_SHAFT));

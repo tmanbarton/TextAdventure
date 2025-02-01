@@ -9,10 +9,14 @@ import com.project.textadventure.game.Graph.Item;
 import com.project.textadventure.game.Graph.Location;
 import com.project.textadventure.game.Graph.LocationConnection;
 import com.project.textadventure.game.Graph.MineEntrance;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.lang.Nullable;
 
 import static com.project.textadventure.constants.ItemConstants.ARROW_NAME;
 import static com.project.textadventure.constants.ItemConstants.JAR_NAME;
 import static com.project.textadventure.game.ActionExecutorUtils.addItemToInventory;
+import static com.project.textadventure.game.ActionExecutorUtils.addItemToLocation;
+import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromInventory;
 import static com.project.textadventure.game.ActionExecutorUtils.getInventoryItemByName;
 import static com.project.textadventure.game.ActionExecutorUtils.isItemInInventory;
 import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromLocation;
@@ -100,6 +104,55 @@ public class ActionExecutor {
     }
 
     /**
+     * Drop an item from the player's inventory at the current location. If the item is dropped at the dam and the item is the magnet, the dam's
+     * description is updated to reflect the dropped magnet. If the item is dropped at the boat, the item is lost forever.
+     * Otherwise, just add the item to the location and remove it from the inventory
+     * @param noun item to drop
+     * @return response to user
+     */
+    public static String executeDropCommand(@Nullable final String noun) {
+        final Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
+        if (noun == null) {
+            return "What to want to drop?";
+        }
+        final Item item = getInventoryItemByName(noun);
+        if (item == null) {
+            return "You're not carrying that!";
+        }
+        // Special case for if the user tries to drop the jar of gold flakes.
+        // If they do, both the gold flakes and jar are added to the location and removed from inventory. Also update the jar's description
+        if (StringUtils.equals(noun, JAR_NAME)) {
+            final Item gold = getInventoryItemByName(ItemConstants.GOLD_NAME);
+            if (gold != null) {
+                item.setInventoryDescription("Jar");
+                addItemToLocation(gold);
+                removeItemFromInventory(gold);
+            }
+        }
+        // Special case for when the user tries to drop the gold flakes. If they do, update the jar's description and drop the gold
+        if (noun.equals("gold")) {
+            final Item jar = getInventoryItemByName(ItemConstants.JAR_NAME);
+            jar.setInventoryDescription(ItemConstants.JAR_INVENTORY_DESCRIPTION);
+        }
+        // Special case for when the user drops the magnet at the dam. If they do, set the magnetDropped flag to true and
+        // remove it from the inventory. Also update the dam's description
+        if (noun.equals(ItemConstants.MAGNET_NAME) && currentLocation instanceof Dam) {
+            removeItemFromInventory(item);
+            ((Dam) currentLocation).setMagnetDropped(true);
+            return "You drop the magnet and as it's falling it snaps to the shiny center of the wheel. A faint, mechanical clicking comes from deep inside the dam.";
+        }
+        // Special case for when the user drops the gold flakes at the dam. If they do, remove the item from inventory but don't add it to the location
+        if (currentLocation.getName().equals(LocationNames.BOAT)) {
+            removeItemFromInventory(item);
+            return "You're " + item.getName() + " splashes into the water next to the boat and sinks to the bottom, never to be found again.";
+        }
+        // Regular case for dropping an item. Add the item to the location and remove it from the inventory
+        removeItemFromInventory(item);
+        addItemToLocation(item);
+        return ResponseConstants.OK;
+    }
+
+    /**
      * Display the current {@link Location}'s description and list the {@link Item}s at the {@link Location}.
      * @return Description of the current location + items at the {@link Location}
      */
@@ -117,10 +170,10 @@ public class ActionExecutor {
         final Game game = GameState.getInstance().getGame();
         final Item arrow = getInventoryItemByName(ARROW_NAME);
         if (game.getCurrentLocation().getName().equals(LocationNames.BOAT)) {
-            game.removeItemFromInventory(arrow);
+            removeItemFromInventory(arrow);
             return "Your arrow goes flying off into the the distance and splashes into the water, never to be found again.";
         }
-        game.removeItemFromInventory(arrow);
+        removeItemFromInventory(arrow);
         ActionExecutorUtils.addItemToLocation(arrow);
         return "Your arrow goes flying off into the the distance and lands with a thud on the ground.";
     }

@@ -91,6 +91,15 @@ public class ActionExecutorUtils {
         return null;
     }
 
+    public static void removeItemFromInventory(final Item item) {
+        final List<Item> inventory = GameState.getInstance().getGame().getInventory();
+        inventory.remove(item);
+        // Remove points from score if the item has points associated with it
+        if (item.getPoints() > 0) {
+            GameState.getInstance().decrementScore(item.getPoints());
+        }
+    }
+
     /**
      * Check if a given {@link Item} is in the inventory.
      * @param itemName Name of the item

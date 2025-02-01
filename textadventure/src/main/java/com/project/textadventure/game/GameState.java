@@ -226,14 +226,15 @@ public class GameState {
         driveway.setVisited(true);
 
         ////// Helpful for manual debugging to change start location and add items to it /////
-        game = new Game(new ArrayList<>(), mineEntrance, status);
-        addItemToInventory(magnet);
-//        game.addItemToInventory(new Item(4, ItemConstants.ARROW_LOCATION_DESCRIPTION, ItemConstants.ARROW_INVENTORY_DESCRIPTION, ItemConstants.ARROW_NAME, 0, 1));
-//        game.addItemToInventory(new Item(3, ItemConstants.BOW_LOCATION_DESCRIPTION, ItemConstants.BOW_INVENTORY_DESCRIPTION, ItemConstants.BOW_NAME, 0, 3));
-        return game;
+//        game = new Game(new ArrayList<>(), mineEntrance, status);
+//        addItemToInventory(magnet);
+//        addItemToInventory(new Item(5, ItemConstants.JAR_LOCATION_DESCRIPTION, ItemConstants.JAR_INVENTORY_DESCRIPTION, ItemConstants.JAR_NAME, 0, 1));
+//        addItemToInventory(new Item(4, ItemConstants.ARROW_LOCATION_DESCRIPTION, ItemConstants.ARROW_INVENTORY_DESCRIPTION, ItemConstants.ARROW_NAME, 0, 1));
+//        addItemToInventory(new Item(3, ItemConstants.BOW_LOCATION_DESCRIPTION, ItemConstants.BOW_INVENTORY_DESCRIPTION, ItemConstants.BOW_NAME, 0, 3));
+//        return game;
         //////
 
-//        return new Game(new ArrayList<>(), driveway, status);
+        return new Game(new ArrayList<>(), driveway, status);
     }
 
     public void restartGame() {

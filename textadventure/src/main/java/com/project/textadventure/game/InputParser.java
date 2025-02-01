@@ -17,6 +17,7 @@ import static com.project.textadventure.constants.GameConstants.NO_SHORT;
 import static com.project.textadventure.constants.GameConstants.YES_LONG;
 import static com.project.textadventure.constants.GameConstants.YES_NO_STATES;
 import static com.project.textadventure.constants.GameConstants.YES_SHORT;
+import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
 public class InputParser {
     /**
@@ -58,6 +59,11 @@ public class InputParser {
                 }
             }
         }
+
+//        if (parsedCommands.isEmpty()) {
+//            // If no commands were found, generate a random unknown command response
+//            parsedCommands.add(Pair.of(generateRandomUnknownCommandResponse(), ""));
+//        }
 
         return parsedCommands;
     }

@@ -21,13 +21,6 @@ import java.util.*;
 
 import static com.project.textadventure.constants.GameConstants.*;
 import static com.project.textadventure.constants.ItemConstants.PIE_NAME;
-import static com.project.textadventure.constants.LocationDescriptions.BOTTOM_MINE_SHAFT_NO_CAGE_LONG_DESCRIPTION;
-import static com.project.textadventure.constants.LocationDescriptions.BOTTOM_MINE_SHAFT_WITH_CAGE_LONG_DESCRIPTION;
-import static com.project.textadventure.constants.LocationDescriptions.MOUNTAIN_PASS_NO_CAGE_LONG_DESCRIPTION;
-import static com.project.textadventure.constants.LocationDescriptions.MOUNTAIN_PASS_WITH_CAGE_LONG_DESCRIPTION;
-import static com.project.textadventure.constants.LocationNames.BOTTOM_OF_VERTICAL_MINE_SHAFT;
-import static com.project.textadventure.constants.LocationNames.MINE_CAGE;
-import static com.project.textadventure.constants.LocationNames.MOUNTAIN_PASS;
 import static com.project.textadventure.constants.ResponseConstants.HELP_RESPONSE;
 import static com.project.textadventure.constants.ResponseConstants.INFO_RESPONSE;
 import static com.project.textadventure.game.ActionExecutorUtils.addItemToInventory;
@@ -35,6 +28,7 @@ import static com.project.textadventure.game.ActionExecutorUtils.addItemToLocati
 import static com.project.textadventure.game.ActionExecutorUtils.getInventoryItemByName;
 import static com.project.textadventure.game.ActionExecutorUtils.getLocationItemByName;
 import static com.project.textadventure.game.ActionExecutorUtils.isItemInInventory;
+import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromInventory;
 import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromLocation;
 
 
@@ -67,14 +61,6 @@ public class Game implements Action, Comparator<Item> {
         return totalWeight;
     }
 
-    public void removeItemFromInventory(final Item item) {
-        inventory.remove(item);
-        // Remove points from score if the item has points associated with it
-        if (item.getPoints() > 0) {
-            GameState.getInstance().decrementScore(item.getPoints());
-        }
-    }
-
     public static String generateRandomUnknownCommandResponse() {
         final Random r = new Random();
         final int randomNum = r.nextInt(3);
@@ -99,9 +85,6 @@ public class Game implements Action, Comparator<Item> {
 
         } else if (StringUtils.equals(verb, FILL)) {
             return handleFillCommand(noun);
-
-        } else if (StringUtils.equals(verb, DROP) || StringUtils.equals(verb, THROW)) {
-            return handleDropCommand(noun);
 
         } else if (StringUtils.equals(verb, EAT)) {
             return handleEatCommand(noun);
@@ -156,47 +139,6 @@ public class Game implements Action, Comparator<Item> {
             noun = noun.substring(3);
         }
         return noun;
-    }
-
-    /**
-     * Drop an item from the player's inventory at the current location. If the item is dropped at the dam and the item is the magnet, the dam's
-     * description is updated to reflect the dropped magnet. If the item is dropped at the boat, the item is lost forever.
-     * Otherwise, just add the item to the location and remove it from the inventory
-     * @param noun item to drop
-     * @return response to user
-     */
-    private String handleDropCommand(@Nullable final String noun) {
-        if (noun == null) {
-            return "What to want to drop?";
-        }
-        final Item item = getInventoryItemByName(noun);
-        if (item == null) {
-            return "You're not carrying that!";
-        }
-        if (noun.equals("jar")) {
-            final Item gold = getInventoryItemByName(ItemConstants.GOLD_NAME);
-            if (gold != null) {
-                item.setInventoryDescription("Jar");
-                addItemToLocation(gold);
-                removeItemFromInventory(gold);
-            }
-        }
-        if (noun.equals("gold")) {
-            final Item jar = getInventoryItemByName(ItemConstants.JAR_NAME);
-            jar.setInventoryDescription(ItemConstants.JAR_INVENTORY_DESCRIPTION);
-        }
-        if (noun.equals(ItemConstants.MAGNET_NAME) && currentLocation instanceof Dam) {
-            removeItemFromInventory(item);
-            ((Dam) currentLocation).setMagnetDropped(true);
-            return "You drop the magnet and as it's falling it snaps to the shiny center of the wheel. A faint, mechanical clicking comes from deep inside the dam.";
-        }
-        if (currentLocation.getName().equals(LocationNames.BOAT)) {
-            removeItemFromInventory(item);
-            return "You're " + item.getName() + " splashes into the water next to the boat and sinks to the bottom, never to be found again.";
-        }
-        removeItemFromInventory(item);
-        addItemToLocation(item);
-        return ResponseConstants.OK;
     }
 
     /**
