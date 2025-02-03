@@ -58,7 +58,8 @@ public class ActionExecutorUtils {
      * @param item Item to add
      */
     public static void addItemToLocation(final Item item) {
-        final List<Item> items = GameState.getInstance().getGame().getCurrentLocation().getItems();
+        final Game game = GameState.getInstance().getGame();
+        final List<Item> items = game.getCurrentLocation().getItems();
         items.add(item);
     }
 

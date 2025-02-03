@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -30,10 +31,22 @@ import static com.project.textadventure.constants.GameConstants.TURN;
 import static com.project.textadventure.constants.GameConstants.UNLOCK;
 import static com.project.textadventure.constants.ItemConstants.ARROW_NAME;
 import static com.project.textadventure.constants.ItemConstants.BOW_NAME;
+import static com.project.textadventure.constants.ItemConstants.PIE_NAME;
 import static com.project.textadventure.game.ActionExecutor.executeDropCommand;
+import static com.project.textadventure.game.ActionExecutor.executeEatCommand;
+import static com.project.textadventure.game.ActionExecutor.executeFillCommand;
 import static com.project.textadventure.game.ActionExecutor.executeGetCommand;
+import static com.project.textadventure.game.ActionExecutor.executeHelpCommand;
+import static com.project.textadventure.game.ActionExecutor.executeInfoCommand;
+import static com.project.textadventure.game.ActionExecutor.executeInventoryCommand;
 import static com.project.textadventure.game.ActionExecutor.executeLookCommand;
+import static com.project.textadventure.game.ActionExecutor.executePushCommand;
+import static com.project.textadventure.game.ActionExecutor.executeQuitCommand;
+import static com.project.textadventure.game.ActionExecutor.executeScoreCommand;
+import static com.project.textadventure.game.ActionExecutor.executeShootCommand;
+import static com.project.textadventure.game.ActionExecutorUtils.getInventoryItemByName;
 import static com.project.textadventure.game.ActionExecutorUtils.isItemInInventory;
+import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromInventory;
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
 /**
@@ -63,6 +76,13 @@ public class Location {
     }
 
     /**
+     * Only used for testing.
+     */
+    public Location() {
+        this("Full description", "Short Description", new ArrayList<>(), new ArrayList<>(), false, "name");
+    }
+
+    /**
      * Connect this {@link Location} to another {@link Location}. Essentially an edge in the graph.
      * @param locationToConnect Location to connect to
      */
@@ -71,12 +91,13 @@ public class Location {
     }
 
     /**
-     * Determine what action to take based on the verb and noun and execute the action.
+     * Determine what action to take based on the verb and noun and execute the action for locations that don't do
+     * anything special/actions that are the same for all locations
      * @param command Verb part of the command
      * @param noun Noun part of the command, could be empty
      * @return Response to the command to display to the user
      */
-    public String takeAction(@NonNull String command, @Nullable final String noun) {
+    public String takeAction(@NonNull String command, @NonNull final String noun) {
         if (StringUtils.equals(command, MOVE)) {
             return parseMoveCommand(noun);
         } else if (StringUtils.equals(command, GET)) {
@@ -84,25 +105,25 @@ public class Location {
         } else if (StringUtils.equals(command, DROP)) {
             return executeDropCommand(noun);
         } else if (StringUtils.equals(command, INVENTORY_LONG)) {
-            return null;//todo
+            return executeInventoryCommand();
         } else if (StringUtils.equals(command, RESTART)) {
-            return null;//todo
+            return executeQuitCommand();
         } else if (StringUtils.equals(command, LOOK_LONG)) {
             return executeLookCommand();
         } else if (StringUtils.equals(command, HELP)) {
-            return null;//todo
+            return executeHelpCommand();
         } else if (StringUtils.equals(command, INFO)) {
-            return null;//todo
+            return executeInfoCommand();
         } else if (StringUtils.equals(command, SCORE)) {
-            return null;//todo
+            return executeScoreCommand();
         } else if (StringUtils.equals(command, SHOOT)) {
             return executeShootCommand(noun);
         } else if (StringUtils.equals(command, EAT)) {
-            return null;//todo
+            return executeEatCommand(noun);
         } else if (StringUtils.equals(command, PUSH)) {
-            return null;//todo
+            return executePushCommand(command, noun);
         } else if (StringUtils.equals(command, FILL)) {
-            return null;//todo
+            return executeFillCommand(noun);
         } else if (StringUtils.equals(command, UNLOCK)) {
             return "There's nothing to unlock here.";
         } else if (StringUtils.equals(command, OPEN)) {
@@ -133,31 +154,6 @@ public class Location {
         }
         final LocationConnection locationConnection = connectingLocation.get();
         return ActionExecutor.moveToLocation(locationConnection);
-    }
-
-    /**
-     * Parse the shoot command. If the noun is null or "arrow" and both the bow and arrow are in the inventory, shoot the arrow.
-     * Otherwise, return a response indicating why you can't shoot.
-     * @param thingToShoot Noun of the command
-     * @return Response to the shoot command
-     */
-    String executeShootCommand(final String thingToShoot) {
-        final Game game = GameState.getInstance().getGame();
-        String response = "";
-
-        if (!isItemInInventory(BOW_NAME)) {
-            // Must have the bow and arrow in your inventory
-            response = "You don't have anything to shoot with.";
-        } else if (!isItemInInventory(ARROW_NAME)) {
-            response = "You don't have anything to shoot.";
-        } else if (StringUtils.equals(thingToShoot, ARROW_NAME) || StringUtils.isEmpty(thingToShoot)) {
-            // Shoot the arrow
-            response = ActionExecutor.shootArrow();
-        } else {
-            // User has the bow and arrow, but tries to shoot something other than the arrow
-            response = "You can't shoot that.";
-        }
-        return response;
     }
 
     @Override

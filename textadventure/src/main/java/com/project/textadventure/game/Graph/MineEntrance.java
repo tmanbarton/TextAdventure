@@ -80,14 +80,13 @@ public class MineEntrance extends Location implements Action {
         return super.takeAction(verb, itemName);
     }
 
-    @Override
     String executeShootCommand(final String thingToShoot) {
         // Special case for shooting at mine entrance happens when the user has the arrow and bow and
         // the mine hasn't collapsed (caused by taking or shooting the nails)
         if (isItemInInventory(ARROW_NAME) && isItemInInventory(ItemConstants.BOW_NAME) && !nailsTakenByHand) {
             return shootArrow();
         }
-        return super.executeShootCommand(thingToShoot);
+        return ActionExecutor.executeShootCommand(thingToShoot);
     }
 
     /**

@@ -9,13 +9,25 @@ import com.project.textadventure.game.Graph.Item;
 import com.project.textadventure.game.Graph.Location;
 import com.project.textadventure.game.Graph.LocationConnection;
 import com.project.textadventure.game.Graph.MineEntrance;
+import com.project.textadventure.game.Graph.MineShaft;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.Nullable;
 
+import java.util.List;
+
+import static com.project.textadventure.constants.GameConstants.BUTTON;
+import static com.project.textadventure.constants.GameConstants.PRESS;
+import static com.project.textadventure.constants.GameConstants.QUIT;
+import static com.project.textadventure.constants.GameConstants.RESTART;
 import static com.project.textadventure.constants.ItemConstants.ARROW_NAME;
+import static com.project.textadventure.constants.ItemConstants.BOW_NAME;
 import static com.project.textadventure.constants.ItemConstants.JAR_NAME;
+import static com.project.textadventure.constants.ItemConstants.PIE_NAME;
+import static com.project.textadventure.constants.ResponseConstants.HELP_RESPONSE;
+import static com.project.textadventure.constants.ResponseConstants.INFO_RESPONSE;
 import static com.project.textadventure.game.ActionExecutorUtils.addItemToInventory;
 import static com.project.textadventure.game.ActionExecutorUtils.addItemToLocation;
+import static com.project.textadventure.game.ActionExecutorUtils.getLocationItemByName;
 import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromInventory;
 import static com.project.textadventure.game.ActionExecutorUtils.getInventoryItemByName;
 import static com.project.textadventure.game.ActionExecutorUtils.isItemInInventory;
@@ -176,5 +188,121 @@ public class ActionExecutor {
         removeItemFromInventory(arrow);
         ActionExecutorUtils.addItemToLocation(arrow);
         return "Your arrow goes flying off into the the distance and lands with a thud on the ground.";
+    }
+
+    /**
+     * Get a list of the items in the player's inventory. Or a message saying the player is not carrying anything.
+     * @return List of items in the player's inventory
+     */
+    public static String executeInventoryCommand() {
+        final List<Item> inventory = GameState.getInstance().getGame().getInventory();
+        if (inventory.isEmpty()) {
+            return "You're not carrying anything.";
+        }
+        final StringBuilder result = new StringBuilder("You're carrying:");
+        for (final Item item : inventory) {
+            result.append("\n").append(item.getInventoryDescription());
+        }
+        return result.toString();
+    }
+
+    public static String executeQuitCommand() {
+        GameState.getInstance().getGame().setGameStatus(GameStatus.QUITTING);
+        return "Are you sure you want to restart?";
+    }
+
+    public static String executeHelpCommand() {
+        return HELP_RESPONSE;
+    }
+
+    public static String executeInfoCommand() {
+        return INFO_RESPONSE;
+    }
+
+    public static String executeScoreCommand() {
+        return "Your score: " + GameState.getInstance().getScore();
+    }
+
+
+    public static String executeEatCommand(final String itemName) {
+        // Check that the pie is in the inventory and if the prompt for item to eat is a pie
+        // or empty (command is just "eat").
+        // If it is, remove the pie from the inventory and add 3.14 to the score.
+        final Item item = getInventoryItemByName(itemName);
+
+        if (isItemInInventory(PIE_NAME) && (StringUtils.isEmpty(itemName) || StringUtils.equals(itemName, PIE_NAME))) {
+            removeItemFromInventory(getInventoryItemByName(PIE_NAME));
+            GameState.getInstance().incrementScore(3.14);
+            return "You eat the pie. It's delicious. You earned 3.14 points.";
+        }
+
+        // Item is not found in the inventory
+        if (item == null) {
+            return StringUtils.isEmpty(itemName) ? "You don't have anything to eat." : "You're not carrying it!";
+        }
+
+        // The item is found but not edible
+        return "That's not something you can eat.";
+    }
+
+    public static String executePushCommand(final String verb, final String noun) {
+        final Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
+        if (currentLocation instanceof MineShaft) {
+            if (StringUtils.equals(BUTTON, noun) || noun.isEmpty()) {
+                return ((MineShaft) currentLocation).moveMineCage();
+            } else {
+                return  "You can't " + (StringUtils.equals(verb, PRESS) ? "press" : "push") + " that.";
+            }
+        } else {
+            return  "There's nothing to push here.";
+        }
+    }
+
+    public static String executeFillCommand(final String itemToFill) {
+        if (!(itemToFill.isEmpty() || itemToFill.equals(ItemConstants.JAR_NAME))) {
+            return "That's not something you can fill.";
+        }
+        final Item jar = getInventoryItemByName(ItemConstants.JAR_NAME);
+        final Item gold = getLocationItemByName(ItemConstants.GOLD_NAME);
+        if (jar == null) {
+            return "You don't have anything to fill.";
+        }
+        if (gold == null) {
+            return "There's nothing here to fill your jar with.";
+        }
+        if (isItemInInventory(ItemConstants.GOLD_NAME)) {
+            return "The jar is already full of gold flakes.";
+        }
+        jar.setInventoryDescription("Jar full of gold flakes");
+        final String result = addItemToInventory(gold);
+        if (result != null) {
+            return result;
+        }
+        removeItemFromLocation(gold);
+        return  "The jar is now full of gold flakes.";
+    }
+
+    /**
+     * Parse the shoot command. If the noun is null or "arrow" and both the bow and arrow are in the inventory, shoot the arrow.
+     * Otherwise, return a response indicating why you can't shoot.
+     * @param thingToShoot Noun of the command
+     * @return Response to the shoot command
+     */
+    public static String executeShootCommand(final String thingToShoot) {
+        String response = "";
+
+        if (!isItemInInventory(BOW_NAME)) {
+            // Must have the bow and arrow in your inventory
+            response = "You don't have anything to shoot with.";
+        } else if (!isItemInInventory(ARROW_NAME)) {
+            response = "You don't have anything to shoot.";
+        } else if (StringUtils.equals(thingToShoot, ARROW_NAME) || StringUtils.isEmpty(thingToShoot)) {
+            // Shoot the arrow
+            response = ActionExecutor.shootArrow();
+        } else {
+            // User has the bow and arrow, but tries to shoot something other than the arrow
+            response = "You can't shoot that.";
+        }
+        return response;
     }
 }

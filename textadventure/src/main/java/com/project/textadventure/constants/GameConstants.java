@@ -16,7 +16,10 @@ public class GameConstants {
             "before you can even get them out, there is a loud crack and the support you were working on " +
             "snaps and the ceiling comes crashing down on top of you. Unfortunately being crushed by a " +
             "mountain and old wood is very dangerous, thus this decision has cost you your life.";
-    public static final String LAKE_EMPTYING = "The ground begins to rumble and you see a massive wall slowly rise from the water on the far side of the lake, blocking the flow of water from the river into the lake. There's another shudder and the water begins to recede as a huge whirl pool forms near the middle of the lake. Soon the lake is completely empty, revealing a town that had been submerged only a few moments ago. You can get to the town to the west, down the dam.";
+    public static final String LAKE_EMPTYING = "The ground begins to rumble and you see a massive wall slowly rise from the water on the far " +
+            "side of the lake, blocking the flow of water from the river. There's another shudder and the water begins to recede " +
+            "as a huge whirl pool forms near the middle of the lake. Soon the lake is completely empty, revealing a town that had been submerged " +
+            "only a few moments ago. You can get to the town to the west, down the dam.";
     public static final String BAD_DIRECTION = "You can't go that way.";
 
     // Interactive elements that aren't pick-upable

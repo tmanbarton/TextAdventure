@@ -6,14 +6,11 @@ import com.project.textadventure.constants.ResponseConstants;
 import com.project.textadventure.controllers.Action;
 import com.project.textadventure.controllers.GameStatus;
 import com.project.textadventure.game.Graph.LocationConnection;
-import com.project.textadventure.game.Graph.Dam;
 import com.project.textadventure.game.Graph.Item;
 import com.project.textadventure.game.Graph.Location;
 import com.project.textadventure.game.Graph.MineEntrance;
 import com.project.textadventure.game.Graph.MineShaft;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.Nullable;
 
@@ -32,8 +29,6 @@ import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromI
 import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromLocation;
 
 
-@Getter
-@Setter
 public class Game implements Action, Comparator<Item> {
     private List<Item> inventory;
     // Limit based on weight
@@ -41,10 +36,22 @@ public class Game implements Action, Comparator<Item> {
     private Location currentLocation;
     private GameStatus gameStatus;
 
+    private GameState gameState;
+
     public Game(final List<Item> inventory, final Location currentLocation, final GameStatus status) {
         this.inventory = inventory;
         this.currentLocation = currentLocation;
         this.gameStatus = status;
+    }
+
+    /**
+     * Used only for testing to mock the game state.
+     */
+    public Game(final GameState gameState) {
+        this.inventory = List.of();
+        this.currentLocation = new Location();
+        this.gameStatus = GameStatus.IN_PROGRESS;
+        this.gameState = gameState;
     }
 
     public Game() {}
@@ -59,6 +66,34 @@ public class Game implements Action, Comparator<Item> {
             totalWeight += item.getWeight();
         }
         return totalWeight;
+    }
+
+    public List<Item> getInventory() {
+        return inventory;
+    }
+
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public int getInventoryLimit() {
+        return inventoryLimit;
+    }
+
+    public void setInventory(final List<Item> inventory) {
+        this.inventory = inventory;
+    }
+
+    public void setCurrentLocation(final Location currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+
+    public void setInventoryLimit(final int inventoryLimit) {
+        this.inventoryLimit = inventoryLimit;
+    }
+
+    public void setGameStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
     }
 
     public static String generateRandomUnknownCommandResponse() {
