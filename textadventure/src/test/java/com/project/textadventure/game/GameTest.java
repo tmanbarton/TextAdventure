@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static com.project.textadventure.game.ActionExecutorUtils.addItemToInventory;
-import static com.project.textadventure.game.ActionExecutorUtils.getInventoryItemByName;
+import static com.project.textadventure.game.GameUtils.addItemToInventory;
+import static com.project.textadventure.game.GameUtils.getInventoryItemByName;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 

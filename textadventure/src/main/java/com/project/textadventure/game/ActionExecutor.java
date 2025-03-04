@@ -17,21 +17,19 @@ import java.util.List;
 
 import static com.project.textadventure.constants.GameConstants.BUTTON;
 import static com.project.textadventure.constants.GameConstants.PRESS;
-import static com.project.textadventure.constants.GameConstants.QUIT;
-import static com.project.textadventure.constants.GameConstants.RESTART;
 import static com.project.textadventure.constants.ItemConstants.ARROW_NAME;
 import static com.project.textadventure.constants.ItemConstants.BOW_NAME;
 import static com.project.textadventure.constants.ItemConstants.JAR_NAME;
 import static com.project.textadventure.constants.ItemConstants.PIE_NAME;
 import static com.project.textadventure.constants.ResponseConstants.HELP_RESPONSE;
 import static com.project.textadventure.constants.ResponseConstants.INFO_RESPONSE;
-import static com.project.textadventure.game.ActionExecutorUtils.addItemToInventory;
-import static com.project.textadventure.game.ActionExecutorUtils.addItemToLocation;
-import static com.project.textadventure.game.ActionExecutorUtils.getLocationItemByName;
-import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromInventory;
-import static com.project.textadventure.game.ActionExecutorUtils.getInventoryItemByName;
-import static com.project.textadventure.game.ActionExecutorUtils.isItemInInventory;
-import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromLocation;
+import static com.project.textadventure.game.GameUtils.addItemToInventory;
+import static com.project.textadventure.game.GameUtils.addItemToLocation;
+import static com.project.textadventure.game.GameUtils.getLocationItemByName;
+import static com.project.textadventure.game.GameUtils.removeItemFromInventory;
+import static com.project.textadventure.game.GameUtils.getInventoryItemByName;
+import static com.project.textadventure.game.GameUtils.isItemInInventory;
+import static com.project.textadventure.game.GameUtils.removeItemFromLocation;
 
 public class ActionExecutor {
 
@@ -46,10 +44,10 @@ public class ActionExecutor {
         GameState.getInstance().getGame().setCurrentLocation(toLocation);
 
         if (toLocation.isVisited()) {
-            return toLocation.getShortDescription() + ActionExecutorUtils.listLocationItems(toLocation.getItems());
+            return toLocation.getShortDescription() + GameUtils.listLocationItems(toLocation.getItems());
         }
         toLocation.setVisited(true);
-        return toLocation.getDescription() + ActionExecutorUtils.listLocationItems(toLocation.getItems());
+        return toLocation.getDescription() + GameUtils.listLocationItems(toLocation.getItems());
     }
 
     /**
@@ -62,7 +60,7 @@ public class ActionExecutor {
             return ResponseConstants.WHAT_DO_YOU_WANT_TO_GET;
         }
         final Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
-        final Item item = ActionExecutorUtils.getLocationItemByName(itemName);
+        final Item item = GameUtils.getLocationItemByName(itemName);
         final boolean isJarInInventory = isItemInInventory(ItemConstants.JAR_NAME);
 
         // Make sure the item is at the location
@@ -82,7 +80,7 @@ public class ActionExecutor {
                 // Special case from when the user tries to get the magnet from the dam after it's been dropped
                 return "The magnet is firmly attached to the wheel";
             }
-        } else if (ActionExecutorUtils.getInventoryItemByName(itemName) != null) {
+        } else if (GameUtils.getInventoryItemByName(itemName) != null) {
             return ResponseConstants.ALREADY_CARRYING;
 
         } else if (itemName.equals(ItemConstants.GOLD_NAME) && !isJarInInventory) {
@@ -170,7 +168,7 @@ public class ActionExecutor {
      */
     public static String executeLookCommand() {
         final Location currentLocation = GameState.getInstance().getGame().getCurrentLocation();
-        return currentLocation.getDescription() + ActionExecutorUtils.listLocationItems(currentLocation.getItems());
+        return currentLocation.getDescription() + GameUtils.listLocationItems(currentLocation.getItems());
     }
 
     /**
@@ -186,7 +184,7 @@ public class ActionExecutor {
             return "Your arrow goes flying off into the the distance and splashes into the water, never to be found again.";
         }
         removeItemFromInventory(arrow);
-        ActionExecutorUtils.addItemToLocation(arrow);
+        GameUtils.addItemToLocation(arrow);
         return "Your arrow goes flying off into the the distance and lands with a thud on the ground.";
     }
 

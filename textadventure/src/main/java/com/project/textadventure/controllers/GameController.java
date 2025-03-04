@@ -78,10 +78,11 @@ public class GameController {
     }
 
     /**
-     * Handles the player's response to the initial confirmation prompt at the start of the game (Would you like help?)
+     * Handles the player's response to the initial confirmation prompt at the start of the game (Would you like help?) and any other state where
+     * a yes/no confirmation is required (e.g. taking nails)
      * @param input User's input
      * @return Game intro, if requested then current location's description, only current location's description if not requested,
-     * "Please anwser the question." if something else is entered
+     * "Please answer the question." if something else is entered
      */
     private String handleYesNoConfirmation(final String input) {
         final Game game = GameState.getInstance().getGame();

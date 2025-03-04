@@ -20,13 +20,13 @@ import static com.project.textadventure.constants.GameConstants.*;
 import static com.project.textadventure.constants.ItemConstants.PIE_NAME;
 import static com.project.textadventure.constants.ResponseConstants.HELP_RESPONSE;
 import static com.project.textadventure.constants.ResponseConstants.INFO_RESPONSE;
-import static com.project.textadventure.game.ActionExecutorUtils.addItemToInventory;
-import static com.project.textadventure.game.ActionExecutorUtils.addItemToLocation;
-import static com.project.textadventure.game.ActionExecutorUtils.getInventoryItemByName;
-import static com.project.textadventure.game.ActionExecutorUtils.getLocationItemByName;
-import static com.project.textadventure.game.ActionExecutorUtils.isItemInInventory;
-import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromInventory;
-import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromLocation;
+import static com.project.textadventure.game.GameUtils.addItemToInventory;
+import static com.project.textadventure.game.GameUtils.addItemToLocation;
+import static com.project.textadventure.game.GameUtils.getInventoryItemByName;
+import static com.project.textadventure.game.GameUtils.getLocationItemByName;
+import static com.project.textadventure.game.GameUtils.isItemInInventory;
+import static com.project.textadventure.game.GameUtils.removeItemFromInventory;
+import static com.project.textadventure.game.GameUtils.removeItemFromLocation;
 
 
 public class Game implements Action, Comparator<Item> {
@@ -36,25 +36,17 @@ public class Game implements Action, Comparator<Item> {
     private Location currentLocation;
     private GameStatus gameStatus;
 
-    private GameState gameState;
-
     public Game(final List<Item> inventory, final Location currentLocation, final GameStatus status) {
         this.inventory = inventory;
         this.currentLocation = currentLocation;
         this.gameStatus = status;
     }
 
-    /**
-     * Used only for testing to mock the game state.
-     */
-    public Game(final GameState gameState) {
+    public Game() {
         this.inventory = List.of();
         this.currentLocation = new Location();
         this.gameStatus = GameStatus.IN_PROGRESS;
-        this.gameState = gameState;
     }
-
-    public Game() {}
 
     public GameStatus getGameStatus() {
         return gameStatus;
@@ -80,16 +72,8 @@ public class Game implements Action, Comparator<Item> {
         return inventoryLimit;
     }
 
-    public void setInventory(final List<Item> inventory) {
-        this.inventory = inventory;
-    }
-
     public void setCurrentLocation(final Location currentLocation) {
         this.currentLocation = currentLocation;
-    }
-
-    public void setInventoryLimit(final int inventoryLimit) {
-        this.inventoryLimit = inventoryLimit;
     }
 
     public void setGameStatus(GameStatus gameStatus) {

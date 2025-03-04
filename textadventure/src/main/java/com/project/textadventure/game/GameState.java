@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.textadventure.constants.GameConstants.*;
-import static com.project.textadventure.game.ActionExecutorUtils.addItemToInventory;
+import static com.project.textadventure.game.GameUtils.addItemToInventory;
 
 public class GameState {
     private static GameState instance;

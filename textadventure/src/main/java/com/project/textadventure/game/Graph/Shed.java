@@ -2,7 +2,7 @@ package com.project.textadventure.game.Graph;
 
 import com.project.textadventure.constants.ItemConstants;
 import com.project.textadventure.controllers.Action;
-import com.project.textadventure.game.ActionExecutorUtils;
+import com.project.textadventure.game.GameUtils;
 import com.project.textadventure.game.Game;
 import com.project.textadventure.game.GameState;
 import lombok.NonNull;
@@ -15,8 +15,8 @@ import static com.project.textadventure.constants.LocationDescriptions.SHED_OPEN
 import static com.project.textadventure.constants.LocationDescriptions.SHED_OPEN_SHORT_DESCRIPTION;
 import static com.project.textadventure.constants.LocationDescriptions.SHED_UNLOCKED_LONG_DESCRIPTION;
 import static com.project.textadventure.constants.LocationDescriptions.SHED_UNLOCKED_SHORT_DESCRIPTION;
-import static com.project.textadventure.game.ActionExecutorUtils.addItemToLocation;
-import static com.project.textadventure.game.ActionExecutorUtils.getInventoryItemByName;
+import static com.project.textadventure.game.GameUtils.addItemToLocation;
+import static com.project.textadventure.game.GameUtils.getInventoryItemByName;
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
 public class Shed extends Location implements Action {
@@ -94,7 +94,7 @@ public class Shed extends Location implements Action {
                     response = !this.isUnlocked ? "First unlocking the shed, the shed now stands open." : "The shed now stands open.";
                     // In case the user did the open command before the unlock command, set the shed as unlocked even if it was already unlocked
                     this.isUnlocked = true;
-                    response += ActionExecutorUtils.listLocationItems(game.getCurrentLocation().getItems());
+                    response += GameUtils.listLocationItems(game.getCurrentLocation().getItems());
                     return response;
                 }
             } else {

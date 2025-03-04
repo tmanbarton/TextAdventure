@@ -17,10 +17,10 @@ import static com.project.textadventure.constants.ItemConstants.ARROW_NAME;
 import static com.project.textadventure.constants.ItemConstants.NAILS_NAME;
 import static com.project.textadventure.constants.LocationDescriptions.MINE_ENTRANCE_RECENT_CAVE_IN;
 import static com.project.textadventure.constants.LocationNames.MINE_SHAFT;
-import static com.project.textadventure.game.ActionExecutorUtils.addItemToLocation;
-import static com.project.textadventure.game.ActionExecutorUtils.getInventoryItemByName;
-import static com.project.textadventure.game.ActionExecutorUtils.isItemInInventory;
-import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromInventory;
+import static com.project.textadventure.game.GameUtils.addItemToLocation;
+import static com.project.textadventure.game.GameUtils.getInventoryItemByName;
+import static com.project.textadventure.game.GameUtils.isItemInInventory;
+import static com.project.textadventure.game.GameUtils.removeItemFromInventory;
 import static com.project.textadventure.game.Game.isGetCommand;
 
 public class MineEntrance extends Location implements Action {

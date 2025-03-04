@@ -8,15 +8,14 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.project.textadventure.game.ActionExecutorUtils.addItemToLocation;
-import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromLocation;
+import static com.project.textadventure.game.GameUtils.addItemToLocation;
+import static com.project.textadventure.game.GameUtils.removeItemFromLocation;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
 import org.mockito.MockedStatic;
-import org.powermock.api.mockito.PowerMockito;
 
 public class LocationTest {
     @Test

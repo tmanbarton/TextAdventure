@@ -1,14 +1,11 @@
 package com.project.textadventure.game.Graph;
 
-import com.project.textadventure.constants.GameConstants;
 import com.project.textadventure.game.*;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,9 +26,6 @@ import static com.project.textadventure.constants.GameConstants.SCORE;
 import static com.project.textadventure.constants.GameConstants.SHOOT;
 import static com.project.textadventure.constants.GameConstants.TURN;
 import static com.project.textadventure.constants.GameConstants.UNLOCK;
-import static com.project.textadventure.constants.ItemConstants.ARROW_NAME;
-import static com.project.textadventure.constants.ItemConstants.BOW_NAME;
-import static com.project.textadventure.constants.ItemConstants.PIE_NAME;
 import static com.project.textadventure.game.ActionExecutor.executeDropCommand;
 import static com.project.textadventure.game.ActionExecutor.executeEatCommand;
 import static com.project.textadventure.game.ActionExecutor.executeFillCommand;
@@ -44,9 +38,6 @@ import static com.project.textadventure.game.ActionExecutor.executePushCommand;
 import static com.project.textadventure.game.ActionExecutor.executeQuitCommand;
 import static com.project.textadventure.game.ActionExecutor.executeScoreCommand;
 import static com.project.textadventure.game.ActionExecutor.executeShootCommand;
-import static com.project.textadventure.game.ActionExecutorUtils.getInventoryItemByName;
-import static com.project.textadventure.game.ActionExecutorUtils.isItemInInventory;
-import static com.project.textadventure.game.ActionExecutorUtils.removeItemFromInventory;
 import static com.project.textadventure.game.Game.generateRandomUnknownCommandResponse;
 
 /**
@@ -55,12 +46,13 @@ import static com.project.textadventure.game.Game.generateRandomUnknownCommandRe
 @Data
 public class Location {
     private String description;
+    private String shortDescription;
+    private String name;
     private List<Item> items;
     private List<LocationConnection> locationConnections;
     private boolean visited;
+    // Only used for BFS algorithm when finding a location by name
     public boolean bfsIsVisited;
-    private String name;
-    private String shortDescription;
 
     public Location(final String fullDescription, final String shortDescription, final List<Item> items, final List<LocationConnection> locationConnections,
             final boolean visited, final String name) {
@@ -70,8 +62,6 @@ public class Location {
         this.locationConnections = locationConnections;
         this.visited = visited;
         this.name = name;
-
-        // Only used for BFS algorithm when finding a location
         this.bfsIsVisited = false;
     }
 

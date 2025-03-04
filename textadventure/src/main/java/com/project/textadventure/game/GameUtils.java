@@ -1,19 +1,13 @@
 package com.project.textadventure.game;
 
-import com.project.textadventure.constants.ItemConstants;
-import com.project.textadventure.constants.LocationNames;
-import com.project.textadventure.constants.ResponseConstants;
-import com.project.textadventure.controllers.GameStatus;
-import com.project.textadventure.game.Graph.Dam;
 import com.project.textadventure.game.Graph.Item;
 import com.project.textadventure.game.Graph.Location;
-import com.project.textadventure.game.Graph.MineEntrance;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
 import java.util.List;
 
-public class ActionExecutorUtils {
+public class GameUtils {
     public static Item getInventoryItemByName(final String name) {
         final List<Item> inventory = GameState.getInstance().getGame().getInventory();
         for (final Item item : inventory) {
